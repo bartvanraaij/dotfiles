@@ -1,0 +1,16 @@
+[user]
+	name = Bart van Raaij
+  email = bart@linku.nl
+
+[color]
+	ui = auto
+
+[alias]
+    l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    dev2master = fetch . dev:master
+[push]
+	default = simple
+[credential]
+	helper = osxkeychain
+[core]
+	autocrlf = input

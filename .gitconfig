@@ -1,0 +1,7 @@
+[user]
+	name = Bart van Raaij
+	email = bart.vanraaij@coolblue.nl
+[init]
+	defaultBranch = main
+[core]
+	autocrlf = input

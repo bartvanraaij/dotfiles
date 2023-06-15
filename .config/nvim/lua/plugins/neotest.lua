@@ -4,13 +4,13 @@ return {
     "nvim-lua/plenary.nvim",
     "nvim-treesitter/nvim-treesitter",
     "antoinemadec/FixCursorHold.nvim",
-    "olimorris/neotest-phpunit"
+    "olimorris/neotest-phpunit",
   },
   config = function()
-    require('neotest').setup({
+    require("neotest").setup({
       adapters = {
-        require('neotest-phpunit'),
-      }
+        require("neotest-phpunit"),
+      },
     })
   end,
   ft = { "php" },

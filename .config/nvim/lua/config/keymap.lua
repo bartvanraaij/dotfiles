@@ -1,50 +1,50 @@
 local map = require("utils").map
 
 -- Unmap macro recording
-vim.keymap.set('n', 'q', '')
+vim.keymap.set("n", "q", "")
 
 -- Save
-map('n', '<C-s>', ':w<cr>', 'Save')
-map('i', '<C-s>', '<Esc>:w<cr>a', 'Save')
+map("n", "<C-s>", ":w<cr>", "Save")
+map("i", "<C-s>", "<Esc>:w<cr>a", "Save")
 
 -- Plugins
-map('n', '<leader>pl', '<cmd>Lazy<cr>', 'Lazy.nvim')
-map('n', "<leader>pg", "<cmd>LazygitToggle<cr>", 'Lazygit')
+map("n", "<leader>pl", "<cmd>Lazy<cr>", "Lazy.nvim")
+map("n", "<leader>pg", "<cmd>LazygitToggle<cr>", "Lazygit")
 
 -- File explorer
-map('n', "<leader>e", "<cmd>NvimTreeToggle<cr>", 'File explorer')
+map("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", "File explorer")
 
 -- Telescope
-map('n', "<leader>ff", "<cmd>Telescope find_files<cr>", 'Find file')
-map('n', "<leader>fg", "<cmd>Telescope live_grep<cr>", 'Find text')
-map('n', "<leader>fb", "<cmd>Telescope buffers previewer=false<cr>", 'Find buffer')
-map('n', "<leader>fh", "<cmd>Telescope help_tags<cr>", 'Find help tag')
-map('n', "<leader>fr", "<cmd>Telescope oldfiles<cr>", 'Find recent file')
+map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", "Find file")
+map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", "Find text")
+map("n", "<leader>fb", "<cmd>Telescope buffers previewer=false<cr>", "Find buffer")
+map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", "Find help tag")
+map("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", "Find recent file")
 
 -- Buffer navigation
-map('n', "<S-Tab>", "<cmd>BufferLineCycleNext<cr>")
+map("n", "<S-Tab>", "<cmd>BufferLineCycleNext<cr>")
 
 -- Code actions
-map('n', '<leader>cf', "<cmd>lua vim.lsp.buf.format()<cr>", 'Code format')
-map({'n','v'}, '<leader>ca', "<cmd>lua vim.lsp.buf.code_action()<cr>", 'Code action')
-map('v', 'a', "<cmd>lua vim.lsp.buf.code_action()<cr>", 'Code action')
+map("n", "<leader>cf", "<cmd>lua vim.lsp.buf.format()<cr>", "Code format")
+map({ "n", "v" }, "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
+map("v", "a", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
 
 --map('n', '<leader>ca', "<cmd>Lspsaga code_action<cr>", 'Code action')
 
 -- Code navigation
-map({ 'n', 'i' }, '<C-a>', '<Home>')      -- Ctrl-a to beginning of line
-map({ 'n', 'i' }, '<C-e>', '<End>')       -- Ctrl-e to end of line
+map({ "n", "i" }, "<C-a>", "<Home>") -- Ctrl-a to beginning of line
+map({ "n", "i" }, "<C-e>", "<End>") -- Ctrl-e to end of line
 --map({ 'n' }, '<C-[>', '<Nop>') -- Unmap default Ctrl-[
-map({ 'n' }, 'gb', '<C-o>', 'Go back')    -- Previous edit location
-map({ 'n' }, 'gf', '<C-i>', 'Go forward') -- Next edit location
+map({ "n" }, "gb", "<C-o>", "Go back") -- Previous edit location
+map({ "n" }, "gf", "<C-i>", "Go forward") -- Next edit location
 
 --vmap <LeftRelease> "*ygv
-map('v', '<LeftRelease>', '"*ygv'); -- Copy contents of mouse selection to clipboard on mouse switch release
+map("v", "<LeftRelease>", '"*ygv') -- Copy contents of mouse selection to clipboard on mouse switch release
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
   callback = function(ev)
     -- Enable completion triggered by <c-x><c-o> / <C-Space>
     --vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
@@ -52,19 +52,18 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
-    map('n', 'gD', vim.lsp.buf.declaration, 'Go to declaration', opts)
-    map('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', 'Go to definition', opts)
-    map('n', 'gr', '<cmd>Telescope lsp_references<cr>', 'Show references', opts)
-    map('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', 'Show implementations', opts)
-    
-    vim.keymap.set({ 'n', 'i' }, '<C-p>', vim.lsp.buf.hover, opts)
+    map("n", "gD", vim.lsp.buf.declaration, "Go to declaration", opts)
+    map("n", "gd", "<cmd>Telescope lsp_definitions<cr>", "Go to definition", opts)
+    map("n", "gr", "<cmd>Telescope lsp_references<cr>", "Show references", opts)
+    map("n", "gi", "<cmd>Telescope lsp_implementations<cr>", "Show implementations", opts)
+
+    vim.keymap.set({ "n", "i" }, "<C-p>", vim.lsp.buf.hover, opts)
 
     --map({'n','i'}, '<C-p>', '<cmd>lua vim.lsp.buf.hover()<cr>', 'Info popup')
 
-
     --vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     --vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
     --vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wl', function()
@@ -77,5 +76,5 @@ vim.api.nvim_create_autocmd('LspAttach', {
     --vim.keymap.set('n', '<space>f', function()
     --  vim.lsp.buf.format { async = true }
     --end, opts)
-  end
+  end,
 })

@@ -1,5 +1,5 @@
 return {
-		"windwp/nvim-autopairs",
-		event = "User FileOpened",
-		config = true,
+  "windwp/nvim-autopairs",
+  event = "User FileOpened",
+  config = true,
 }

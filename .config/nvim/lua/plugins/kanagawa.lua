@@ -8,8 +8,8 @@ return {
         --local theme = colors.theme
         return {
           WinSeparator = {
-            fg = colors.theme.ui.nontext --Higher contrast window splits
-          }
+            fg = colors.theme.ui.nontext, --Higher contrast window splits
+          },
         }
       end,
     })

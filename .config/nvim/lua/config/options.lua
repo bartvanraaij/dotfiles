@@ -31,19 +31,19 @@ vim.g.loaded_netrwPlugin = 1
 -- Indentation
 vim.opt.wrap = false
 vim.opt.breakindent = true
-vim.opt.tabstop = 2
+vim.opt.tabstop = 4
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
 -- Show the cursorline
 vim.opt.cursorline = true
-vim.opt.cursorlineopt = 'number,screenline'
+vim.opt.cursorlineopt = "number,screenline"
 
 -- Reserve space for signs (lsp info) in gutter
-vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = "yes"
 
 -- Use zsh as shell
-vim.opt.shell = 'zsh'
+vim.opt.shell = "zsh"
 
 -- Hide not-saved messages
 vim.opt.hidden = true
@@ -65,20 +65,20 @@ vim.opt.showcmd = false
 
 -- Wrap navigation keys
 -- This causes the left and right arrow keys, as well as h and l, to wrap when used at beginning or end of lines. ( < > are the cursor keys used in normal and visual mode, and [ ] are the cursor keys in insert mode).
-vim.opt.whichwrap = 'b,s,<,>,h,l,[,],'
+vim.opt.whichwrap = "b,s,<,>,h,l,[,],"
 
 -- Use the system keyboard
-vim.opt.clipboard = 'unnamedplus'
+vim.opt.clipboard = "unnamedplus"
 
 -- Default file-encoding
-vim.opt.fileencoding = 'utf-8'
+vim.opt.fileencoding = "utf-8"
 
 -- Show title in terminal title bar
 vim.opt.title = true
-vim.opt.titlestring = 'NVIM' -- Just show NVIM
+vim.opt.titlestring = "NVIM" -- Just show NVIM
 
 -- Allow the cursor to move just past the end of the line
-vim.opt.virtualedit = 'onemore'
+vim.opt.virtualedit = "onemore"
 
 -- Allow the cursor to move anywhere
 --vim.opt.virtualedit = 'all'
@@ -90,5 +90,3 @@ vim.opt.virtualedit = 'onemore'
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 6
-
-

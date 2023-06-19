@@ -75,7 +75,7 @@ vim.opt.fileencoding = "utf-8"
 
 -- Show title in terminal title bar
 vim.opt.title = true
-vim.opt.titlestring = "NVIM" -- Just show NVIM
+--vim.opt.titlestring = "NVIM" -- Just show NVIM
 
 -- Allow the cursor to move just past the end of the line
 vim.opt.virtualedit = "onemore"

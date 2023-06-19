@@ -14,6 +14,11 @@ export PATH=$HOME/.bart/bin:$HOME/.local/bin:/$HOME/bin:/usr/local/bin:$HOME/.co
 
 export ZSH="/Users/bart/.config/zsh"
 
+# Directory as window title
+set_window_title () { print -Pn "\e]0;$PWD\a" }
+precmd_functions+=(set_window_title)
+
+
 # Load zsh conf
 source "$ZSH/load.zsh"
 

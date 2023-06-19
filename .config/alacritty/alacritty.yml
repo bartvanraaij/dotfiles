@@ -62,7 +62,7 @@ window:
   # Values for `decorations` (macOS only):
   #     - transparent: Title bar, transparent background and title bar buttons
   #     - buttonless: Title bar, transparent background and no title bar buttons
-  decorations: buttonless
+  #decorations: buttonless
 
   # Background opacity
   #
@@ -197,12 +197,48 @@ font:
   #builtin_box_drawing: false
 
 # If `true`, bold text is drawn using the bright color variants.
-draw_bold_text_with_bright_colors: false
+draw_bold_text_with_bright_colors: true
 
-import:
+#import:
   #- ~/.config/alacritty/theme/kanagawa-wave.yml
-  - ~/.config/alacritty/theme/github-light.yml
+  #  - ~/.config/alacritty/theme/github-light-bart.yml
 
+colors:
+  # Default colors
+  primary:
+    background: '#ffffff'
+    foreground: '#24292f'
+
+  # Normal colors
+  normal:
+    black:   '#24292f'
+    red:     '#cf222e'
+    green:   '#116329'
+    yellow:  '#dbab09'
+    blue:    '#0969da'
+    magenta: '#8250df'
+    cyan:    '#1b7c83'
+    white:   '#6e7781'
+
+  # Bright colors
+  bright:
+    black:   '#57606a'
+    red:     '#a40e26'
+    green:   '#1a7f37'
+    yellow:  '#b08800'
+    blue:    '#218bff'
+    magenta: '#a475f9'
+    cyan:    '#3192aa'
+    white:   '#8c969f'
+
+  indexed_colors:
+    - { index: 16, color: '0xd18616' }
+    - { index: 17, color: '0xcb2431' }
+
+  cursor:
+    text: '#ffffff'
+    cursor: '#8250df'
+               
 
 # Colors (Gruvbox)
 #colors:
@@ -463,7 +499,7 @@ import:
   # When set to `true`, selected text will be copied to the primary clipboard.
   #save_to_clipboard: false
 
-#cursor:
+      #cursor:
   # Cursor style
   #style:
     # Cursor shape
@@ -489,7 +525,8 @@ import:
   # the style of the active value of the normal cursor.
   #
   # See `cursor.style` for available options.
-  #vi_mode_style: None
+  #vi_mode_style:
+  #  shape: Underline
 
   # Cursor blinking interval in milliseconds.
   #blink_interval: 750
@@ -519,9 +556,17 @@ import:
 # Default:
 #   - (Linux/BSD/macOS) `$SHELL` or the user's login shell, if `$SHELL` is unset
 #   - (Windows) powershell
-#shell:
-#  program: /bin/bash
-#  args:
+# Tmux shared sessions: https://gist.github.com/chakrit/5004006
+shell:
+  program: /bin/zsh
+  args:
+    - -l
+    - -c
+      #- "tmux attach"
+    - "tmux new-session -t main\\; new-window"
+      #- "tmux new-session -t main"
+  #- "tmux attach\\; new-window"
+  #  args:
 #    - --login
 
 # Startup directory

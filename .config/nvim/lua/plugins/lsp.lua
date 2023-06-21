@@ -14,7 +14,7 @@ return {
 		-- Setup Mason
 		require("mason").setup()
 		require("mason-lspconfig").setup {
-			ensure_installed = { "lua_ls", "intelephense", "phpactor", "tsserver", "yamlls", },
+			ensure_installed = { "lua_ls", "intelephense", "phpactor", "tsserver", "yamlls" },
 			automatic_installation = { exclude = { "tailwindcss" } }
 		}
 
@@ -39,7 +39,12 @@ return {
 				null_ls.builtins.formatting.phpcsfixer.with({
 					prefer_local = "vendor/bin",
 				}),
+        null_ls.builtins.formatting.prettierd,
         null_ls.builtins.formatting.stylua,
+        null_ls.builtins.formatting.shfmt.with({ filetypes = { "sh", "zsh" } }),
+        null_ls.builtins.diagnostics.shellcheck.with({ filetypes = { "sh", "zsh" } }),
+        null_ls.builtins.code_actions.shellcheck.with({ filetypes = { "sh", "zsh" } }),
+        null_ls.builtins.diagnostics.zsh,
 				null_ls.builtins.code_actions.gitsigns,
 			}
 		})

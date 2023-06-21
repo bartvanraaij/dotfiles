@@ -80,7 +80,7 @@ return {
     })
 
     telescope.load_extension("fzf")
-    telescope.load_extension("projects")
+    --telescope.load_extension("projects")
     --telescope.load_extension("ui-select")
 
     -- Set the border color to be the same as Noice's Cmdline

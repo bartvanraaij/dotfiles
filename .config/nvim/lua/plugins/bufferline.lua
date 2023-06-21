@@ -1,9 +1,10 @@
 return {
-  'akinsho/bufferline.nvim',
+  "akinsho/bufferline.nvim",
   event = "VeryLazy",
-  dependencies = 'nvim-tree/nvim-web-devicons',
-	config = function()
-    require('bufferline').setup({
+  dependencies = "nvim-tree/nvim-web-devicons",
+  enabled = false,
+  config = function()
+    require("bufferline").setup({
       options = {
         offsets = {
           {
@@ -14,7 +15,7 @@ return {
           },
         },
         separator_style = "thin",
-      }
+      },
     })
   end,
 }

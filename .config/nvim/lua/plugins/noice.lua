@@ -31,7 +31,7 @@ return {
       views = {
         notify = {
           stages = "static",
-          render = "compact",
+          -- render = "compact",
           fps = 10,
         }
       },

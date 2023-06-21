@@ -12,7 +12,7 @@ map("n", "<leader>pl", "<cmd>Lazy<cr>", "Lazy.nvim")
 map("n", "<leader>pg", "<cmd>LazygitToggle<cr>", "Lazygit")
 
 -- File explorer
-map("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", "File explorer")
+map("n", "<leader>e", "<cmd>NeoTreeShowToggle<cr>", "File explorer")
 
 -- Telescope
 map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", "Find file")
@@ -28,7 +28,7 @@ map("n", "<S-Tab>", "<cmd>BufferLineCycleNext<cr>")
 map("n", "<leader>cf", "<cmd>lua vim.lsp.buf.format()<cr>", "Code format")
 map({ "n", "v" }, "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
 map("v", "a", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
-
+map("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", "Code rename")
 --map('n', '<leader>ca', "<cmd>Lspsaga code_action<cr>", 'Code action')
 
 -- Code navigation
@@ -57,13 +57,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "gr", "<cmd>Telescope lsp_references<cr>", "Show references", opts)
     map("n", "gi", "<cmd>Telescope lsp_implementations<cr>", "Show implementations", opts)
 
-    vim.keymap.set({ "n", "i" }, "<C-p>", vim.lsp.buf.hover, opts)
+    --vim.keymap.set({ "n", "i" }, "<C-p>", vim.lsp.buf.hover, opts)
+    map({"n","i"}, "<C-p>", vim.lsp.buf.hover, "Info popup", opts);
 
     --map({'n','i'}, '<C-p>', '<cmd>lua vim.lsp.buf.hover()<cr>', 'Info popup')
 
     --vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     --vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+    --vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+    map('n', '<C-k>', vim.lsp.buf.signature_help, "Signature help", opts)
     --vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wl', function()

@@ -62,6 +62,7 @@ vim.opt.showcmd = false
 
 -- Store stuff in session
 --vim.opt.sessionoptions="curdir,folds,help,tabpages,localoptions"
+vim.opt.sessionoptions="blank,curdir,buffers,folds,help,tabpages"
 
 -- Wrap navigation keys
 -- This causes the left and right arrow keys, as well as h and l, to wrap when used at beginning or end of lines. ( < > are the cursor keys used in normal and visual mode, and [ ] are the cursor keys in insert mode).
@@ -75,7 +76,8 @@ vim.opt.fileencoding = "utf-8"
 
 -- Show title in terminal title bar
 vim.opt.title = true
-vim.opt.titlestring = " %t"
+--vim.opt.titlestring = " %t"
+vim.opt.titlestring = " %{substitute(getcwd(), $HOME, '~', '')}"
 --vim.opt.titlestring = "NVIM" -- Just show NVIM
 
 -- Allow the cursor to move just past the end of the line
@@ -91,3 +93,8 @@ vim.opt.virtualedit = "onemore"
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 6
+
+-- Selection with holding shift
+vim.opt.keymodel = "startsel,stopsel"
+
+

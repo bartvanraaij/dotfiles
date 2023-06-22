@@ -21,6 +21,12 @@ alias 'brew-store-installed'='brew bundle dump --global'
 # Dotfiles git
 alias dot='git --git-dir=$HOME/.dot/ --work-tree=$HOME'
 
+# Git
+alias gs='git s'
+alias gc='git commit -m'
+alias gl='git l'
+alias gdc='git dc'
+
 # Color utils
 function tmuxcolors
 {

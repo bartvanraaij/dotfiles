@@ -58,14 +58,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "gi", "<cmd>Telescope lsp_implementations<cr>", "Show implementations", opts)
 
     --vim.keymap.set({ "n", "i" }, "<C-p>", vim.lsp.buf.hover, opts)
-    map({"n","i"}, "<C-p>", vim.lsp.buf.hover, "Info popup", opts);
+    map({ "n", "i" }, "<C-p>", vim.lsp.buf.hover, "Info popup", opts)
 
     --map({'n','i'}, '<C-p>', '<cmd>lua vim.lsp.buf.hover()<cr>', 'Info popup')
 
     --vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     --vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     --vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-    map('n', '<C-k>', vim.lsp.buf.signature_help, "Signature help", opts)
+    map("n", "<C-k>", vim.lsp.buf.signature_help, "Signature help", opts)
     --vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wl', function()

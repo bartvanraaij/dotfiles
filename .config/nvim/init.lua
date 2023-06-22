@@ -1,14 +1,14 @@
 -- Load Vim options
-require 'config.options'
+require("config.options")
 
 -- Enable Lua loader
 vim.loader.enable()
 
 -- Custom functions
-require 'config.functions'
+require("config.functions")
 
 -- Autocmds
-require 'config.autocmds'
+require("config.autocmds")
 
 -- Load lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -25,28 +25,33 @@ end
 
 vim.opt.runtimepath:prepend(lazypath)
 
-require("lazy").setup('plugins', {
+require("lazy").setup("plugins", {
   defaults = { lazy = true },
-  performance = {
+  install = {
+    colorscheme = {"github_light"},
+  },
+  change_detection = {
+    enabled = false,
+  },
+  performance = { 
     rtp = {
       disabled_plugins = {
-        'gzip',
-        'netrwPlugin',
-        'tarPlugin',
-        'tohtml',
-        'tutor',
-        'zipPlugin',
+        "gzip",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
       },
     },
   },
 })
 
 -- Keymap
-require 'config.keymap'
+require("config.keymap")
 
 -- Colorscheme
 vim.cmd([[colorscheme github_light]])
 
 -- Icons
-require 'config.icons'
-
+require("config.icons")

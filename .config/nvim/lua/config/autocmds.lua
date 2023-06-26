@@ -31,20 +31,6 @@ local autocmds = {
       end,
     },
   },
-  { -- Fix for NvimTree in session restore
-    { "BufEnter" },
-    {
-      pattern = "NvimTree*",
-      callback = function()
-        local api = require("nvim-tree.api")
-        local view = require("nvim-tree.view")
-
-        if not view.is_visible() then
-          api.tree.open()
-        end
-      end,
-    },
-  },
   {
     { "VimEnter" },
     {
@@ -86,5 +72,7 @@ local autocmds = {
   --	}
   --},
 }
+
+
 
 define_autocmds(autocmds)

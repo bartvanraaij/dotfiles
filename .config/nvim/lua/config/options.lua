@@ -62,7 +62,7 @@ vim.opt.showcmd = false
 
 -- Store stuff in session
 --vim.opt.sessionoptions="curdir,folds,help,tabpages,localoptions"
-vim.opt.sessionoptions="blank,curdir,buffers,folds,help,tabpages"
+vim.opt.sessionoptions = "blank,curdir,buffers,folds,help,tabpages"
 
 -- Wrap navigation keys
 -- This causes the left and right arrow keys, as well as h and l, to wrap when used at beginning or end of lines. ( < > are the cursor keys used in normal and visual mode, and [ ] are the cursor keys in insert mode).
@@ -97,4 +97,9 @@ vim.opt.scrolloff = 6
 -- Selection with holding shift
 vim.opt.keymodel = "startsel,stopsel"
 
-
+-- Set html as the filetype for njk files
+vim.filetype.add({
+  extension = {
+    njk = "html",
+  },
+})

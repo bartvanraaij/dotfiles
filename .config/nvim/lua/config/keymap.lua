@@ -1,5 +1,5 @@
-local map = require("utils").map
-
+local map = require("../functions").map
+local lsp_format = require("../functions").lsp_format
 -- Unmap macro recording
 vim.keymap.set("n", "q", "")
 
@@ -9,10 +9,10 @@ map("i", "<C-s>", "<Esc>:w<cr>a", "Save")
 
 -- Plugins
 map("n", "<leader>pl", "<cmd>Lazy<cr>", "Lazy.nvim")
-map("n", "<leader>pg", "<cmd>LazygitToggle<cr>", "Lazygit")
 
 -- File explorer
-map("n", "<leader>e", "<cmd>NeoTreeShowToggle<cr>", "File explorer")
+map("n", "<leader>e", "<cmd>Neotree focus filesystem toggle reveal<cr>", "Explore files")
+map("n", "<leader>eb", "<cmd>Neotree focus buffers reveal<cr>", "Explore buffers")
 
 -- Telescope
 map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", "Find file")
@@ -25,17 +25,18 @@ map("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", "Find recent file")
 map("n", "<S-Tab>", "<cmd>BufferLineCycleNext<cr>")
 
 -- Code actions
-map("n", "<leader>cf", "<cmd>lua vim.lsp.buf.format()<cr>", "Code format")
+--map("n", "<leader>cf", "<cmd>lua vim.lsp.buf.format()<cr>", "Code format")
+map("n", "<leader>cf", "<cmd>LspFormat<cr>", "Code format")
 map({ "n", "v" }, "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
 map("v", "a", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
 map("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", "Code rename")
 --map('n', '<leader>ca', "<cmd>Lspsaga code_action<cr>", 'Code action')
 
 -- Code navigation
-map({ "n", "i" }, "<C-a>", "<Home>") -- Ctrl-a to beginning of line
-map({ "n", "i" }, "<C-e>", "<End>") -- Ctrl-e to end of line
+map({ "n", "i" }, "<C-a>", "<Home>")      -- Ctrl-a to beginning of line
+map({ "n", "i" }, "<C-e>", "<End>")       -- Ctrl-e to end of line
 --map({ 'n' }, '<C-[>', '<Nop>') -- Unmap default Ctrl-[
-map({ "n" }, "gb", "<C-o>", "Go back") -- Previous edit location
+map({ "n" }, "gb", "<C-o>", "Go back")    -- Previous edit location
 map({ "n" }, "gf", "<C-i>", "Go forward") -- Next edit location
 
 --vmap <LeftRelease> "*ygv
@@ -47,8 +48,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("UserLspConfig", {}),
   callback = function(ev)
     -- Enable completion triggered by <c-x><c-o> / <C-Space>
-    --vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    --vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc
 
+    local function buf_lsp_format()
+      lsp_format(ev.buf)
+    end
+    vim.api.nvim_buf_create_user_command(ev.buf, 'LspFormat', buf_lsp_format, {})
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
@@ -59,7 +64,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     --vim.keymap.set({ "n", "i" }, "<C-p>", vim.lsp.buf.hover, opts)
     map({ "n", "i" }, "<C-p>", vim.lsp.buf.hover, "Info popup", opts)
-
     --map({'n','i'}, '<C-p>', '<cmd>lua vim.lsp.buf.hover()<cr>', 'Info popup')
 
     --vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)

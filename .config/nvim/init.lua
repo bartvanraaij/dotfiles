@@ -5,7 +5,7 @@ require("config.options")
 vim.loader.enable()
 
 -- Custom functions
-require("config.functions")
+require("functions")
 
 -- Autocmds
 require("config.autocmds")
@@ -28,12 +28,12 @@ vim.opt.runtimepath:prepend(lazypath)
 require("lazy").setup("plugins", {
   defaults = { lazy = true },
   install = {
-    colorscheme = {"github_light"},
+    colorscheme = { "github_light" },
   },
   change_detection = {
     enabled = false,
   },
-  performance = { 
+  performance = {
     rtp = {
       disabled_plugins = {
         "gzip",

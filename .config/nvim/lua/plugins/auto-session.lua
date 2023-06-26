@@ -3,7 +3,7 @@ local function close_neo_tree()
 end
 
 local function open_neo_tree()
-  require("neo-tree.sources.manager").show("filesystem")
+--  require("neo-tree.sources.manager").show("filesystem")
 end
 
 return {

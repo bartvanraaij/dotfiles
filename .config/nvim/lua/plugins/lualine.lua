@@ -28,7 +28,6 @@ return {
       },
       extensions = {
         --'nvim-tree',
-        --'toggleterm',
       },
       sections = {
         lualine_a = {

@@ -6,8 +6,8 @@ return {
     "jose-elias-alvarez/null-ls.nvim",
     "nvim-lua/plenary.nvim",
   },
-  event = "VeryLazy",
-    --event = "VeryLazy",
+  --event = "VeryLazy",
+  event = "User FileOpened",
   --ft = { "php" },
   --lazy = false,
   enabled = true,
@@ -23,9 +23,7 @@ return {
     -- Auto setup handlers:
     require("mason-lspconfig").setup_handlers({
       function(server_name) -- default handler (optional)
-     --   print("Setting up " .. server_name)
-        require("lspconfig")[server_name].setup({
-        })
+        require("lspconfig")[server_name].setup({})
       end,
     })
     -- Manual setup handlers:

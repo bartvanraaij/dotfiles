@@ -37,8 +37,15 @@ return {
           mappings = {
             i = {
               ["<esc>"] = actions.close,
+              ["<C-j>"] = actions.move_selection_next,
+              ["<C-k>"] = actions.move_selection_previous,
+              ["<C-n>"] = actions.cycle_history_next,
+              ["<C-p>"] = actions.cycle_history_prev,
             },
           },
+          path_display = {
+            truncate = 2,
+          }
         }
       ),
       extensions = {
@@ -47,6 +54,10 @@ return {
         --},
       },
       pickers = {
+        buffers = {
+          sort_lastused = true,
+          sort_mru = true,
+        },
         lsp_definitions = {
           --theme = 'dropdown',
           --fname_width = 100,

@@ -18,7 +18,6 @@ export ZSH="/Users/bart/.config/zsh"
 set_window_title () { print -Pn "\e]0;  $(print -rD $PWD)\a" }
 precmd_functions+=(set_window_title)
 
-
 # Load zsh conf
 source "$ZSH/load.zsh"
 
@@ -34,3 +33,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# Homebrew PHP
+export PATH="/opt/homebrew/opt/php@8.1/bin:$PATH"
+export PATH="/opt/homebrew/opt/php@8.1/sbin:$PATH"

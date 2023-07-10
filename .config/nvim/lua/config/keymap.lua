@@ -12,7 +12,7 @@ map("n", "<leader>pl", "<cmd>Lazy<cr>", "Lazy.nvim")
 
 -- File explorer
 map("n", "<leader>e", "<cmd>Neotree focus filesystem toggle reveal<cr>", "Explore files")
-map("n", "<leader>eb", "<cmd>Neotree focus buffers reveal<cr>", "Explore buffers")
+map("n", "<leader>eb", "<cmd>Neotree focus buffers toggle reveal<cr>", "Explore buffers")
 
 -- Telescope
 map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", "Find file")

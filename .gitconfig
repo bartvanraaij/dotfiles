@@ -19,7 +19,7 @@
   colorMoved = default
 [delta "decorations"]
   #file-style = omit
-  #hunk-header-style = omit
+  hunk-header-style = omit
 [push]
   autoSetupRemote = true
 [alias]

@@ -1,3 +1,9 @@
 [submodule ".config/zsh/plugins/zsh-vi-mode"]
 	path = .config/zsh/plugins/zsh-vi-mode
 	url = https://github.com/jeffreytse/zsh-vi-mode.git
+[submodule ".config/tmux/plugins/tmux-sensible"]
+	path = .config/tmux/plugins/tmux-sensible
+	url = https://github.com/tmux-plugins/tmux-sensible.git
+[submodule ".config/tmux/plugins/tpm"]
+	path = .config/tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm.git

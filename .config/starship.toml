@@ -1,0 +1,27 @@
+format = """
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$docker_context\
+$package\
+$golang\
+$lua\
+$nodejs\
+$php\
+$python\
+$ruby\
+$rust\
+$custom\
+$sudo\
+$cmd_duration\
+$line_break\
+$status\
+$character"""
+
+[character]
+success_symbol = '[〉](bright-green)'
+error_symbol = '[〉](bright-red)'
+vimcmd_symbol = '[〉](bright-blue)'

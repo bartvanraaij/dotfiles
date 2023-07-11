@@ -28,4 +28,5 @@
 	dc = diff --cached
     l = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -20
     unstage = restore --staged
-	amend = commit --amend --no-edit
+    amend = commit --amend --no-edit
+    recommit = commit --reuse-message=HEAD

@@ -14,4 +14,6 @@ setopt HIST_REDUCE_BLANKS # Remove blank lines
 setopt CORRECT
 setopt CORRECT_ALL
 
-
+function zvm_config() {
+# ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
+}

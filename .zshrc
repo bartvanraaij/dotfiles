@@ -7,7 +7,10 @@ export VISUAL=nvim
 export XDG_CONFIG_HOME="$HOME/.config"
 
 # Set emacs navigation mode keys (C-a, C-e etc)
-bindkey -e
+#bindkey -e
+
+# Set vim navigation mode keys
+bindkey -v
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/.bart/bin:$HOME/.local/bin:/$HOME/bin:/usr/local/bin:$HOME/.composer/vendor/bin:$PATH
@@ -36,3 +39,7 @@ export NVM_DIR="$HOME/.nvm"
 # Homebrew PHP
 export PATH="/opt/homebrew/opt/php@8.1/bin:$PATH"
 export PATH="/opt/homebrew/opt/php@8.1/sbin:$PATH"
+
+# Starship
+eval "$(starship init zsh)"
+

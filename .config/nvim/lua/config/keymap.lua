@@ -30,13 +30,16 @@ map("n", "<leader>cf", "<cmd>LspFormat<cr>", "Code format")
 map({ "n", "v" }, "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
 map("v", "a", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
 map("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", "Code rename")
---map('n', '<leader>ca', "<cmd>Lspsaga code_action<cr>", 'Code action')
+map("n", "<leader>ct", "<cmd>TroubleToggle<cr>", "Code trouble") -- TOdo improve
+
+-- Test
+map("n", "<leader>tf", "<cmd>TestFile<cr>", "Test File")
 
 -- Code navigation
-map({ "n", "i" }, "<C-a>", "<Home>")      -- Ctrl-a to beginning of line
-map({ "n", "i" }, "<C-e>", "<End>")       -- Ctrl-e to end of line
+map({ "n", "i" }, "<C-a>", "<Home>") -- Ctrl-a to beginning of line
+map({ "n", "i" }, "<C-e>", "<End>") -- Ctrl-e to end of line
 --map({ 'n' }, '<C-[>', '<Nop>') -- Unmap default Ctrl-[
-map({ "n" }, "gb", "<C-o>", "Go back")    -- Previous edit location
+map({ "n" }, "gb", "<C-o>", "Go back") -- Previous edit location
 map({ "n" }, "gf", "<C-i>", "Go forward") -- Next edit location
 
 --vmap <LeftRelease> "*ygv
@@ -53,7 +56,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local function buf_lsp_format()
       lsp_format(ev.buf)
     end
-    vim.api.nvim_buf_create_user_command(ev.buf, 'LspFormat', buf_lsp_format, {})
+    vim.api.nvim_buf_create_user_command(ev.buf, "LspFormat", buf_lsp_format, {})
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }

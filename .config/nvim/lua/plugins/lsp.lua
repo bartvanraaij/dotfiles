@@ -12,13 +12,13 @@ return {
   --lazy = false,
   enabled = true,
   config = function()
+    
     -- Setup Mason
     require("mason").setup()
     require("mason-lspconfig").setup({
       ensure_installed = { "lua_ls", "phpactor", "tsserver", "yamlls" },
       automatic_installation = { exclude = { "tailwindcss" } },
     })
-
 
     -- Auto setup handlers:
     require("mason-lspconfig").setup_handlers({
@@ -28,7 +28,9 @@ return {
     })
     -- Manual setup handlers:
     --require("lspconfig").lua_ls.setup({})
-    --require("lspconfig").phpactor.setup({})
+    --require("lspconfig").phpactor.setup({
+    --  cmd = { "phpactor", "language-server" }
+    --})
     --require("lspconfig").tsserver.setup({})
     --require("lspconfig").yamlls.setup({})
 
@@ -42,9 +44,9 @@ return {
         null_ls.builtins.formatting.phpcbf.with({
           prefer_local = "vendor/bin",
         }),
-        null_ls.builtins.formatting.phpcsfixer.with({
-          prefer_local = "vendor/bin",
-        }),
+        --null_ls.builtins.formatting.phpcsfixer.with({
+        --  prefer_local = "vendor/bin",
+        --}),
         null_ls.builtins.formatting.prettierd,
         null_ls.builtins.formatting.stylua,
         null_ls.builtins.formatting.shfmt.with({ filetypes = { "sh", "zsh" } }),
@@ -54,6 +56,9 @@ return {
         null_ls.builtins.code_actions.gitsigns,
       },
     })
+
+    -- Setup lsp progress
+    --require("lsp-progress").setup()
 
     -- Todo setup useful keybinds
     -- Setup keybinds

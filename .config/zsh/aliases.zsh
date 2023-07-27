@@ -27,6 +27,14 @@ alias gc='git commit -m'
 alias gl='git l'
 alias gdc='git dc'
 
+# Tmux kill detached sessions
+function tmux-kill-detached-sessions {
+	tmux list-sessions -F '#{session_attached} #{session_id}' |
+		awk '/^0/{print $2}' |
+		xargs -n 1 tmux kill-session -t
+    tmux list-sessions
+}
+
 # Color utils
 function tmuxcolors {
 	for i in {0..255}; do

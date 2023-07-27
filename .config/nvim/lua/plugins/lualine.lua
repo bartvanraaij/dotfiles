@@ -83,6 +83,9 @@ return {
           require("auto-session.lib").current_session_name,
           "%f", -- Full file path
         },
+        --lualine_x = {
+        --  "require('lsp-progress').progress()",
+        --},
       },
       winbar = wb,
       inactive_winbar = wb,

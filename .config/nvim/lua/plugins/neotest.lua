@@ -14,5 +14,5 @@ return {
     })
   end,
   ft = { "php" },
-  enabled = true,
+  enabled = false,
 }

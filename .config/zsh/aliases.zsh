@@ -15,7 +15,7 @@ function hs {
 alias hsi='hs -i'
 
 # Update brew bundle
-alias 'brew-store-installed'='brew bundle dump --global'
+alias 'brew-store-installed'='brew bundle dump --global --force'
 
 # Dotfiles git
 alias dot='git --git-dir=$HOME/.dot/ --work-tree=$HOME'

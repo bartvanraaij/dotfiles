@@ -29,13 +29,6 @@ return {
       messages = {
         enabled = true,
       },
-      views = {
-        notify = {
-          stages = "static",
-          -- render = "compact",
-          fps = 0,
-        }
-      },
       -- you can enable a preset for easier configuration
       presets = {
         bottom_search = false, -- use a classic bottom cmdline for search

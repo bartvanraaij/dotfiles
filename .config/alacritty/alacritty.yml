@@ -150,7 +150,7 @@ font:
     style: Light # Never use bolds
 
   # Italic font face
-  #italic:
+  italic:
     # Font family
     #
     # If the italic family is not specified, it will fall back to the
@@ -158,7 +158,7 @@ font:
     #family: 'BlexMono Nerd Font'
 
     # The `style` can be specified to pick a specific face.
-    #style: Light Italic
+    style: Light Italic
 
   # Bold italic font face
   #bold_italic:
@@ -199,46 +199,11 @@ font:
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
 
-#import:
+import:
   #- ~/.config/alacritty/theme/kanagawa-wave.yml
-  #  - ~/.config/alacritty/theme/github-light-bart.yml
-
-colors:
-  # Default colors
-  primary:
-    background: '#ffffff'
-    foreground: '#24292f'
-
-  # Normal colors
-  normal:
-    black:   '#24292f'
-    red:     '#cf222e'
-    green:   '#116329'
-    yellow:  '#dbab09'
-    blue:    '#0969da'
-    magenta: '#8250df'
-    cyan:    '#1b7c83'
-    white:   '#6e7781'
-
-  # Bright colors
-  bright:
-    black:   '#57606a'
-    red:     '#a40e26'
-    green:   '#1a7f37'
-    yellow:  '#b08800'
-    blue:    '#218bff'
-    magenta: '#a475f9'
-    cyan:    '#3192aa'
-    white:   '#8c969f'
-
-  indexed_colors:
-    - { index: 16, color: '0xd18616' }
-    - { index: 17, color: '0xcb2431' }
-
-  cursor:
-    text: '#ffffff'
-    cursor: '#8250df'
-               
+    - ~/.config/alacritty/theme/github-light-bart.yml
+  #- ~/.config/alacritty/theme/tokyonight_night.yml
+  #- ~/.config/alacritty/theme/tokyonight_night.yml
 
 # Colors (Gruvbox)
 #colors:

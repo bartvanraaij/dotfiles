@@ -33,7 +33,7 @@ return {
         notify = {
           stages = "static",
           -- render = "compact",
-          fps = 10,
+          fps = 0,
         }
       },
       -- you can enable a preset for easier configuration

@@ -22,7 +22,7 @@ vim.opt.smartcase = true
 
 -- Decrease timeout
 vim.opt.timeout = true
-vim.opt.timeoutlen = 300
+vim.opt.timeoutlen = 1000
 
 -- Disable netrw
 vim.g.loaded_netrw = 1
@@ -59,6 +59,9 @@ vim.opt.splitright = true
 
 -- Dont show last command
 vim.opt.showcmd = false
+
+-- Ask for confirmation instead of throwing errors
+vim.opt.confirm = true
 
 -- Store stuff in session
 --vim.opt.sessionoptions="curdir,folds,help,tabpages,localoptions"

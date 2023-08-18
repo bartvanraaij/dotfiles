@@ -19,6 +19,9 @@ return {
         --  print("bar")
         --end, "Foobar" }                               -- you can also pass functions!
       },
+      b = {
+        name = "Buffers",
+      },
       c = {
         name = "Code",
       },

@@ -3,8 +3,10 @@ return {
   dependencies = {
     "williamboman/mason.nvim",
     "neovim/nvim-lspconfig",
-    "jose-elias-alvarez/null-ls.nvim",
+    --"jose-elias-alvarez/null-ls.nvim",
     "nvim-lua/plenary.nvim",
+    "mhartington/formatter.nvim",
+    "mfussenegger/nvim-lint",
   },
   --event = "VeryLazy",
   event = "User FileOpened",
@@ -12,51 +14,124 @@ return {
   --lazy = false,
   enabled = true,
   config = function()
-    
     -- Setup Mason
     require("mason").setup()
     require("mason-lspconfig").setup({
-      ensure_installed = { "lua_ls", "phpactor", "tsserver", "yamlls" },
+      ensure_installed = { "lua_ls", "phpactor", "tsserver", "yamlls", "intelephense" },
       automatic_installation = { exclude = { "tailwindcss" } },
     })
 
     -- Auto setup handlers:
+    --[[
     require("mason-lspconfig").setup_handlers({
       function(server_name) -- default handler (optional)
         require("lspconfig")[server_name].setup({})
       end,
     })
+    --]]
     -- Manual setup handlers:
-    --require("lspconfig").lua_ls.setup({})
-    --require("lspconfig").phpactor.setup({
-    --  cmd = { "phpactor", "language-server" }
-    --})
-    --require("lspconfig").tsserver.setup({})
-    --require("lspconfig").yamlls.setup({})
+    require("lspconfig").lua_ls.setup({})
+    require("lspconfig").phpactor.setup({})
+    -- require("lspconfig").intelephense.setup({})
+    require("lspconfig").tsserver.setup({})
+    require("lspconfig").yamlls.setup({})
 
-    -- Setup Null-ls
-    local null_ls = require("null-ls")
-    null_ls.setup({
-      sources = {
-        null_ls.builtins.diagnostics.phpcs.with({
-          prefer_local = "vendor/bin",
-        }),
-        null_ls.builtins.formatting.phpcbf.with({
-          prefer_local = "vendor/bin",
-        }),
-        --null_ls.builtins.formatting.phpcsfixer.with({
-        --  prefer_local = "vendor/bin",
-        --}),
-        null_ls.builtins.formatting.prettierd,
-        null_ls.builtins.formatting.stylua,
-        null_ls.builtins.formatting.shfmt.with({ filetypes = { "sh", "zsh" } }),
-        null_ls.builtins.diagnostics.shellcheck.with({ filetypes = { "sh", "zsh" } }),
-        null_ls.builtins.code_actions.shellcheck.with({ filetypes = { "sh", "zsh" } }),
-        null_ls.builtins.diagnostics.zsh,
-        null_ls.builtins.code_actions.gitsigns,
+    -- Setup formatter.nvim
+    local util = require("formatter.util")
+    require("formatter").setup({
+      -- Enable or disable logging
+      logging = true,
+      -- Set the log level
+      log_level = vim.log.levels.WARN,
+      -- All formatter configurations are opt-in
+      filetype = {
+        -- Formatter configurations for filetype "lua" go here
+        -- and will be executed in order
+        lua = {
+          -- "formatter.filetypes.lua" defines default configurations for the
+          -- "lua" filetype
+          require("formatter.filetypes.lua").stylua,
+        },
+        php = {
+          function()
+            return {
+              exe = "vendor/bin/phpcbf",
+              args = {
+                "--stdin-path=" .. util.quote_cmd_arg(util.get_current_buffer_file_path()),
+                "-",
+              },
+              ignore_exitcode = true,
+              stdin = true,
+              no_append = true,
+            }
+          end,
+        },
+        javascript = {
+          require("formatter.filetypes.javascript").semistandard,
+        }
+
+        -- Use the special "*" filetype for defining formatter configurations on
+        -- any filetype
+      --  ["*"] = {
+          -- "formatter.filetypes.any" defines default configurations for any
+          -- filetype
+        --  require("formatter.filetypes.any").remove_trailing_whitespace,
+        --},
       },
     })
 
+    -- Setup nvim-linti
+    local phpcs = require('lint').linters.phpcs
+    phpcs.cmd = 'vendor/bin/phpcs'
+
+    require('lint').linters_by_ft = {
+      php = { 'phpcs', }
+    }
+
+    vim.api.nvim_create_autocmd({"TextChanged","TextChangedI","BufWritePost","BufEnter" }, {
+      callback = function()
+        require("lint").try_lint()
+      end,
+    })
+
+
+    -- Setup Null-ls
+    --
+    -- local null_ls = require("null-ls")
+    -- null_ls.setup({
+    --   sources = {
+    --     null_ls.builtins.diagnostics.phpcs.with({
+    --       prefer_local = "vendor/bin",
+    --       args = {
+    --         "--report=json",
+    --         "-q",
+    --         "-s",
+    --         "--runtime-set",
+    --         "ignore_warnings_on_exit",
+    --         "1",
+    --         "--runtime-set",
+    --         "ignore_errors_on_exit",
+    --         "1",
+    --         "--stdin-path=$FILENAME",
+    --         "--basepath=",
+    --       },
+    --     }),
+    --     null_ls.builtins.formatting.phpcbf.with({
+    --       prefer_local = "vendor/bin",
+    --     }),
+    --     --null_ls.builtins.formatting.phpcsfixer.with({
+    --     --  prefer_local = "vendor/bin",
+    --     --}),
+    --     null_ls.builtins.formatting.prettierd,
+    --     null_ls.builtins.formatting.stylua,
+    --     null_ls.builtins.formatting.shfmt.with({ filetypes = { "sh", "zsh" } }),
+    --     null_ls.builtins.diagnostics.shellcheck.with({ filetypes = { "sh", "zsh" } }),
+    --     null_ls.builtins.code_actions.shellcheck.with({ filetypes = { "sh", "zsh" } }),
+    --     null_ls.builtins.diagnostics.zsh,
+    --     null_ls.builtins.code_actions.gitsigns,
+    --   },
+    -- })
+    --
     -- Setup lsp progress
     --require("lsp-progress").setup()
 

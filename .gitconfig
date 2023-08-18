@@ -12,6 +12,7 @@
 	navigate = true    # use n and N to move between diff sections
 	light = true      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
 	line-numbers = true
+	#side-by-side = true
 [merge]
 	conflictstyle = diff3
 	autoStash = true
@@ -23,10 +24,12 @@
 [push]
 	autoSetupRemote = true
 [alias]
-	s = status -s
+	s = status
 	d = diff
 	dc = diff --cached
 	l = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -20
 	unstage = restore --staged
 	amend = commit --amend --no-edit
 	recommit = commit --reuse-message=HEAD
+	num-staged = diff --cached --num
+	history = log -p --

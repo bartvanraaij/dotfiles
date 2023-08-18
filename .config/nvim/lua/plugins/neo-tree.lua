@@ -16,10 +16,22 @@ return {
           hide_dotfiles = false,
           hide_gitignored = false,
         },
+        follow_current_file = {
+          enabled = true,
+        },
       },
+      hide_root_node = true,
       source_selector = {
         winbar = true,
-      }
+        statusline = false,
+        -- show_scrolled_off_parent_node=true,
+
+        highlight_tab = "BufferLineBuffer",
+        highlight_tab_active = "BufferLineBufferSelected",
+        highlight_background = "Somethign1",
+        highlight_separator = "BufferLineSeparator",
+        highlight_separator_active = "BufferLineSeparatorSelected",
+      },
     })
   end,
 }

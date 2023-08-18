@@ -4,6 +4,7 @@ return {
   dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope-fzf-native.nvim",
+    "nvim-telescope/telescope-live-grep-args.nvim",
     --		"nvim-telescope/telescope-ui-select.nvim",
   },
   --cmd = "Telescope",
@@ -45,13 +46,16 @@ return {
           },
           path_display = {
             truncate = 2,
-          }
+          },
         }
       ),
       extensions = {
         --["ui-select"] = {
         --  custom_dropdown,
         --},
+        live_grep_args = {
+          auto_quoting = false,
+        }
       },
       pickers = {
         buffers = {
@@ -87,10 +91,15 @@ return {
           --            preview_cutoff = 120
           --          },
         },
+        find_files = {
+          hidden = true,
+          -- no_ignore = true,
+        },
       },
     })
 
     telescope.load_extension("fzf")
+    telescope.load_extension("live_grep_args")
     --telescope.load_extension("projects")
     --telescope.load_extension("ui-select")
 

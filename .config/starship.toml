@@ -5,7 +5,6 @@ $git_commit\
 $git_state\
 $git_metrics\
 $git_status\
-$docker_context\
 $package\
 $golang\
 $lua\
@@ -25,3 +24,6 @@ $character"""
 success_symbol = '[〉](bright-green)'
 error_symbol = '[〉](bright-red)'
 vimcmd_symbol = '[〉](bright-blue)'
+
+[git_metrics]
+disabled = false

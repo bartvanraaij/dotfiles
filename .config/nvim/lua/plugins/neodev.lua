@@ -1,6 +1,6 @@
 return {
 		"folke/neodev.nvim",
-    --lazy = false,
+    lazy = false,
     --enabled = false,
 		config = true,
 		ft = { "lua" }

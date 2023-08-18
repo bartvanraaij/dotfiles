@@ -4,8 +4,8 @@ local lsp_format = require("../functions").lsp_format
 vim.keymap.set("n", "q", "")
 
 -- Save
-map("n", "<C-s>", ":w<cr>", "Save")
-map("i", "<C-s>", "<Esc>:w<cr>a", "Save")
+--map("n", "<C-s>", ":w<cr>", "Save")
+--map("i", "<C-s>", "<Esc>:w<cr>a", "Save")
 
 -- Plugins
 map("n", "<leader>pl", "<cmd>Lazy<cr>", "Lazy.nvim")
@@ -16,17 +16,35 @@ map("n", "<leader>eb", "<cmd>Neotree focus buffers toggle reveal<cr>", "Explore 
 
 -- Telescope
 map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", "Find file")
-map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", "Find text")
+--map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", "Find text")
+map("n", "<leader>fg", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", "Find text")
 map("n", "<leader>fb", "<cmd>Telescope buffers previewer=false<cr>", "Find buffer")
 map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", "Find help tag")
 map("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", "Find recent file")
 
--- Buffer navigation
-map("n", "<S-Tab>", "<cmd>BufferLineCycleNext<cr>")
+map("n", "<C-w>-", "<cmd>split<cr>", "Split window")
+map("n", "<C-w>\\", "<cmd>vsplit<cr>", "Split window vertically")
+--map("n", "<C-s>-", "<cmd>split<cr>", "Split window");
+--map("n", "<C-s>", "<C-w>", "+window", { noremap = false, silent = false});
+--vim.cmd([[nmap <C-s> <C-w>]])
+map("n", "<C-s>", "<C-w>", "", { remap = true, silent = true })
+
+-- Buffers
+map("n", "<C-Tab>", "<cmd>BufferLineCycleNext<cr>")
+map("n", "<leader>bn", "<cmd>BufferLineCycleNext<cr>", "Next buffer")
+map("n", "<leader>bd", "<cmd>bp<bar>sp<bar>bn<bar>bd<cr>", "Close buffer")
+map("n", "<leader>ba", "<cmd>%bd<cr>", "Close all buffers")
+for i = 1, 9, 1 do
+  map("n", "<C-b>" .. i, "<cmd>lua require('bufferline').go_to(" .. i .. ", true)<cr>", "Goto buffer " .. i)
+end
+map("n", "<C-b>d", "<cmd>bp<bar>sp<bar>bn<bar>bd<cr>", "Delete current buffer")
+map("n", "<C-b>l", "<cmd>BufferLineCycleNext<cr>", "Next buffer")
+map("n", "<C-b>h", "<cmd>BufferLineCyclePrev<cr>", "Previous buffer")
+--map("n", "<C-b>da", "<cmd>%bd<cr>", "Close all buffers")
 
 -- Code actions
 --map("n", "<leader>cf", "<cmd>lua vim.lsp.buf.format()<cr>", "Code format")
-map("n", "<leader>cf", "<cmd>LspFormat<cr>", "Code format")
+map("n", "<leader>cf", "<cmd>Format<cr>", "Code format")
 map({ "n", "v" }, "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
 map("v", "a", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
 map("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", "Code rename")
@@ -72,7 +90,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     --vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     --vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     --vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-    map("n", "<C-k>", vim.lsp.buf.signature_help, "Signature help", opts)
+    --map("n", "<C-k>", vim.lsp.buf.signature_help, "Signature help", opts)
     --vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wl', function()

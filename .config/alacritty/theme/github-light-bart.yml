@@ -1,0 +1,38 @@
+# github Alacritty Colors
+# Source: https://github.com/projekt0n/github-nvim-theme/blob/main/lua/github-theme/palette/github_light.lua
+               
+colors:
+  # Default colors
+  primary:
+    background: '#ffffff'
+    foreground: '#24292f'
+
+  # Normal colors
+  normal:
+    black:   '#24292f'
+    red:     '#cf222e'
+    green:   '#116329'
+    yellow:  '#dbab09'
+    blue:    '#0969da'
+    magenta: '#8250df'
+    cyan:    '#1b7c83'
+    white:   '#fafafa'
+
+  # Bright colors
+  bright:
+    black:   '#57606a'
+    red:     '#a40e26'
+    green:   '#1a7f37'
+    yellow:  '#b08800'
+    blue:    '#218bff'
+    magenta: '#a475f9'
+    cyan:    '#3192aa'
+    white:   '#ffffff'
+
+  indexed_colors:
+    - { index: 16, color: '0xd18616' }
+    - { index: 17, color: '0xcb2431' }
+
+  cursor:
+    text: '#ffffff'
+    cursor: '#8250df'

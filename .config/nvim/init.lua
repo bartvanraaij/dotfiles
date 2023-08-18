@@ -48,11 +48,12 @@ require("lazy").setup("plugins", {
   },
 })
 
+-- Colorscheme
+--vim.cmd([[colorscheme tokyonight-night]])
+vim.cmd([[colorscheme github_light]])
+
 -- Keymap
 require("config.keymap")
-
--- Colorscheme
-vim.cmd([[colorscheme github_light]])
 
 -- Icons
 require("config.icons")

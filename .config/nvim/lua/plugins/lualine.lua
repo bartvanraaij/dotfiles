@@ -14,19 +14,6 @@ return {
       end
     end
 
-    local bufferline = {
-      "buffers",
-      component_separators = {
-        left = "",
-        right = "",
-      },
-      mode = 2,
-      show_modified_status = false,
-      symbols = {
-        alternate_file = "",
-      },
-      max_length = vim.o.columns,
-    }
 
     local wb = {
       lualine_c = {
@@ -87,8 +74,8 @@ return {
         --  "require('lsp-progress').progress()",
         --},
       },
-      winbar = wb,
-      inactive_winbar = wb,
+--      winbar = wb,
+ --     inactive_winbar = wb,
       --tabline = {
       --  lualine_z = {
       --    bufferline,

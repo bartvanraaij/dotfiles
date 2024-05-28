@@ -4,8 +4,8 @@ local lsp_format = require("../functions").lsp_format
 vim.keymap.set("n", "q", "")
 
 -- Save
---map("n", "<C-s>", ":w<cr>", "Save")
---map("i", "<C-s>", "<Esc>:w<cr>a", "Save")
+map("n", "<C-s>", ":w<cr>", "Save")
+map("i", "<C-s>", "<Esc>:w<cr>a", "Save")
 
 -- Plugins
 map("n", "<leader>pl", "<cmd>Lazy<cr>", "Lazy.nvim")

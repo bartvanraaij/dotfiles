@@ -17,7 +17,7 @@ local function define_autocmds(definitions)
 end
 
 local autocmds = {
-  { -- taken from AstroNvim
+  { -- taken from LunarVim
     { "BufRead", "BufWinEnter", "BufNewFile" },
     {
       group = "_file_opened",
@@ -26,7 +26,7 @@ local autocmds = {
         local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
         if not (vim.fn.expand("%") == "" or buftype == "nofile") then
           vim.api.nvim_del_augroup_by_name("_file_opened")
-          vim.cmd("do User FileOpened")
+          vim.api.nvim_exec_autocmds("User", { pattern = "FileOpened" })
         end
       end,
     },
@@ -51,20 +51,20 @@ local autocmds = {
     },
   },
   {
-    { "User FileOpened" },
+    { "BufRead", "BufWinEnter", "BufNewFile" },
     {
       command = "set formatoptions-=c formatoptions-=r formatoptions-=o",
     },
   },
-  {
-    { "TermOpen term://*" },
-    {
-      callback = function()
-        local opts = { buffer = 0 }
-        vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], opts)
-      end,
-    },
-  },
+--   {
+--     { "TermOpen term://*" },
+--     {
+--       callback = function()
+--         local opts = { buffer = 0 }
+--         vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], opts)
+--       end,
+--     },
+--   },
   --{
   --	{ "VimEnter"},
   --	{

@@ -12,7 +12,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # History
 export HISTFILE=~/.zsh_history
 SAVEHIST=5000 # Save 5000 rows
-HISTSIZE=2000 # Load 2000 rows in memory
+HISTSIZE=5000 # Load 2000 rows in memory
 setopt SHARE_HISTORY # share history across multiple zsh sessions
 setopt APPEND_HISTORY # append to history file (no overwriting)
 setopt INC_APPEND_HISTORY # Immediately add them, not on shell exit
@@ -20,14 +20,17 @@ setopt HIST_IGNORE_DUPS # Do not store duplicates
 setopt HIST_REDUCE_BLANKS # Remove blank lines
 
 # enable corrections
-setopt CORRECT
-setopt CORRECT_ALL
+setopt CORRECT # Try to correct the spelling of commands.
+#setopt CORRECT_ALL # Try to correct the spelling of all arguments in a line.
 
 function zvm_config() {
 # ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
 }
 
 # Set emacs navigation mode keys (C-a, C-e etc)
-#bindkey -e
+bindkey -e
 # Set vim navigation mode keys
-bindkey -v
+#bindkey -v
+
+# Fzf colors
+export FZF_DEFAULT_OPTS="--color=bg+:#e7eaf0,bg:#ffffff,spinner:#cf222e,hl:#6e7781,fg:#1f2328,header:#6e7781,info:#cf222e,pointer:#cf222e,marker:#cf222e,fg+:#1f2328,preview-bg:#f6f8fa,prompt:#cf222e,hl+:#cf222e"

@@ -52,8 +52,27 @@ require("lazy").setup("plugins", {
 --vim.cmd([[colorscheme tokyonight-night]])
 vim.cmd([[colorscheme github_light]])
 
+
+vim.cmd([[let g:fzf_colors =
+\ { 'fg':         ['fg', 'Normal'],
+  \ 'bg':         ['bg', 'Normal'],
+  \ 'preview-bg': ['bg', 'NormalFloat'],
+  \ 'hl':         ['fg', 'Comment'],
+  \ 'fg+':        ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':        ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':        ['fg', 'Statement'],
+  \ 'info':       ['fg', 'PreProc'],
+  \ 'border':     ['fg', 'Ignore'],
+  \ 'prompt':     ['fg', 'Conditional'],
+  \ 'pointer':    ['fg', 'Exception'],
+  \ 'marker':     ['fg', 'Keyword'],
+  \ 'spinner':    ['fg', 'Label'],
+  \ 'header':     ['fg', 'Comment'] }]])
+
 -- Keymap
 require("config.keymap")
 
 -- Icons
 require("config.icons")
+
+

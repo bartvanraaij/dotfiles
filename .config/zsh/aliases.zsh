@@ -25,7 +25,13 @@ alias dotedit='GIT_DIR=$HOME/.dot GIT_WORK_TREE=$HOME nvim'
 alias gs='git s'
 alias gc='git commit -m'
 alias gl='git l'
+alias gd='git d'
 alias gdc='git dc'
+alias ga='git add'
+
+# Docker
+alias dc='docker compose'
+alias dstats='docker stats --no-stream --format "table {{.Name}}\t{{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}" | sort -k 4 -h'
 
 # Tmux kill detached sessions
 function tmux-kill-detached-sessions {

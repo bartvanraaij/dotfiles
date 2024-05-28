@@ -14,7 +14,6 @@ return {
       end
     end
 
-
     local wb = {
       lualine_c = {
         --  function()
@@ -46,6 +45,20 @@ return {
         -- bufferline,
       },
     }
+
+    local function LspIcon()
+      local active_clients_count = #vim.lsp.get_active_clients()
+      return active_clients_count > 0 and " LSP" or ""
+    end
+
+    local function LspStatus()
+      return require("lsp-progress").progress({
+        format = function(messages)
+          return #messages > 0 and table.concat(messages, " ") or ""
+        end,
+      })
+    end
+
     require("lualine").setup({
       options = {
         globalstatus = true,
@@ -74,13 +87,21 @@ return {
         --  "require('lsp-progress').progress()",
         --},
       },
---      winbar = wb,
- --     inactive_winbar = wb,
+      --      winbar = wb,
+      --     inactive_winbar = wb,
       --tabline = {
       --  lualine_z = {
       --    bufferline,
       --  }
       --}
+    })
+
+    -- listen lsp-progress event and refresh lualine
+    vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
+    vim.api.nvim_create_autocmd("User", {
+      group = "lualine_augroup",
+      pattern = "LspProgressStatusUpdated",
+      callback = require("lualine").refresh,
     })
   end,
 }

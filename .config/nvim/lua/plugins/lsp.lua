@@ -7,6 +7,7 @@ return {
     "nvim-lua/plenary.nvim",
     "mhartington/formatter.nvim",
     "mfussenegger/nvim-lint",
+    "linrongbin16/lsp-progress.nvim",
   },
   --event = "VeryLazy",
   event = "User FileOpened",
@@ -17,7 +18,7 @@ return {
     -- Setup Mason
     require("mason").setup()
     require("mason-lspconfig").setup({
-      ensure_installed = { "lua_ls", "phpactor", "tsserver", "yamlls", "intelephense" },
+      ensure_installed = { "lua_ls", "phpactor", "tsserver", "yamlls", "intelephense", "rust_analyzer" },
       automatic_installation = { exclude = { "tailwindcss" } },
     })
 
@@ -35,6 +36,7 @@ return {
     -- require("lspconfig").intelephense.setup({})
     require("lspconfig").tsserver.setup({})
     require("lspconfig").yamlls.setup({})
+    require("lspconfig").rust_analyzer.setup({})
 
     -- Setup formatter.nvim
     local util = require("formatter.util")
@@ -68,32 +70,37 @@ return {
         },
         javascript = {
           require("formatter.filetypes.javascript").semistandard,
-        }
+        },
+        typescript = {
+          require("formatter.filetypes.typescript").prettier,
+        },
+        rust = {
+          require("formatter.filetypes.rust").rustfmt,
+        },
 
         -- Use the special "*" filetype for defining formatter configurations on
         -- any filetype
-      --  ["*"] = {
-          -- "formatter.filetypes.any" defines default configurations for any
-          -- filetype
+        --  ["*"] = {
+        -- "formatter.filetypes.any" defines default configurations for any
+        -- filetype
         --  require("formatter.filetypes.any").remove_trailing_whitespace,
         --},
       },
     })
 
     -- Setup nvim-linti
-    local phpcs = require('lint').linters.phpcs
-    phpcs.cmd = 'vendor/bin/phpcs'
+    local phpcs = require("lint").linters.phpcs
+    phpcs.cmd = "vendor/bin/phpcs"
 
-    require('lint').linters_by_ft = {
-      php = { 'phpcs', }
+    require("lint").linters_by_ft = {
+      php = { "phpcs" },
     }
 
-    vim.api.nvim_create_autocmd({"TextChanged","TextChangedI","BufWritePost","BufEnter" }, {
+    vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI", "BufWritePost", "BufEnter" }, {
       callback = function()
         require("lint").try_lint()
       end,
     })
-
 
     -- Setup Null-ls
     --
@@ -133,7 +140,7 @@ return {
     -- })
     --
     -- Setup lsp progress
-    --require("lsp-progress").setup()
+    require("lsp-progress").setup()
 
     -- Todo setup useful keybinds
     -- Setup keybinds
@@ -172,6 +179,61 @@ return {
     --    end, opts)
     --  end,
     --})
+
+    local Float = require("plenary.window.float")
+
+    vim.cmd([[
+    augroup LspPhpactor
+      autocmd!
+      autocmd Filetype php command! -nargs=0 LspPhpactorReindex lua vim.lsp.buf_notify(0, "phpactor/indexer/reindex",{})
+      autocmd Filetype php command! -nargs=0 LspPhpactorConfig lua LspPhpactorDumpConfig()
+      autocmd Filetype php command! -nargs=0 LspPhpactorStatus lua LspPhpactorStatus()
+      autocmd Filetype php command! -nargs=0 LspPhpactorBlackfireStart lua LspPhpactorBlackfireStart()
+      autocmd Filetype php command! -nargs=0 LspPhpactorBlackfireFinish lua LspPhpactorBlackfireFinish()
+    augroup END
+]])
+
+    local function showWindow(title, syntax, contents)
+      local out = {}
+      for match in string.gmatch(contents, "[^\n]+") do
+        table.insert(out, match)
+      end
+
+      local float = Float.percentage_range_window(0.6, 0.4, { winblend = 0 }, {
+        title = title,
+        topleft = "┌",
+        topright = "┐",
+        top = "─",
+        left = "│",
+        right = "│",
+        botleft = "└",
+        botright = "┘",
+        bot = "─",
+      })
+
+      vim.api.nvim_buf_set_option(float.bufnr, "filetype", syntax)
+      vim.api.nvim_buf_set_lines(float.bufnr, 0, -1, false, out)
+    end
+
+    function LspPhpactorDumpConfig()
+      local results, _ = vim.lsp.buf_request_sync(0, "phpactor/debug/config", { ["return"] = true })
+      for _, res in pairs(results or {}) do
+        showWindow("Phpactor LSP Configuration", "json", res["result"])
+      end
+    end
+    function LspPhpactorStatus()
+      local results, _ = vim.lsp.buf_request_sync(0, "phpactor/status", { ["return"] = true })
+      for _, res in pairs(results or {}) do
+        showWindow("Phpactor Status", "markdown", res["result"])
+      end
+    end
+
+    function LspPhpactorBlackfireStart()
+      local _, _ = vim.lsp.buf_request_sync(0, "blackfire/start", {})
+    end
+    function LspPhpactorBlackfireFinish()
+      local _, _ = vim.lsp.buf_request_sync(0, "blackfire/finish", {})
+    end
   end,
   build = ":MasonUpdate",
 }

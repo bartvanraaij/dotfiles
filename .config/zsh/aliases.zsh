@@ -1,8 +1,8 @@
 alias vim="nvim"
 
 # exa, prettier ls replacement
-alias ls="exa -a --icons"
-alias la="exa -a --long --icons --header --no-user --git"
+alias ls="eza -a --icons"
+alias la="eza -a --long --icons --header --no-user --git"
 
 # Myonlinestore Psalm single file
 alias mospsalm="vendor/bin/psalm --config=psalm.xml.dist --show-info=true  --ignore-baseline"

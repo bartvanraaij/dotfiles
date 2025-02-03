@@ -18,7 +18,7 @@ return {
     -- Setup Mason
     require("mason").setup()
     require("mason-lspconfig").setup({
-      ensure_installed = { "lua_ls", "phpactor", "tsserver", "yamlls", "intelephense", "rust_analyzer" },
+      ensure_installed = { "lua_ls", "phpactor", "ts_ls", "yamlls", "intelephense", "rust_analyzer", "jsonls" },
       automatic_installation = { exclude = { "tailwindcss" } },
     })
 
@@ -34,9 +34,10 @@ return {
     require("lspconfig").lua_ls.setup({})
     require("lspconfig").phpactor.setup({})
     -- require("lspconfig").intelephense.setup({})
-    require("lspconfig").tsserver.setup({})
+    require("lspconfig").ts_ls.setup({})
     require("lspconfig").yamlls.setup({})
     require("lspconfig").rust_analyzer.setup({})
+    require("lspconfig").jsonls.setup({})
 
     -- Setup formatter.nvim
     local util = require("formatter.util")
@@ -70,6 +71,9 @@ return {
         },
         javascript = {
           require("formatter.filetypes.javascript").semistandard,
+        },
+        json = {
+          require("formatter.filetypes.json").prettier,
         },
         typescript = {
           require("formatter.filetypes.typescript").prettier,

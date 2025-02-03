@@ -11,8 +11,8 @@ function M.lsp_format(bufnr)
   --print(vim.inspect(bufnr))
   vim.lsp.buf.format({
     filter = function(client)
-      -- Don't use tsserver for formatting
-      return client.name ~= "tsserver"
+      -- Don't use ts_ls for formatting
+      return client.name ~= "ts_ls"
       --local file_type = vim.api.nvim_buf_get_option(bufnr, "filetype")
       -- apply whatever logic you want (in this example, we'll only use null-ls)
       -- return client.name == "null-ls"

@@ -10,3 +10,8 @@ precmd_functions+=(set_window_title)
 
 # Starship
 eval "$(starship init zsh)"
+
+# Neofetch
+#neofetch
+
+fastfetch

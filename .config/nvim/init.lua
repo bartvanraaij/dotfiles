@@ -49,8 +49,8 @@ require("lazy").setup("plugins", {
 })
 
 -- Colorscheme
-vim.cmd([[colorscheme tokyonight-night]])
---vim.cmd([[colorscheme github_light]])
+--vim.cmd([[colorscheme tokyonight-night]])
+vim.cmd([[colorscheme github_light]])
 
 
 vim.cmd([[let g:fzf_colors =

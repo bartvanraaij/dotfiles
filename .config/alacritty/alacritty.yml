@@ -201,8 +201,8 @@ draw_bold_text_with_bright_colors: true
 
 import:
   #- ~/.config/alacritty/theme/kanagawa-wave.yml
-  #  - ~/.config/alacritty/theme/github-light-bart.yml
-  - ~/.config/alacritty/theme/tokyonight_night.yml
+   - ~/.config/alacritty/theme/github-light-bart.yml
+  #- ~/.config/alacritty/theme/tokyonight_night.yml
   #- ~/.config/alacritty/theme/tokyonight_night.yml
 
 # Colors (Gruvbox)

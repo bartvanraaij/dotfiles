@@ -42,4 +42,7 @@ bindkey -e
 #	--color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff 
 #	--color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a'
 
+# Hide Homebrew nagging cleanup msg
+export HOMEBREW_NO_ENV_HINTS=1
+
 

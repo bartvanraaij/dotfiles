@@ -45,4 +45,5 @@ bindkey -e
 # Hide Homebrew nagging cleanup msg
 export HOMEBREW_NO_ENV_HINTS=1
 
-
+# Allow comments in zsh line
+setopt interactivecomments

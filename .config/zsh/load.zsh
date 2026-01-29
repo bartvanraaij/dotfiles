@@ -14,4 +14,9 @@ eval "$(starship init zsh)"
 # Neofetch
 #neofetch
 
+# Fzf
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
+# Fastfetch
 fastfetch

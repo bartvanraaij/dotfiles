@@ -1,0 +1,49 @@
+
+[env]
+TERM = "alacritty-direct"
+
+[font]
+size = 13.5
+
+[font.bold]
+style = "Light"
+
+[font.glyph_offset]
+x = 0
+y = 2
+
+[font.italic]
+style = "Light Italic"
+
+[font.normal]
+family = "BlexMono Nerd Font"
+style = "Light"
+
+[font.offset]
+x = 0
+y = 4
+
+[terminal.shell]
+args = ["-l", "-c", 'tmux new-session -t main\; new-window']
+program = "/bin/zsh"
+
+[window]
+dynamic_padding = false
+opacity = 1.0
+option_as_alt = "Both"
+
+[window.dimensions]
+columns = 200
+lines = 50
+
+[window.padding]
+x = 4
+y = 4
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[general]
+import = ["/Users/bartvanraaij/.config/alacritty/theme/github-light-bart.toml"]
+
+[terminal]

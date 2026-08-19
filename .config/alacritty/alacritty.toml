@@ -47,3 +47,8 @@ draw_bold_text_with_bright_colors = true
 import = ["/Users/bartvanraaij/.config/alacritty/theme/github-light-bart.toml"]
 
 [terminal]
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"

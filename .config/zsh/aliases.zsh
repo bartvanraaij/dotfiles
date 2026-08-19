@@ -1,5 +1,8 @@
 alias vim="nvim"
 
+alias python="python3"
+alias pip="pip3"
+
 # exa, prettier ls replacement
 alias ls="eza -a --icons"
 alias la="eza -a --long --icons --header --no-user --git"
@@ -59,3 +62,6 @@ function ansicolors {
 	echo -e "\u001b[36m Cyan\t \u001b[36;1m Bright Cyan \u001b[0m"
 	echo -e "\u001b[37m White\t \u001b[37;1m Bright White \u001b[0m"
 }
+
+# Tf
+alias tfx='./scripts/tf-apply.sh'

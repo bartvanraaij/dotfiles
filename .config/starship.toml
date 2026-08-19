@@ -15,10 +15,12 @@ $ruby\
 $rust\
 $custom\
 $sudo\
-$cmd_duration\
 $line_break\
 $status\
 $character"""
+
+right_format= """$cmd_duration\
+"""
 
 [character]
 success_symbol = '[〉](bright-green)'
@@ -27,3 +29,7 @@ vimcmd_symbol = '[〉](bright-blue)'
 
 [git_metrics]
 disabled = false
+
+[cmd_duration]
+show_milliseconds = true
+min_time = 50

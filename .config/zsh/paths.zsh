@@ -9,9 +9,9 @@ if [ -f '/Users/bart/.bart/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/bart
 if [ -f '/Users/bart/.bart/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/bart/.bart/google-cloud-sdk/completion.zsh.inc'; fi
 
 # NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Homebrew PHP
 export PATH="$PATH:/opt/homebrew/opt/php@8.3/bin"
@@ -28,6 +28,5 @@ export PATH="$PATH:/Users/bartvanraaij/.dotnet/tools"
 # Psql
 export PATH="$PATH:/opt/homebrew/opt/libpq/bin"
 
-
  # Mysql
- export PATH="$PATH:/opt/homebrew/opt/mysql-client@8.4/bin"
+#export PATH="$PATH:/opt/homebrew/opt/mysql-client@8.4/bin"

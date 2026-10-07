@@ -26,7 +26,12 @@ local autocmds = {
         local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
         if not (vim.fn.expand("%") == "" or buftype == "nofile") then
           vim.api.nvim_del_augroup_by_name("_file_opened")
-          vim.api.nvim_exec_autocmds("User", { pattern = "FileOpened" })
+          -- Deferred until BufRead (incl. filetype detection) is done: plugins loaded on FileOpened
+          -- (e.g. vim.lsp.enable) can fire FileType, which makes the pending `:setf` a no-op,
+          -- leaving the buffer without filetype (seen on auto-session restore)
+          vim.schedule(function()
+            vim.api.nvim_exec_autocmds("User", { pattern = "FileOpened" })
+          end)
         end
       end,
     },

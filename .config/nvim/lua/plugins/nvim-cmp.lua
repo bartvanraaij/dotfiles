@@ -61,6 +61,7 @@ return {
         --	}) --If nothing is selected (including preselections) add a newline as usual. If something has explicitly been selected by the user, select it.
       },
       sources = cmp.config.sources({
+        { name = "lazydev", group_index = 0 }, -- require() / annotation completion in nvim config
         { name = "nvim_lsp" },
         { name = "luasnip" },
         { name = "nvim_lsp_signature_help" },

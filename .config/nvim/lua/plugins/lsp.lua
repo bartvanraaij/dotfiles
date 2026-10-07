@@ -1,11 +1,10 @@
 return {
-  "williamboman/mason-lspconfig.nvim",
+  "mason-org/mason-lspconfig.nvim",
   dependencies = {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     "neovim/nvim-lspconfig",
     --"jose-elias-alvarez/null-ls.nvim",
     "nvim-lua/plenary.nvim",
-    "mhartington/formatter.nvim",
     "mfussenegger/nvim-lint",
     "linrongbin16/lsp-progress.nvim",
   },
@@ -19,7 +18,6 @@ return {
     require("mason").setup()
     require("mason-lspconfig").setup({
       ensure_installed = { "lua_ls", "phpactor", "ts_ls", "yamlls", "intelephense", "rust_analyzer", "jsonls" },
-      automatic_installation = { exclude = { "tailwindcss" } },
       -- Enable servers manually below (keeps intelephense installed but disabled)
       automatic_enable = false,
     })
@@ -34,59 +32,6 @@ return {
       "yamlls",
       "rust_analyzer",
       "jsonls",
-    })
-
-    -- Setup formatter.nvim
-    local util = require("formatter.util")
-    require("formatter").setup({
-      -- Enable or disable logging
-      logging = true,
-      -- Set the log level
-      log_level = vim.log.levels.WARN,
-      -- All formatter configurations are opt-in
-      filetype = {
-        -- Formatter configurations for filetype "lua" go here
-        -- and will be executed in order
-        lua = {
-          -- "formatter.filetypes.lua" defines default configurations for the
-          -- "lua" filetype
-          require("formatter.filetypes.lua").stylua,
-        },
-        php = {
-          function()
-            return {
-              exe = "vendor/bin/phpcbf",
-              args = {
-                "--stdin-path=" .. util.quote_cmd_arg(util.get_current_buffer_file_path()),
-                "-",
-              },
-              ignore_exitcode = true,
-              stdin = true,
-              no_append = true,
-            }
-          end,
-        },
-        javascript = {
-          require("formatter.filetypes.javascript").semistandard,
-        },
-        json = {
-          require("formatter.filetypes.json").prettier,
-        },
-        typescript = {
-          require("formatter.filetypes.typescript").prettier,
-        },
-        rust = {
-          require("formatter.filetypes.rust").rustfmt,
-        },
-
-        -- Use the special "*" filetype for defining formatter configurations on
-        -- any filetype
-        --  ["*"] = {
-        -- "formatter.filetypes.any" defines default configurations for any
-        -- filetype
-        --  require("formatter.filetypes.any").remove_trailing_whitespace,
-        --},
-      },
     })
 
     -- Setup nvim-linti
@@ -212,7 +157,7 @@ return {
         bot = "─",
       })
 
-      vim.api.nvim_buf_set_option(float.bufnr, "filetype", syntax)
+      vim.bo[float.bufnr].filetype = syntax
       vim.api.nvim_buf_set_lines(float.bufnr, 0, -1, false, out)
     end
 

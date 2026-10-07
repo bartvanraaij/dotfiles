@@ -12,6 +12,8 @@ return {
       json = { "prettier" },
       typescript = { "prettier" },
       rust = { "rustfmt" },
+      -- Uses project-local `dotnet csharpier` if in the tool manifest, else global ~/.dotnet/tools/csharpier
+      cs = { "csharpier" },
     },
     -- Filetypes without a formatter above fall back to the LSP formatter
     default_format_opts = {

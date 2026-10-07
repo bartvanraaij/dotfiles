@@ -48,7 +48,7 @@ map("n", "<leader>cf", "<cmd>Format<cr>", "Code format")
 map({ "n", "v" }, "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
 map("v", "a", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
 map("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", "Code rename")
-map("n", "<leader>ct", "<cmd>TroubleToggle<cr>", "Code trouble") -- TOdo improve
+map("n", "<leader>ct", "<cmd>Trouble diagnostics toggle<cr>", "Code trouble") -- TOdo improve
 
 -- Test
 map("n", "<leader>tf", "<cmd>TestFile<cr>", "Test File")

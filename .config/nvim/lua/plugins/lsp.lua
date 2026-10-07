@@ -20,24 +20,21 @@ return {
     require("mason-lspconfig").setup({
       ensure_installed = { "lua_ls", "phpactor", "ts_ls", "yamlls", "intelephense", "rust_analyzer", "jsonls" },
       automatic_installation = { exclude = { "tailwindcss" } },
+      -- Enable servers manually below (keeps intelephense installed but disabled)
+      automatic_enable = false,
     })
 
-    -- Auto setup handlers:
-    --[[
-    require("mason-lspconfig").setup_handlers({
-      function(server_name) -- default handler (optional)
-        require("lspconfig")[server_name].setup({})
-      end,
+    -- Enable servers (nvim 0.11+ native API; configs come from nvim-lspconfig's lsp/ dir).
+    -- Per-server overrides: vim.lsp.config("lua_ls", { settings = { ... } })
+    vim.lsp.enable({
+      "lua_ls",
+      "phpactor",
+      -- "intelephense",
+      "ts_ls",
+      "yamlls",
+      "rust_analyzer",
+      "jsonls",
     })
-    --]]
-    -- Manual setup handlers:
-    require("lspconfig").lua_ls.setup({})
-    require("lspconfig").phpactor.setup({})
-    -- require("lspconfig").intelephense.setup({})
-    require("lspconfig").ts_ls.setup({})
-    require("lspconfig").yamlls.setup({})
-    require("lspconfig").rust_analyzer.setup({})
-    require("lspconfig").jsonls.setup({})
 
     -- Setup formatter.nvim
     local util = require("formatter.util")

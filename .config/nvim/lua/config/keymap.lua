@@ -63,6 +63,12 @@ map({ "n" }, "gf", "<C-i>", "Go forward") -- Next edit location
 --vmap <LeftRelease> "*ygv
 map("v", "<LeftRelease>", '"*ygv') -- Copy contents of mouse selection to clipboard on mouse switch release
 
+-- Remove nvim 0.11+ default LSP maps grr, gri, grn, gra, grt, grx: they make our `gr` ambiguous,
+-- so nvim waited 'timeoutlen' (1s) before running it. Rename/code action live on <leader>cr/<leader>ca
+for _, lhs in ipairs({ "grr", "gri", "grn", "gra", "grt", "grx" }) do
+  pcall(vim.keymap.del, "n", lhs)
+end
+
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd("LspAttach", {

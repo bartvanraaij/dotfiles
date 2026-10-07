@@ -37,6 +37,23 @@ return {
         inc_rename = false, -- enables an input dialog for inc-rename.nvim
         lsp_doc_border = false, -- add a border to hover docs and signature help
       },
+      views = {
+        -- mini keeps messages 2s after their last update; this one hides ~right away.
+        -- Must stay above lsp.progress.throttle (100ms) or a running spinner flickers
+        mini_quick = { view = "mini", timeout = 150 },
+      },
+      routes = {
+        { -- gd/gr/gi "Finding ..." spinner (config/autocmds.lua): gone as soon as the server answers
+          view = "mini_quick",
+          filter = {
+            event = "lsp",
+            kind = "progress",
+            cond = function(message)
+              return tostring(message.opts.progress and message.opts.progress.id):find("user_request_", 1, true) ~= nil
+            end,
+          },
+        },
+      },
       cmdline = {
         view = "cmdline_popup",
         opts = {

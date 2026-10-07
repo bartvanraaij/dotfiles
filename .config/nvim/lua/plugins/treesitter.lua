@@ -5,7 +5,7 @@ return {
   enabled = true,
   config = function()
     require("nvim-treesitter.configs").setup({
-      ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "php", "javascript" },
+      ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "php", "javascript", "rust", "toml" },
       auto_install = true,
       highlight = {
         enable = true,

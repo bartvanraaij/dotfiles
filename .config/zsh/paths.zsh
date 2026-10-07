@@ -30,3 +30,6 @@ export PATH="$PATH:/opt/homebrew/opt/libpq/bin"
 
  # Mysql
 #export PATH="$PATH:/opt/homebrew/opt/mysql-client@8.4/bin"
+
+# Rust (Homebrew rustup is keg-only; its bin holds the cargo/rustc/rustfmt proxies)
+export PATH="/opt/homebrew/opt/rustup/bin:$HOME/.cargo/bin:$PATH"

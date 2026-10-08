@@ -114,3 +114,65 @@ local autocmds = {
 
 
 define_autocmds(autocmds)
+
+-- Reload files changed outside nvim (e.g. by Claude in another tmux pane), even while this nvim
+-- isn't focused: watch each file buffer and run :checktime when it changes on disk.
+-- With 'autoread' (default on) unmodified buffers reload silently; buffers with unsaved changes
+-- are never overwritten, nvim warns about the conflict instead.
+local file_watchers = {} ---@type table<integer, uv.uv_fs_event_t>
+local watch_group = vim.api.nvim_create_augroup("_file_watch", {})
+
+local function unwatch(bufnr)
+  local watcher = file_watchers[bufnr]
+  file_watchers[bufnr] = nil
+  if watcher and not watcher:is_closing() then
+    watcher:close()
+  end
+end
+
+local function watch(bufnr)
+  unwatch(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) or vim.bo[bufnr].buftype ~= "" then
+    return
+  end
+  local path = vim.api.nvim_buf_get_name(bufnr)
+  if path == "" or not vim.uv.fs_stat(path) then
+    return
+  end
+  local watcher = vim.uv.new_fs_event()
+  if not watcher then
+    return
+  end
+  file_watchers[bufnr] = watcher
+  watcher:start(path, {}, function(err)
+    -- Short delay: lets multi-step saves finish, and atomic saves (write temp file, rename it
+    -- over this one) replace the file, which ends this watch, so re-attach to the new file
+    vim.defer_fn(function()
+      if err or not vim.api.nvim_buf_is_valid(bufnr) then
+        return unwatch(bufnr)
+      end
+      pcall(vim.cmd.checktime, bufnr)
+      watch(bufnr)
+    end, 100)
+  end)
+end
+
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "BufFilePost" }, {
+  group = watch_group,
+  callback = function(ev)
+    watch(ev.buf)
+  end,
+})
+vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
+  group = watch_group,
+  callback = function(ev)
+    unwatch(ev.buf)
+  end,
+})
+-- Backup for changes made while no watcher was running
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
+  group = watch_group,
+  callback = function()
+    pcall(vim.cmd.checktime)
+  end,
+})

@@ -91,7 +91,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); model=$(echo \"$input\" | jq -r '.model.display_name'); remaining=$(echo \"$input\" | jq -r '.context_window.remaining_percentage // empty'); ctx_part=\"\"; [ -n \"$remaining\" ] && ctx_part=\" | ctx: ${remaining}% remaining\"; echo \"${cwd} | ${model}${ctx_part}\""
+    "command": "~/.claude/statusline.sh"
   },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,

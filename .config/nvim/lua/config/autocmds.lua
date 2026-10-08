@@ -78,14 +78,6 @@ local autocmds = {
     },
   },
   {
-    { "VimEnter" },
-    {
-      callback = function()
-        --require("nvim-tree.api").tree.open({ focus = false }) -- Open nvim-tree
-      end,
-    },
-  },
-  {
     { "BufLeave", "FocusLost" },
     {
       callback = function()

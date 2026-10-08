@@ -13,9 +13,6 @@ function M.lsp_format(bufnr)
     filter = function(client)
       -- Don't use ts_ls for formatting
       return client.name ~= "ts_ls"
-      --local file_type = vim.api.nvim_buf_get_option(bufnr, "filetype")
-      -- apply whatever logic you want (in this example, we'll only use null-ls)
-      -- return client.name == "null-ls"
     end,
     bufnr = bufnr,
   })

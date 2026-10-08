@@ -73,6 +73,9 @@ vim.cmd([[let g:fzf_colors =
   \ 'spinner':    ['fg', 'Label'],
   \ 'header':     ['fg', 'Comment'] }]])
 
+-- LSP settings shared by all servers
+require("config.lsp")
+
 -- Keymap
 require("config.keymap")
 

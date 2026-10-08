@@ -2,10 +2,10 @@
 #   theme            show current mode
 #   theme dark|light switch
 #   theme toggle     flip
-# Only Ghostty is switched here (via ~/.config/ghostty/theme.ghostty, not in dotfiles).
+# Switches Ghostty (via ~/.config/ghostty/theme.ghostty, not in dotfiles) and tmux (sources
+# tmux/theme-<mode>.conf; tmux.conf reads theme.ghostty on load).
 # Everything else follows Ghostty's theme by itself:
-#   tmux        client-light-theme/client-dark-theme hooks in tmux.conf
-#   nvim        theme notifications (DEC mode 2031), lua/config/theme.lua
+#   nvim        'background' from the terminal's color (OSC 11), lua/config/theme.lua
 #   Claude Code "theme": "auto"
 #   delta, bat  detect the terminal background per run
 #   fzf, lazygit, starship, eza  use the terminal's ANSI palette
@@ -27,5 +27,7 @@ theme() {
   else
     echo "theme = GitHub Dark Default" >"$file"
   fi
+  # tmux can't see Ghostty config reloads, so switch its colors directly (all sessions)
+  tmux source-file "$HOME/.config/tmux/theme-$mode.conf" 2>/dev/null
   echo "Terminal theme: $mode. Reload Ghostty with Cmd+Shift+, to apply."
 }

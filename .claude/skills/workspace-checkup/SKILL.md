@@ -18,7 +18,7 @@ The user's terminal workspace is hand-built and lives in a dotfiles bare repo. K
 | Neovim | `~/.config/nvim` (lazy.nvim, `lazy-lock.json`) | see Neovim section | headless checks below |
 | git | `~/.gitconfig` (delta pager, `dark = true`) | brew (git, git-delta) | `git log -p -1` |
 | Claude Code | `~/.claude/settings.json`, `rules/`, own `skills/` (not `skills/synced/`) | Claude Code self-updates | `jq . ~/.claude/settings.json` |
-| Tools | `~/.Brewfile` | `brew update && brew outdated` | `brew bundle check --global` |
+| Tools | `~/.Brewfile` (regenerate with `brew-store-installed`) | `brew update && brew outdated` | `brew bundle check --global` |
 
 **Color scheme: GitHub Dark Default (Primer) everywhere.** Ghostty theme `GitHub Dark Default`, nvim `github_dark_default`, tmux hex colors (legend in `tmux.conf`), delta `dark = true`, Claude Code `"theme": "dark"`. Background `#0d1117`. Any new tool config: dark, matching palette, hex colors over ANSI names.
 
@@ -34,7 +34,8 @@ The user's terminal workspace is hand-built and lives in a dotfiles bare repo. K
 
 1. **Snapshot.** `dot status --short` for touched areas. Dirty? Show it, ask to commit as a pre-update snapshot.
 2. **Inventory drift.**
-   - `brew outdated`; `brew bundle check --global`; installed-but-not-in-Brewfile: `brew bundle cleanup --global` (dry run, lists them). Propose adding tools the config depends on (e.g. tree-sitter-cli, stylua, rustup).
+   - `brew outdated`; `brew bundle check --global` (listed but not installed).
+   - Sync `~/.Brewfile` with what's installed using the user's alias `brew-store-installed` (= `brew bundle dump --global --force`), never by hand-editing. Then compare package sets old vs new (strip `# description` comments and `, trusted: true`) and show the user what was added/removed before committing.
    - Plugin clones: `.gitmodules` lists tpm and tmux-sensible, but in this bare-repo setup `dot submodule status` shows them as `-` (uninitialized); it says nothing about freshness. Check each clone in `~/.config/tmux/plugins/` instead: `git -C <dir> fetch -q && git -C <dir> rev-list --count HEAD..@{u}`. After pulling tpm or tmux-sensible, `dot add` the dir to record the new commit. Old upstream dates (tmux-sensible 2022, better-mouse-mode 2017) are inactive upstreams, not drift.
    - Untracked config under `~/.config/*` and `~/.claude/{rules,skills}`.
 3. **Update** (ask first for anything beyond nvim plugins): brew upgrades, `rustup update`, `dotnet tool update -g csharpier` and roslyn-language-server (see Neovim), tmux plugin clones, nvim plugins.

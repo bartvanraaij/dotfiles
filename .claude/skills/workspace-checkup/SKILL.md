@@ -20,7 +20,11 @@ The user's terminal workspace is hand-built and lives in a dotfiles bare repo. K
 | Claude Code | `~/.claude/settings.json`, `rules/`, own `skills/` (not `skills/synced/`) | Claude Code self-updates | `jq . ~/.claude/settings.json` |
 | Tools | `~/.Brewfile` (regenerate with `brew-store-installed`) | `brew update && brew outdated` | `brew bundle check --global` |
 
-**Color scheme: GitHub Dark Default (Primer) everywhere.** Ghostty theme `GitHub Dark Default`, nvim `github_dark_default`, tmux hex colors (legend in `tmux.conf`), delta `dark = true`, Claude Code `"theme": "dark"`. Background `#0d1117`. Any new tool config: dark, matching palette, hex colors over ANSI names.
+**Color scheme: GitHub (Primer) light or dark, switched with the `theme` zsh function** (`theme dark|light|toggle`, `~/.config/zsh/theme.zsh`), independent of macOS appearance (which stays light). It only writes `~/.config/ghostty/theme.ghostty` (untracked, in `~/.dot/info/exclude`): dark = `GitHub Dark Default`, light = the user's `github-light-bart`; the user reloads Ghostty (Cmd+Shift+,). Everything else follows Ghostty:
+- tmux: `client-dark-theme`/`client-light-theme` hooks load `tmux/theme-dark.conf` / `theme-light.conf` (hex colors, palette legend in each).
+- nvim: `lua/config/theme.lua` maps `'background'` (from the terminal's OSC 11 answer) to `github_dark_default`/`github_light_default`, live. Needs the `hi clear` before switching (see fragile spots).
+- Claude Code `"theme": "auto"`; delta and bat detect per run; fzf, lazygit, starship, eza use the ANSI palette.
+Any new tool config: support both modes, preferably by following the terminal; hex colors over ANSI names when a tool needs explicit colors.
 
 ## Dotfiles repo
 
@@ -67,6 +71,7 @@ The user's terminal workspace is hand-built and lives in a dotfiles bare repo. K
 | `codelens_eol.lua` + `plugins/roslyn.lua` | wraps `client.handlers["workspace/projectInitializationComplete"]` (set by roslyn.nvim), handles `workspace/codeLens/refresh` |
 | `config/lsp.lua` | `cmp_nvim_lsp.default_capabilities()` into `vim.lsp.config("*")` |
 | `config/keymap.lua` deletes default `grr gri grn gra grt grx` | new nvim default `gr*` maps make `gr` wait `timeoutlen` again |
+| `config/theme.lua` live light/dark switch | nvim updating `'background'` on OSC 11 answers (TermResponse only sees OSC/DCS/APC/DA1, not DEC 2031 `?997` reports); `hi clear` before `:colorscheme` because nvim unsets `g:colors_name` on a `'background'` change and github-theme then skips its own clear (bufferline keeps old colors otherwise) |
 | `plugins/lsp.lua` mason-lspconfig `automatic_enable = false` | servers enabled explicitly via `vim.lsp.enable`; intelephense installed but off |
 
 ## Safety

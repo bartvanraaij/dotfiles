@@ -1,0 +1,149 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/Users/bartvanraaij/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0/skills/brainstorming/scripts/start-server.sh *)",
+      "Bash(bun add *)",
+      "Read(//Users/bartvanraaij/.bun/bin/**)",
+      "Read(//opt/homebrew/bin/**)",
+      "Read(//usr/local/bin/**)",
+      "Bash(cd *)",
+      "Bash(bun run *)",
+      "Bash(curl -sf http://localhost:5173)",
+      "Bash(kill %1)",
+      "Bash(wait)",
+      "Read(//tmp/**)",
+      "Bash(pkill -f \"vite\")",
+      "Read(//private/tmp/**)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git rm *)",
+      "Bash(git commit *)",
+      "Bash(bun outdated *)",
+      "Bash(npm view *)",
+      "Bash(curl -sf http://localhost:5173/src/theme/globals.css)",
+      "Bash(bunx shadcn@latest init --help)",
+      "Bash(bunx shadcn@latest init --template vite --base radix --yes --no-monorepo --css-variables)",
+      "Bash(bunx shadcn@latest init --template vite --base radix --preset base-nova --yes --no-monorepo --css-variables)",
+      "Bash(bunx shadcn@latest init --template vite --base radix --preset nova --yes --no-monorepo --css-variables --no-pointer)",
+      "Bash(npx ctx7@latest *)",
+      "Bash(bunx shadcn@latest add input skeleton sonner --yes)",
+      "Bash(bun remove *)",
+      "Bash(curl -s \"https://api.npmjs.org/downloads/point/last-month/react-i18next\")",
+      "Bash(curl -s \"https://api.npmjs.org/downloads/point/last-month/@lingui/react\")",
+      "Bash(curl -s \"https://api.npmjs.org/downloads/point/last-month/@inlang/paraglide-js\")",
+      "Bash(curl -s \"https://api.npmjs.org/downloads/point/last-month/next-intl\")",
+      "Read(//Users/bartvanraaij/Dev/playgrid/playgrid-app/assets/**)",
+      "Bash(cp /Users/bartvanraaij/Dev/playgrid/playgrid-app/assets/playgrid-logo-square.svg public/brand/playgrid-logo.svg)",
+      "Bash(npx @inlang/paraglide-js@latest init --help)",
+      "Bash(curl -s https://ui.shadcn.com/schema.json)",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\(json.dumps\\(list\\(data.get\\('properties',{}\\).keys\\(\\)\\), indent=2\\)\\)\")",
+      "Bash(pkill -f vite)",
+      "Bash(disown)",
+      "Bash(curl -s 'http://localhost:5173/src/theme/globals.css?direct')",
+      "Bash(grep -oE \"\\\\.app[^,{]{0,60}\")",
+      "Bash(curl -sS -o /tmp/cloudkit.js https://cdn.apple-cloudkit.com/ck/2/cloudkit.js)",
+      "Bash(grep -oE '\"[a-zA-Z][a-zA-Z0-9_]{2,40}\":function' /tmp/cloudkit.js)",
+      "Bash(grep -oE '[a-zA-Z_$][a-zA-Z0-9_$]{3,30}:function' /tmp/cloudkit.js)",
+      "Bash(grep -oE '[a-zA-Z_$][a-zA-Z0-9_$]{3,40}=function' /tmp/cloudkit.js)",
+      "Bash(grep -oE '\\\\.[a-zA-Z_$][a-zA-Z0-9_$]{3,40}=function' /tmp/cloudkit.js)",
+      "Bash(grep -oE '\"[a-zA-Z_$][a-zA-Z0-9_$]{2,40}\"' /tmp/cloudkit.js)",
+      "Bash(grep -oE 'performQuery:function[^}]{0,500}' /tmp/cloudkit.js)",
+      "Bash(grep -oE 'forceUpdate:function[^,]{0,200}|forceReplace:function[^,]{0,200}|create:function[^,]{0,200}|update:function[^,]{0,200}|forceDelete:function[^,]{0,200}|createOrUpdate:function[^,]{0,200}' /tmp/cloudkit.js)",
+      "Bash(grep -oE '\"\\(forceUpdate|forceReplace|create|update|forceDelete|createOrUpdate\\)\",value:function[^}]{0,200}' /tmp/cloudkit.js)",
+      "Bash(grep -oE '.{40}\"forceUpdate\",value:function.{300}' /tmp/cloudkit.js)",
+      "Bash(grep -oE '.{100}\"_pushOperations\",value:function.{800}' /tmp/cloudkit.js)",
+      "Bash(grep -oE 'operationType[^,]{0,30}' /tmp/cloudkit.js)",
+      "Bash(grep -oE 'function o\\\\\\(e,t\\\\\\)\\\\{[^}]{0,500}' /tmp/cloudkit.js)",
+      "Bash(grep -oE '\\\\.recordType.{0,100}' /tmp/cloudkit.js)",
+      "Bash(grep -oE 'value:function[^{]{0,30}\\\\{[^}]{0,200}\\\\.fields' /tmp/cloudkit.js)",
+      "Bash(grep -oE '\\\\.fields[\\\\.\\\\[][^,;\\)]{0,100}' /tmp/cloudkit.js)",
+      "Bash(git checkout *)",
+      "Bash(git -C /Users/bartvanraaij/Dev/playgrid/playgrid-web status --short)",
+      "Bash(git -C /Users/bartvanraaij/Dev/playgrid/playgrid-web diff --stat)",
+      "Bash(git -C /Users/bartvanraaij/Dev/playgrid/playgrid-web add src/routes/__root.tsx src/components/shell/AppShell.tsx)",
+      "Bash(git -C /Users/bartvanraaij/Dev/playgrid/playgrid-web commit -q -m 'Defer route mount until signed in to fix auth race *)",
+      "Bash(git -C /Users/bartvanraaij/Dev/playgrid/playgrid-web log --oneline -1)",
+      "Bash(git -C /Users/bartvanraaij/Dev/playgrid/playgrid-web add src/components/shell/SectionList.tsx)",
+      "Bash(git -C /Users/bartvanraaij/Dev/playgrid/playgrid-web commit -q -m 'Widen sidebar to 300px *)",
+      "Bash(git -C /Users/bartvanraaij/Dev/playgrid/playgrid-web add 'src/routes/songs/$id.tsx')",
+      "Bash(git -C /Users/bartvanraaij/Dev/playgrid/playgrid-web commit -q -m 'Guard against losing unsaved song edits on navigation *)",
+      "Bash(git merge *)",
+      "Bash(git branch *)",
+      "Bash(git push *)",
+      "Bash(scripts/start-server.sh --project-dir /Users/bartvanraaij/Dev/playgrid/playgrid-web)",
+      "Bash(scripts/stop-server.sh /Users/bartvanraaij/Dev/playgrid/playgrid-web/.superpowers/brainstorm/46520-1780062865)",
+      "Bash(curl -sk https://localhost:5173 -o /dev/null -w \"%{http_code}\\\\n\" --max-time 3)",
+      "Bash(bunx vite *)",
+      "Bash(curl -sk https://localhost:4173 -o /dev/null -w \"https:%{http_code}\\\\n\" --max-time 4)",
+      "Bash(curl -s http://localhost:4173 -o /dev/null -w \"http:%{http_code}\\\\n\" --max-time 4)",
+      "Bash(pkill -f \"vite preview\")",
+      "Bash(curl -sk https://localhost:4173 -o /dev/null -w \"%{http_code}\\\\n\" --max-time 3)",
+      "Bash(curl -sk https://localhost:5173 -o /dev/null -w \"dev5173:%{http_code}\\\\n\" --max-time 4)",
+      "Bash(curl -s http://localhost:62892 -o /dev/null -w \"comp:%{http_code}\\\\n\" --max-time 4)",
+      "Bash(curl -s http://localhost:58707 -o /dev/null -w \"comp:%{http_code}\\\\n\" --max-time 4)",
+      "Bash(curl -s http://localhost:62274 -o /dev/null -w \"comp:%{http_code}\\\\n\" --max-time 4)",
+      "Bash(bash /Users/bartvanraaij/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0/skills/brainstorming/scripts/stop-server.sh /Users/bartvanraaij/Dev/playgrid/playgrid-web/.superpowers/brainstorm/30249-1780407679)",
+      "Bash(sed -n '1,40p' src/components/state/Ring.tsx)",
+      "Bash(sed -n '1,40p' src/components/ui/spinner.tsx)",
+      "Bash(sed -n '1,50p' src/components/state/BusyRegion.tsx)"
+    ],
+    "defaultMode": "auto"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); model=$(echo \"$input\" | jq -r '.model.display_name'); remaining=$(echo \"$input\" | jq -r '.context_window.remaining_percentage // empty'); ctx_part=\"\"; [ -n \"$remaining\" ] && ctx_part=\" | ctx: ${remaining}% remaining\"; echo \"${cwd} | ${model}${ctx_part}\""
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "context7@claude-plugins-official": false,
+    "code-simplifier@claude-plugins-official": false,
+    "typescript-lsp@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": false,
+    "claude-md-management@claude-plugins-official": false,
+    "dotnet@dotnet-agent-skills": false,
+    "dotnet-diag@dotnet-agent-skills": false,
+    "dotnet-nuget@dotnet-agent-skills": false,
+    "swift-lsp@claude-plugins-official": false,
+    "caveman@caveman": true,
+    "opendesign@opendata-skills": false,
+    "feature-dev@claude-plugins-official": true,
+    "csharp-lsp@claude-plugins-official": true,
+    "microsoft-docs@claude-plugins-official": false
+  },
+  "extraKnownMarketplaces": {
+    "dotnet-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "dotnet/skills"
+      }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    },
+    "opendata-skills": {
+      "source": {
+        "source": "github",
+        "repo": "tryopendata/skills"
+      }
+    }
+  },
+  "feedbackDrafts": "notify",
+  "effortLevel": "high",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "medium"
+    }
+  },
+  "promptSuggestionEnabled": false,
+  "tui": "fullscreen",
+  "theme": "dark",
+  "editorMode": "normal",
+  "verbose": true,
+  "fileCheckpointingEnabled": false,
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true
+}

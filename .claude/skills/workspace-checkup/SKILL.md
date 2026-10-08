@@ -17,7 +17,8 @@ The user's terminal workspace is hand-built and lives in a dotfiles bare repo. K
 | Prompt etc. | `~/.config/starship.toml`, `lazygit/`, `fastfetch/`, `gh/` | brew | run the tool |
 | Neovim | `~/.config/nvim` (lazy.nvim, `lazy-lock.json`) | see Neovim section | headless checks below |
 | git | `~/.gitconfig` (delta pager, `dark = true`) | brew (git, git-delta) | `git log -p -1` |
-| Claude Code | `~/.claude/settings.json`, `rules/`, own `skills/` (not `skills/synced/`) | Claude Code self-updates | `jq . ~/.claude/settings.json` |
+| Claude Code | `~/.claude/settings.json`, `statusline.sh`, `rules/`, own `skills/` (not `skills/synced/`) | Claude Code self-updates | `jq . ~/.claude/settings.json` |
+| Claude usage in tmux | `~/.claude/statusline.sh` writes `rate_limits.five_hour` to `~/.cache/claude-usage` (highest value per window, atomic rename); `~/.config/tmux/claude-usage.sh` renders `✻ 42% (2h46m) \|` in `status-right` | – | `~/.config/tmux/claude-usage.sh` prints the segment; if the status line JSON fields change, check the docs' status line schema |
 | Tools | `~/.Brewfile` (regenerate with `brew-store-installed`) | `brew update && brew outdated` | `brew bundle check --global` |
 
 **Color scheme: GitHub (Primer) light or dark, switched with the `theme` zsh function** (`theme dark|light|toggle`, `~/.config/zsh/theme.zsh`), independent of macOS appearance (which stays light). It writes `~/.config/ghostty/theme.ghostty` (untracked, in `~/.dot/info/exclude`): dark = `GitHub Dark Default`, light = the user's `github-light-bart`; the user reloads Ghostty (Cmd+Shift+,). It also sources `tmux/theme-<mode>.conf` directly; `tmux.conf` picks the file by grepping `theme.ghostty` on load. Don't use tmux's `#{client_theme}` / `client-*-theme` hooks: Ghostty doesn't report config-reload theme changes, so they go stale. Everything else follows Ghostty:

@@ -12,7 +12,6 @@
 [delta]
 	features = decorations
 	navigate = true    # use n and N to move between diff sections
-	dark = true       # terminal uses GitHub Dark Default (Ghostty); was light = true
 	line-numbers = true
 	#side-by-side = true
 [merge]

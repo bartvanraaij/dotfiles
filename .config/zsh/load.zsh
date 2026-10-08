@@ -1,6 +1,7 @@
 source "$ZSH/paths.zsh"
 source "$ZSH/config.zsh"
 source "$ZSH/aliases.zsh"
+source "$ZSH/theme.zsh"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Directory as window title

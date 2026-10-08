@@ -21,9 +21,11 @@ confirm-close-surface = false
 
 # Colors
 bold-color = bright
-#theme = github-light-bart
-# Same Primer palette as nvim's github_dark_default and the tmux colors in tmux.conf
+# Light/dark is switched with the `theme` shell function (~/.config/zsh/theme.zsh), which
+# writes theme.ghostty (not in dotfiles). tmux, nvim and Claude Code follow Ghostty's theme.
+# Fallback when theme.ghostty doesn't exist yet:
 theme = GitHub Dark Default
+config-file = ?theme.ghostty
 
 # Keybindings
 keybind = shift+enter=text:\x1b\r

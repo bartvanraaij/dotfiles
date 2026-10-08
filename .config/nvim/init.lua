@@ -54,7 +54,7 @@ require("lazy").setup("plugins", {
 
 -- Colorscheme
 --vim.cmd([[colorscheme tokyonight-night]])
-vim.cmd([[colorscheme github_dark_default]])
+require("config.theme") -- GitHub light/dark, following the terminal
 
 
 vim.cmd([[let g:fzf_colors =

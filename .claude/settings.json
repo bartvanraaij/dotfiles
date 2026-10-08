@@ -140,7 +140,7 @@
   },
   "promptSuggestionEnabled": false,
   "tui": "fullscreen",
-  "theme": "dark",
+  "theme": "auto",
   "editorMode": "normal",
   "verbose": true,
   "fileCheckpointingEnabled": false,

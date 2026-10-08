@@ -28,7 +28,7 @@ vim.opt.runtimepath:prepend(lazypath)
 require("lazy").setup("plugins", {
   defaults = { lazy = true },
   install = {
-    colorscheme = { "github_light" },
+    colorscheme = { "github_dark_default" },
   },
   change_detection = {
     enabled = false,
@@ -54,7 +54,7 @@ require("lazy").setup("plugins", {
 
 -- Colorscheme
 --vim.cmd([[colorscheme tokyonight-night]])
-vim.cmd([[colorscheme github_light]])
+vim.cmd([[colorscheme github_dark_default]])
 
 
 vim.cmd([[let g:fzf_colors =

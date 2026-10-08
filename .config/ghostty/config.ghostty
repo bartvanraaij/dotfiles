@@ -1,0 +1,29 @@
+# Font
+font-family = "BlexMono Nerd Font"
+font-style = Light
+font-thicken = true
+font-style-bold = Light
+font-style-italic = "Light Italic"
+font-size = 13.5
+adjust-cell-height = 4
+
+# Shell
+command = /bin/zsh -l -c 'tmux new-session -A -s main \; new-window'
+
+# Window
+macos-option-as-alt = true
+window-width = 200
+window-height = 50
+window-padding-x = 8
+#window-padding-y = 4
+macos-titlebar-style = hidden
+confirm-close-surface = false
+
+# Colors
+bold-color = bright
+#theme = github-light-bart
+# Same Primer palette as nvim's github_dark_default and the tmux colors in tmux.conf
+theme = GitHub Dark Default
+
+# Keybindings
+keybind = shift+enter=text:\x1b\r

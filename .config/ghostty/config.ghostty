@@ -8,7 +8,9 @@ font-size = 13.5
 adjust-cell-height = 4
 
 # Shell
-command = /bin/zsh -l -c 'tmux new-session -A -s main \; new-window'
+# First window creates session "main"; each further window gets its own session grouped
+# with it (same windows, independent navigation), cleaned up when that Ghostty window closes.
+command = /bin/zsh -l -c 'if tmux has-session -t main 2>/dev/null; then exec tmux new-session -t main \; set-option destroy-unattached on \; new-window; else exec tmux new-session -s main; fi'
 
 # Window
 macos-option-as-alt = true

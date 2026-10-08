@@ -1,0 +1,2 @@
+# diffpane: light/dark follows the `theme` shell function's Ghostty theme file.
+DIFFPANE_THEME_CMD='grep -qs github-light-bart ~/.config/ghostty/theme.ghostty && echo light || echo dark'

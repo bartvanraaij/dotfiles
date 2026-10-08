@@ -109,7 +109,8 @@
     "opendesign@opendata-skills": false,
     "feature-dev@claude-plugins-official": true,
     "csharp-lsp@claude-plugins-official": true,
-    "microsoft-docs@claude-plugins-official": false
+    "microsoft-docs@claude-plugins-official": false,
+    "diffpane@diffpane": true
   },
   "extraKnownMarketplaces": {
     "dotnet-agent-skills": {
@@ -128,6 +129,12 @@
       "source": {
         "source": "github",
         "repo": "tryopendata/skills"
+      }
+    },
+    "diffpane": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/bartvanraaij/Dev/diffpane"
       }
     }
   },

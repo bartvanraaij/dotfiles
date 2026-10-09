@@ -28,7 +28,7 @@ Any new tool config: support both modes, preferably by following the terminal; h
 
 ## Dotfiles repo
 
-- `dot` = `git --git-dir=$HOME/.dot/ --work-tree=$HOME` (zsh alias). In Bash use `zsh -ic 'dot …'` or a function: `g() { git --git-dir=$HOME/.dot/ --work-tree=$HOME "$@"; }` (a `$G="git …"` variable does not word-split in zsh).
+- `dot` = `git --git-dir=$HOME/.dot/ --work-tree=$HOME` (zsh alias). Works directly in the Bash tool (zsh with the user's aliases); no wrapper needed.
 - Pathspecs: run from `~` with paths like `.config/nvim/...`, or pass absolute paths. Relative paths resolve against cwd and silently match nothing.
 - `status` hides untracked files. New config files must be added explicitly; check `ls-files --error-unmatch <path>` and add any untracked config the user uses.
 - Scope adds to the paths you changed; never `commit -a`. One logical change per commit; split mixed files with a filtered patch + `git apply --cached`.

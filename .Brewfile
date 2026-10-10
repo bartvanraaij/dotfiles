@@ -20,6 +20,8 @@ brew "pcre2"
 brew "glib"
 # OpenType text shaping engine
 brew "harfbuzz"
+# TIFF library and utilities
+brew "libtiff"
 # Development kit for the Java programming language
 brew "openjdk"
 # Avro command-line tools and utilities

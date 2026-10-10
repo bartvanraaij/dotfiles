@@ -22,7 +22,7 @@ dot status --short -- ~/.config/nvim   # alias: git --git-dir=$HOME/.dot/ --work
 
 ### Commit messages
 
-One-line commit messages only. No body paragraphs, no `Co-Authored-By` trailer. No conventional-commit `type(scope):` prefix (some older commits use it; don't copy them).
+One-line commit messages only. No body paragraphs; the only extra is the `Co-Authored-By` trailer (after a blank line) on commits Claude wrote, so `dot log --grep='Co-Authored-By: Claude'` tells Claude's changes from the user's own. No conventional-commit `type(scope):` prefix (some older commits use it; don't copy them).
 
 Format: `<app>: verb noun phrase` (like `a9716a7 theme: switch tmux directly instead of via theme hooks`)
 - `<app>` is the part of the workspace that changed: `nvim`, `zsh`, `tmux`, `ghostty`, `fresh`, `theme`, `git`, `diffpane`, `Brewfile`, `claude` (Claude Code config, rules, CLAUDE.md), `workspace-checkup`, ...

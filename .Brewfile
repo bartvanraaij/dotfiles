@@ -48,6 +48,8 @@ brew "fastlane"
 brew "fd"
 # Play, record, convert, and stream select audio and video codecs
 brew "ffmpeg"
+# Text editor for your terminal: easy, powerful and fast
+brew "fresh-editor"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # Library for encoding and decoding .avif files
@@ -86,6 +88,8 @@ brew "libheif"
 brew "imagemagick"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
+# Handy way to save and run project-specific commands
+brew "just"
 # CLI for managing Apache Kafka
 brew "kafkactl"
 # Simple terminal UI for git commands

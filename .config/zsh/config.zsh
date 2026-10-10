@@ -32,6 +32,13 @@ bindkey -e
 # Set vim navigation mode keys
 #bindkey -v
 
+# Completion system. Was only started by accident by bun's completion script
+# (~/.bun/_bun calls compinit when it isn't loaded yet), so start it here.
+autoload -U compinit && compinit
+# Case-insensitive tab completion: `fresh cl<Tab>` -> `fresh CLAUDE.md`.
+# Exact match first, then lowercase matches uppercase too.
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Za-z}'
+
 # Fzf colors - Github light
 #export FZF_DEFAULT_OPTS="--color=bg+:#e7eaf0,bg:#ffffff,spinner:#cf222e,hl:#6e7781,fg:#1f2328,header:#6e7781,info:#cf222e,pointer:#cf222e,marker:#cf222e,fg+:#1f2328,preview-bg:#f6f8fa,prompt:#cf222e,hl+:#cf222e"
 

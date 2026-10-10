@@ -20,6 +20,21 @@ dot status --short -- ~/.config/nvim   # alias: git --git-dir=$HOME/.dot/ --work
 - `~/.config/ghostty/theme.ghostty` is intentionally untracked (written by `theme`).
 - Generated files have their own commands: `~/.Brewfile` → `brew-store-installed`. Check `zsh/aliases.zsh` before hand-editing generated files.
 
+### Commit messages
+
+One-line commit messages only. No body paragraphs, no `Co-Authored-By` trailer. No conventional-commit `type(scope):` prefix (some older commits use it; don't copy them).
+
+Format: `<app>: verb noun phrase` (like `a9716a7 theme: switch tmux directly instead of via theme hooks`)
+- `<app>` is the part of the workspace that changed: `nvim`, `zsh`, `tmux`, `ghostty`, `fresh`, `theme`, `git`, `diffpane`, `Brewfile`, `claude` (Claude Code config, rules, CLAUDE.md), `workspace-checkup`, ...
+- One app per commit: a change that touches several apps is split into one commit per app. Exception: `theme` for changes that switch colors across apps together.
+- After the colon: lowercase imperative verb, no trailing period.
+- Any imperative verb that fits works (add, fix, remove, allow, configure, rename, extract...). Never gerunds ("adding") or past tense ("added").
+- Name the thing that changed, not the activity: `zsh: fix crash when history file is empty`, not `zsh: fix bug`.
+
+Examples: `nvim: add dark mode toggle to settings`, `zsh: allow case-insensitive tab completion`, `workspace-checkup: extract update steps into own section`.
+
+**Why:** Personal project. Commit bodies never get read back, and `type(scope):` prefixes add noise without value. The app prefix shows at a glance which part of the workspace changed, and verb-first keeps the log scannable.
+
 ## How the pieces connect
 
 **Ghostty → tmux sessions.** `ghostty/config.ghostty` `command` starts every window in tmux: the first attaches/creates session `main` (`new-session -A`), each further window gets its own session grouped with `main` (`main-1`, …, `destroy-unattached`). `tmux/tmux.conf` also runs `new-session -s main` whenever the server starts, so anything that creates `main` must tolerate it already existing.

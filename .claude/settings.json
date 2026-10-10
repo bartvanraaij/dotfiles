@@ -152,5 +152,6 @@
   "verbose": true,
   "fileCheckpointingEnabled": false,
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "model": "sonnet"
 }

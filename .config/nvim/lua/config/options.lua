@@ -99,6 +99,9 @@ vim.opt.scrolloff = 6
 
 -- Selection with holding shift
 vim.opt.keymodel = "startsel,stopsel"
+-- Shift+arrow selection starts Select mode instead of Visual mode, so typing replaces
+-- the selection (like VS Code). Visual mode with v/V and normal-mode motions are unchanged.
+vim.opt.selectmode = "key"
 
 -- Set html as the filetype for njk files
 vim.filetype.add({

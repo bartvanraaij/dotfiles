@@ -53,7 +53,9 @@ return {
         --  custom_dropdown,
         --},
         live_grep_args = {
-          auto_quoting = false,
+          -- Treat the prompt as one pattern, so "Cloud T" searches for the phrase.
+          -- To pass rg args, start with a quote: "Cloud T" -t tf
+          auto_quoting = true,
         }
       },
       pickers = {

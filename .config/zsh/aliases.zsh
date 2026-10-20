@@ -65,3 +65,24 @@ function ansicolors {
 
 # Tf
 alias tfx='./scripts/tf-apply.sh'
+
+# Quick one-off question to Haiku. Startup is the slow part (~7-13s), so skip
+# everything a one-off answer doesn't need: MCP servers, settings (hooks,
+# plugins), tools, skills, session file and the big default system prompt.
+# Brings it to ~2s. Can't read files or search the web.
+# Markdown is rendered with glow, using our style (code blocks between rules) in
+# the current light/dark mode; plain output when piped (q ... | pbcopy).
+q() {
+	claude --model haiku -p "$*" \
+		--strict-mcp-config --setting-sources "" --tools "" \
+		--disable-slash-commands --no-session-persistence \
+		--system-prompt "Answer concisely. Output is markdown rendered in a terminal; put commands and code in fenced code blocks. Terminal is zsh on macOS." |
+		if [[ -t 1 ]]; then
+			local mode=dark
+			grep -qs github-light-bart ~/.config/ghostty/theme.ghostty && mode=light
+			glow -s ~/.config/glow/style-$mode.json -w 80 -
+		else
+			cat
+		fi
+}
+alias q='noglob q'

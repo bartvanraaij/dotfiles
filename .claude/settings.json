@@ -1,4 +1,8 @@
 {
+  "cleanupPeriodDays": 120,
+  "env": {
+    "CLAUDE_CODE_SHELL": "/opt/homebrew/bin/bash"
+  },
   "permissions": {
     "allow": [
       "Bash(/Users/bartvanraaij/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0/skills/brainstorming/scripts/start-server.sh *)",
@@ -89,6 +93,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
@@ -105,12 +110,14 @@
     "dotnet-diag@dotnet-agent-skills": false,
     "dotnet-nuget@dotnet-agent-skills": false,
     "swift-lsp@claude-plugins-official": false,
-    "caveman@caveman": true,
+    "caveman@caveman": false,
     "opendesign@opendata-skills": false,
     "feature-dev@claude-plugins-official": true,
     "csharp-lsp@claude-plugins-official": true,
     "microsoft-docs@claude-plugins-official": false,
-    "diffpane@diffpane": true
+    "diffpane@diffpane": true,
+    "azure@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "dotnet-agent-skills": {
@@ -136,6 +143,12 @@
         "source": "directory",
         "path": "/Users/bartvanraaij/Dev/diffpane"
       }
+    },
+    "chrome-devtools-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "ChromeDevTools/chrome-devtools-mcp"
+      }
     }
   },
   "feedbackDrafts": "notify",
@@ -146,12 +159,13 @@
     }
   },
   "promptSuggestionEnabled": false,
-  "tui": "fullscreen",
+  "tui": "default",
   "theme": "auto",
   "editorMode": "normal",
   "verbose": true,
+  "idleCompaction": false,
+  "switchModelsOnFlag": true,
   "fileCheckpointingEnabled": false,
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true,
-  "model": "sonnet"
+  "agentPushNotifEnabled": true
 }

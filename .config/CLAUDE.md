@@ -11,7 +11,7 @@ For checkups, updates, breakage after updates or theme mismatches, use the `work
 `~/.config` is **not** a git repo. Dotfiles live in a bare repo with work tree `$HOME`:
 
 ```sh
-dot status --short -- ~/.config/nvim   # alias: git --git-dir=$HOME/.dot/ --work-tree=$HOME; works in the Bash tool too
+dot status --short -- ~/.config/nvim   # alias: git --git-dir=$HOME/.dot/ --work-tree=$HOME; defined in ~/.bashrc too, so it works in the Bash tool
 # relative pathspecs resolve against cwd: use absolute paths or run from ~
 ```
 
@@ -41,6 +41,8 @@ Examples: `nvim: add dark mode toggle to settings`, `zsh: allow case-insensitive
 
 **Light/dark theme.** One switch drives everything: the `theme dark|light|toggle` zsh function (`zsh/theme.zsh`) writes `ghostty/theme.ghostty` and sources `tmux/theme-<mode>.conf`. On load, `tmux.conf` picks its theme by grepping `theme.ghostty`. Neovim follows the terminal background via OSC 11 (`nvim/lua/config/theme.lua`); Claude Code, delta, bat, fzf, lazygit, starship and eza follow the terminal by themselves. New tool configs must work in both modes, preferably by following the terminal.
 
+**Claude's shell is bash, the user's is zsh.** Claude Code's Bash tool runs Homebrew bash 5 (`CLAUDE_CODE_SHELL` in `~/.claude/settings.json`), so commands follow bash rules in every project. It inherits PATH and exported variables from the zsh terminal; `~/.bashrc` only adds what Claude needs (`dot`, `theme`, mise shims). Aliases for the user go in `zsh/aliases.zsh`; anything Claude must call also goes in `~/.bashrc`, as a function (non-interactive bash skips aliases).
+
 **Claude usage in tmux.** `~/.claude/statusline.sh` writes the 5-hour rate limit to `~/.cache/claude-usage`; `tmux/claude-usage.sh` renders it in `status-right`.
 
 **diffpane** (live view of files Claude changed) is not in this repo: it lives in `~/Dev/diffpane`, loaded as a local-directory Claude Code plugin. Only personal glue lives here: `diffpane/config` and the `prefix+C` / `prefix+g` bindings in `tmux.conf`.
@@ -54,6 +56,7 @@ Examples: `nvim: add dark mode toggle to settings`, `zsh: allow case-insensitive
 ```sh
 tmux source-file ~/.config/tmux/tmux.conf      # "duplicate session: main" here is expected
 zsh -ic exit                                   # shows zsh config errors
+bash -lc 'type dot'                            # ~/.bashrc loads (Claude's shell): a function, not Graphviz
 nvim --headless "+Lazy! sync" +qa              # update nvim plugins
 NVIM=1 nvim --headless +'checkhealth vim.lsp' +qa   # NVIM=1 keeps auto-session from overwriting the user's session
 ```
@@ -63,4 +66,3 @@ Ghostty reloads with Cmd+Shift+, (user does this). Keep UI verification light: s
 ## Safety
 
 - The user and this Claude session run inside the default tmux server: never `tmux kill-server` or kill sessions/panes you didn't create. Test tmux behavior on a private socket: `tmux -L claude-test -f /dev/null …`.
-- `ls` is aliased to eza; use `command ls` in scripts.

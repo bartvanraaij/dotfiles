@@ -14,6 +14,7 @@ The user's terminal workspace is hand-built and lives in a dotfiles bare repo. K
 | Ghostty | `~/.config/ghostty/config.ghostty`, `themes/` | `brew upgrade --cask ghostty` | Cmd+Shift+, in Ghostty |
 | tmux | `~/.config/tmux/tmux.conf`; plugins in `~/.config/tmux/plugins/` (tpm, tmux-sensible, vim-tmux-navigator, better-mouse-mode), each its own git clone | `git -C <plugin> pull` or tpm `prefix + U` | `tmux source-file ~/.config/tmux/tmux.conf` |
 | zsh | `~/.zshrc`, `~/.zprofile`, `~/.config/zsh/{aliases,config,load,paths}.zsh` | brew (starship etc.) | `zsh -ic exit` shows errors |
+| bash (Claude's shell) | `~/.bashrc` (`dot`, `theme`, mise shims), `~/.bash_profile`; `CLAUDE_CODE_SHELL` in `~/.claude/settings.json` | brew (bash) | `bash -lc 'type dot'` prints the function, not Graphviz's `/opt/homebrew/bin/dot` |
 | Prompt etc. | `~/.config/starship.toml`, `lazygit/`, `fastfetch/`, `gh/` | brew | run the tool |
 | Neovim | `~/.config/nvim` (lazy.nvim, `lazy-lock.json`) | see Neovim section | headless checks below |
 | git | `~/.gitconfig` (delta pager, `dark = true`) | brew (git, git-delta) | `git log -p -1` |
@@ -28,7 +29,7 @@ Any new tool config: support both modes, preferably by following the terminal; h
 
 ## Dotfiles repo
 
-- `dot` = `git --git-dir=$HOME/.dot/ --work-tree=$HOME` (zsh alias). Works directly in the Bash tool (zsh with the user's aliases); no wrapper needed.
+- `dot` = `git --git-dir=$HOME/.dot/ --work-tree=$HOME` (alias in `zsh/aliases.zsh`, function in `~/.bashrc`). Works directly in the Bash tool; no wrapper needed.
 - Pathspecs: run from `~` with paths like `.config/nvim/...`, or pass absolute paths. Relative paths resolve against cwd and silently match nothing.
 - `status` hides untracked files. New config files must be added explicitly; check `ls-files --error-unmatch <path>` and add any untracked config the user uses.
 - Scope adds to the paths you changed; never `commit -a`. One logical change per commit; split mixed files with a filtered patch + `git apply --cached`.
@@ -44,6 +45,12 @@ Any new tool config: support both modes, preferably by following the terminal; h
    - Untracked config under `~/.config/*` and `~/.claude/{rules,skills}`.
 3. **Update** (ask first for anything beyond nvim plugins): brew upgrades, `rustup update`, `dotnet tool update -g csharpier` and roslyn-language-server (see Neovim), tmux plugin clones, nvim plugins.
 4. **Explain what changed.** For each updated nvim plugin: `git -C ~/.local/share/nvim/lazy/<p> log --oneline <old>..<new>`, flag `breaking|deprecat|remove|rename|!:`, and grep the user's config for affected APIs. For brew: release notes of tools whose config we own (Neovim minor bump → read `:help news`).
+   - Claude Code updates itself almost daily, so review its changelog since the last checkup, not since the last update. `claude-code-reviewed` (next to this file) holds the last version reviewed. List the status line entries since then:
+     ```sh
+     curl -sf https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md -o <scratch>/CHANGELOG.md
+     awk -v last="$(cat ~/.claude/skills/workspace-checkup/claude-code-reviewed)" '$0 == "## " last {exit} /^## /{v=$2} tolower($0) ~ /status ?line/ {print v": "$0}' <scratch>/CHANGELOG.md
+     ```
+     Report them as a table (version, change, matters for `statusline.sh`?). Matters = new input fields worth showing, or changes to the fields the script reads (`workspace.current_dir`, `model.display_name`, `context_window`, `rate_limits.five_hour`). Then write the current `claude --version` number into `claude-code-reviewed`.
 5. **Check health.** Neovim checks below; `zsh -ic exit`; `tmux source-file` (a `duplicate session: main` message is expected and harmless); theme consistency against the color section.
 6. **Fix** as a numbered proposal; apply after the user picks. Match each file's style.
 7. **User test.** Hand over for interactive checks (UI can't be verified headless). Keep own testing short: load/syntax checks, not long harnesses.

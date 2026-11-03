@@ -4,10 +4,10 @@ tap "azure/functions", trusted: true
 tap "deviceinsight/packages", trusted: true
 tap "dldash/core", trusted: true
 tap "emqx/mqttx"
-tap "facebook/fb", trusted: true
 tap "hashicorp/tap", trusted: true
 tap "jesseduffield/lazydocker", trusted: true
 tap "jesseduffield/lazygit", trusted: true
+tap "meta/fb", "https://github.com/meta/homebrew-fb.git"
 tap "railwaycat/emacsmacport", trusted: true
 tap "supabase/tap", trusted: true
 tap "symfony-cli/tap", trusted: true
@@ -32,6 +32,8 @@ brew "aztfexport"
 brew "python@3.14"
 # Microsoft Azure CLI 2.0
 brew "azure-cli"
+# Bourne-Again SHell, a UNIX command interpreter
+brew "bash"
 # C library of Git core methods that is re-entrant and linkable
 brew "libgit2"
 # Clone of cat(1) with syntax highlighting and Git integration
@@ -68,6 +70,8 @@ brew "git"
 brew "git-delta"
 # Quickly rewrite git repository history
 brew "git-filter-repo"
+# Render markdown on the CLI
+brew "glow"
 # GNU Transport Layer Security (TLS) Library
 brew "gnutls"
 # GNU Privacy Guard (OpenPGP)
@@ -111,7 +115,7 @@ brew "neovim"
 # Development kit for the Java programming language
 brew "openjdk@21"
 # OpenBSD freely-licensed SSH connectivity tools
-brew "openssh"
+brew "openssh", link: false
 # General-purpose scripting language
 brew "php"
 # Pinentry for GPG on Mac
@@ -144,12 +148,16 @@ brew "ripgrep"
 brew "rustup"
 # Database of common MIME types
 brew "shared-mime-info"
+# Static analysis and lint tool, for (ba)sh scripts
+brew "shellcheck"
 # Cross-shell prompt for astronauts
 brew "starship"
 # Opinionated Lua code formatter
 brew "stylua"
 # CLI tool to generate terraform files from existing infrastructure
 brew "terraformer"
+# Official tldr client written in Rust
+brew "tlrc"
 # Terminal multiplexer
 brew "tmux"
 # Display directories as trees (with optional color/HTML output)
@@ -174,8 +182,6 @@ brew "azure/functions/azure-functions-core-tools@4", trusted: true
 brew "dldash/core/docker-color-output", trusted: true
 # MQTT 5.0 and MQTT X CLI client
 brew "emqx/mqttx/mqttx-cli", trusted: true
-# Companion server for automating iOS Simulators
-brew "facebook/fb/idb-companion", trusted: true
 # Terraform
 brew "hashicorp/tap/terraform", trusted: true
 # A simple terminal UI for docker, written in Go
@@ -204,6 +210,8 @@ cask "git-credential-manager"
 # Open-source keystroke visualiser
 cask "keycastr"
 cask "powershell"
+# Imaging utility to install operating systems to a microSD card
+cask "raspberry-pi-imager"
 # Tool to reverse the direction of scrolling
 cask "scroll-reverser"
 # Virtual machines UI using QEMU
@@ -213,3 +221,4 @@ cask "whatsapp"
 # Cross-platform Xcode replacement
 cask "xtool-org/tap/xtool"
 npm "corepack"
+npm "mobilebuildmcp"

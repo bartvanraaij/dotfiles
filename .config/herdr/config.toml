@@ -58,3 +58,12 @@ yellow = "#d29922"
 red = "#f85149"
 teal = "#39c5cf"
 peach = "#ffa657"
+
+# Same prefix and split keys as tmux/tmux.conf.
+# Spaces: ( and ) cycle like tmux's session keys; shift+1..9 jumps to a space.
+[keys]
+prefix = "ctrl+a"
+split_vertical = ["prefix+backslash", "prefix+v"]
+previous_workspace = "prefix+("
+next_workspace = "prefix+)"
+switch_workspace = "prefix+shift+1..9"

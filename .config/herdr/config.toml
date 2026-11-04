@@ -1,0 +1,60 @@
+onboarding = false
+
+[ui]
+status_indicators = "symbols"
+
+# Colors: GitHub Default (Primer), matching Ghostty (github-light-bart / GitHub Dark Default),
+# tmux/theme-*.conf and nvim github_*_default.
+# The catppuccin themes are only the base; every token they draw with is overridden below.
+# Herdr picks light/dark from the terminal's reported appearance (the `theme` zsh function).
+[theme]
+name = "catppuccin-latte"
+auto_switch = true
+light_name = "catppuccin-latte"
+dark_name = "catppuccin"
+
+# Light colors live in the shared table, so they also apply when herdr can't detect the appearance.
+# [theme.custom.dark] overrides every key.
+# Muted text (sidebar labels, hints) uses Primer fg.muted shades with at least 4.5:1 contrast on sidebar_bg.
+# surface_dim draws the sidebar border and the active tab label on the accent, so it is the
+# page background; sidebar_bg sets the sidebar apart instead of a dark border line.
+[theme.custom]
+panel_bg = "reset"
+accent = "#0969da"
+text = "#1f2328"
+subtext0 = "#424a53"
+overlay1 = "#59636e"
+overlay0 = "#656d76"
+surface0 = "#eaeef2"
+surface1 = "#d0d7de"
+surface_dim = "#ffffff"
+sidebar_bg = "#f6f8fa"
+active_row_bg = "#d8dee4"
+selection_bg = "#ddf4ff"
+blue = "#0969da"
+mauve = "#8250df"
+green = "#1a7f37"
+yellow = "#9a6700"
+red = "#cf222e"
+teal = "#1b7c83"
+peach = "#bc4c00"
+
+[theme.custom.dark]
+accent = "#58a6ff"
+text = "#e6edf3"
+subtext0 = "#9198a1"
+overlay1 = "#7d8590"
+overlay0 = "#6e7681"
+surface0 = "#21262d"
+surface1 = "#30363d"
+surface_dim = "#0d1117"
+sidebar_bg = "#161b22"
+active_row_bg = "#30363d"
+selection_bg = "#1f6feb"
+blue = "#58a6ff"
+mauve = "#bc8cff"
+green = "#3fb950"
+yellow = "#d29922"
+red = "#f85149"
+teal = "#39c5cf"
+peach = "#ffa657"

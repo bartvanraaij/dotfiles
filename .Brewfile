@@ -132,8 +132,6 @@ brew "postgresql@14"
 brew "postgresql@17"
 # Object-relational database system
 brew "postgresql@18"
-# Command-line shell and scripting language
-brew "powershell"
 # Python 3 bindings for the Cairo graphics library
 brew "py3cairo"
 # GNOME Python bindings (based on GObject Introspection)

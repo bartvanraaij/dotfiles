@@ -19,8 +19,9 @@ export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 export PUPPETEER_EXECUTABLE_PATH="/opt/homebrew/bin/chromium"
 
 # Dotnet
-export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
-export PATH="$PATH:/Users/bartvanraaij/.dotnet/tools"
+# The dotnet-sdk cask goes before the dotnet formula in /opt/homebrew/bin, because only the cask has the 11.0 SDK.
+export DOTNET_ROOT="/usr/local/share/dotnet"
+export PATH="$DOTNET_ROOT:$PATH:/Users/bartvanraaij/.dotnet/tools"
 
 # Psql
 export PATH="$PATH:/opt/homebrew/opt/libpq/bin"

@@ -93,7 +93,6 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
@@ -113,10 +112,9 @@
     "caveman@caveman": false,
     "opendesign@opendata-skills": false,
     "feature-dev@claude-plugins-official": true,
-    "csharp-lsp@claude-plugins-official": true,
+    "csharp-lsp@claude-plugins-official": false,
     "microsoft-docs@claude-plugins-official": false,
     "diffpane@diffpane": true,
-    "azure@claude-plugins-official": true,
     "chrome-devtools-mcp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
@@ -159,7 +157,7 @@
     }
   },
   "promptSuggestionEnabled": false,
-  "tui": "default",
+  "tui": "fullscreen",
   "theme": "auto",
   "editorMode": "normal",
   "verbose": true,

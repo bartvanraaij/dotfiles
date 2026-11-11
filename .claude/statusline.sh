@@ -1,5 +1,5 @@
 #!/bin/bash
-# Claude Code status line (settings.json "statusLine"): cwd | model | ctx remaining.
+# Claude Code status line (settings.json "statusLine"): cwd basename | model | ctx remaining.
 # Also records the 5-hour plan usage ("Current session" in /usage) for the tmux status bar,
 # read by ~/.config/tmux/claude-usage.sh.
 
@@ -31,4 +31,4 @@ fi
 
 ctx_part=""
 [ -n "$remaining" ] && ctx_part=" | ctx: ${remaining}% remaining"
-echo "${cwd} | ${model}${ctx_part}"
+echo "${cwd##*/} | ${model}${ctx_part}"

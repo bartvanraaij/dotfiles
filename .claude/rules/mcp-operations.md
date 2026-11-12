@@ -28,7 +28,7 @@ Verified 2026-10-29:
 Verified 2026-10-30 (pipelines):
 - `runBitbucketRepoPipeline` (executeWrite): `target` {`ref_type`: "branch", `ref_name`}, `selector` {`type`: "custom", `pattern`: "<custom pipeline name>"}, `variables` [{`key`, `value`, `secured`?}]. Returns `build_number`.
 - `listBitbucketRepoPipelines` (executeRead): `targetBranch`, `sort` ("-created_on"), `pagelen`. Fields: `values.build_number`, `values.state.name`, `values.state.result.name`.
-- `listBitbucketRepoPipelineSteps` (executeRead): `pipelineId` (build number). Fields: `values.name`, `values.uuid`, `values.state.result.name`.
+- `listBitbucketRepoPipelineSteps` (executeRead): `pipelineId` (build number as a string, e.g. "832"; a number fails validation, checked 2026-11-12). Fields: `values.name`, `values.uuid`, `values.state.result.name`.
 - `getBitbucketRepoPipelineStepLog` (executeRead): `pipelineId`, `stepUuid` ("{...}" form).
 
 Names seen, inputs not verified yet (executeRead): `getBitbucketRepoPullRequest`, `listBitbucketRepoPullRequests`, `getBitbucketRepoPullRequestDiff`, `listBitbucketRepoPullRequestTasks`.

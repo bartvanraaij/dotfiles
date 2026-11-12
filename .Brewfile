@@ -70,6 +70,8 @@ brew "git"
 brew "git-delta"
 # Quickly rewrite git repository history
 brew "git-filter-repo"
+# Audit git repos for secrets
+brew "gitleaks"
 # Render markdown on the CLI
 brew "glow"
 # GNU Transport Layer Security (TLS) Library
@@ -106,6 +108,8 @@ brew "libpq"
 brew "make"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
+# Nice to use pager for humans
+brew "moor"
 # Open source relational database management system
 brew "mysql-client"
 # Fast, highly customisable system info script

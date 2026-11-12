@@ -67,3 +67,28 @@ split_vertical = ["prefix+backslash", "prefix+v"]
 previous_workspace = "prefix+("
 next_workspace = "prefix+)"
 switch_workspace = "prefix+shift+1..9"
+
+# Ctrl+h/j/k/l move between panes without the prefix, through nvim splits too (navigate.sh).
+[[keys.command]]
+key = "ctrl+h"
+type = "shell"
+command = "~/.config/herdr/navigate.sh left"
+description = "pane or nvim split left"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "shell"
+command = "~/.config/herdr/navigate.sh down"
+description = "pane or nvim split below"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "shell"
+command = "~/.config/herdr/navigate.sh up"
+description = "pane or nvim split above"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "shell"
+command = "~/.config/herdr/navigate.sh right"
+description = "pane or nvim split right"

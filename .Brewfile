@@ -202,6 +202,7 @@ cask "copilot-cli"
 cask "dbeaver-community"
 # Developer platform
 cask "dotnet-sdk"
+cask "font-0xproto-nerd-font"
 cask "font-blex-mono-nerd-font"
 cask "font-fira-code-nerd-font"
 cask "font-victor-mono"

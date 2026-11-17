@@ -5,6 +5,8 @@ font-thicken = true
 font-style-bold = Light
 font-style-italic = "Light Italic"
 font-size = 13.5
+# Alternative: "0xProto Nerd Font" (installed). It looks best with font-size 13,
+# font-thicken false, and Regular / Regular / Italic as the styles, since it has no Light weight.
 adjust-cell-height = 4
 
 # Shell

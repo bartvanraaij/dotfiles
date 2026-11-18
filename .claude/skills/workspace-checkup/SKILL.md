@@ -85,7 +85,7 @@ Any new tool config: support both modes, preferably by following the terminal; h
 | `config/theme.lua` live light/dark switch | nvim updating `'background'` on OSC 11 answers (TermResponse only sees OSC/DCS/APC/DA1, not DEC 2031 `?997` reports); `hi clear` before `:colorscheme` because nvim unsets `g:colors_name` on a `'background'` change and github-theme then skips its own clear (bufferline keeps old colors otherwise) |
 | `plugins/vim-tmux-navigator.lua` herdr branch | detects herdr by `HERDR_ENV=1` (set by the herdr TUI); the Herdr app sets `HC_TERMINAL_ID` instead, so the branch doesn't run there |
 | Herdr `claude-usage` mod | the statusline cache formats above; `layout()` node ids `panel` / `panel-body` and the shared `workspace.panels` list of the shipped tabs mod; a mod can't import across mod folders, so the button lives in its own layout block |
-| Herdr `my-changes` mod | a clone of `changes`: dotfiles fallback (`~/.dot`, tracked files only, Commit runs `add -u`) |
+| Herdr `my-changes` mod | a clone of `changes`: dotfiles fallback (`~/.dot`, tracked files only); no commit field: the agent commits |
 | `plugins/lsp.lua` mason-lspconfig `automatic_enable = false` | servers enabled explicitly via `vim.lsp.enable`; intelephense installed but off |
 
 ## Safety

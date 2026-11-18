@@ -1,0 +1,11 @@
+{
+  "zoom": 1,
+  "sounds": {
+    "enabled": true
+  },
+  "minimum_contrast": 1,
+  "font": "BlexMono Nerd Font",
+  "font_size": 13.5,
+  "font_weight": 400,
+  "terminal_line_height": 1.2
+}

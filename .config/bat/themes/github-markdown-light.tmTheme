@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Markdown in GitHub's diff colors (Primer prettylights), for the Herdr Changes panel (herdr-app/mods/my-changes). -->
+<plist version="1.0"><dict>
+  <key>name</key><string>GitHub Markdown Light</string>
+  <key>settings</key><array>
+    <dict><key>settings</key><dict>
+      <key>foreground</key><string>#1f2328</string><key>background</key><string>#ffffff</string>
+    </dict></dict>
+    <dict><key>name</key><string>Heading</string><key>scope</key><string>markup.heading, markup.heading entity.name, punctuation.definition.heading</string>
+      <key>settings</key><dict><key>foreground</key><string>#0550ae</string><key>fontStyle</key><string>bold</string></dict></dict>
+    <dict><key>name</key><string>Inline code</string><key>scope</key><string>markup.raw.inline, markup.inline.raw, markup.raw.inline punctuation.definition.raw</string>
+      <key>settings</key><dict><key>foreground</key><string>#0550ae</string></dict></dict>
+    <dict><key>name</key><string>Fence</string><key>scope</key><string>punctuation.definition.raw.code-fence, markup.raw.code-fence punctuation</string>
+      <key>settings</key><dict><key>foreground</key><string>#1f2328</string></dict></dict>
+    <dict><key>name</key><string>Fence language</string><key>scope</key><string>constant.other.language-name, markup.raw.code-fence constant.other.language-name</string>
+      <key>settings</key><dict><key>foreground</key><string>#6639ba</string></dict></dict>
+    <dict><key>name</key><string>List bullet</string><key>scope</key><string>punctuation.definition.list_item, markup.list.unnumbered.bullet, markup.list.numbered.bullet, punctuation.definition.list</string>
+      <key>settings</key><dict><key>foreground</key><string>#953800</string></dict></dict>
+    <dict><key>name</key><string>Bold</string><key>scope</key><string>markup.bold</string>
+      <key>settings</key><dict><key>foreground</key><string>#1f2328</string><key>fontStyle</key><string>bold</string></dict></dict>
+    <dict><key>name</key><string>Italic</string><key>scope</key><string>markup.italic</string>
+      <key>settings</key><dict><key>foreground</key><string>#1f2328</string><key>fontStyle</key><string>italic</string></dict></dict>
+    <dict><key>name</key><string>Quote</string><key>scope</key><string>markup.quote</string>
+      <key>settings</key><dict><key>foreground</key><string>#59636e</string></dict></dict>
+    <dict><key>name</key><string>Link text</string><key>scope</key><string>meta.link string.other.link, string.other.link</string>
+      <key>settings</key><dict><key>foreground</key><string>#0a3069</string></dict></dict>
+    <dict><key>name</key><string>Link url</string><key>scope</key><string>markup.underline.link, meta.link.inline markup.underline.link</string>
+      <key>settings</key><dict><key>foreground</key><string>#0a3069</string><key>fontStyle</key><string>underline</string></dict></dict>
+    <dict><key>name</key><string>Comment</string><key>scope</key><string>comment, punctuation.definition.comment</string>
+      <key>settings</key><dict><key>foreground</key><string>#59636e</string></dict></dict>
+    <dict><key>name</key><string>Keyword</string><key>scope</key><string>keyword, storage, keyword.operator.word</string>
+      <key>settings</key><dict><key>foreground</key><string>#cf222e</string></dict></dict>
+    <dict><key>name</key><string>String</string><key>scope</key><string>string, punctuation.definition.string</string>
+      <key>settings</key><dict><key>foreground</key><string>#0a3069</string></dict></dict>
+    <dict><key>name</key><string>Constant</string><key>scope</key><string>constant, support, constant.numeric, variable.other.constant, entity.other.attribute-name</string>
+      <key>settings</key><dict><key>foreground</key><string>#0550ae</string></dict></dict>
+    <dict><key>name</key><string>Function</string><key>scope</key><string>entity.name, entity.name.function, support.function, variable.function</string>
+      <key>settings</key><dict><key>foreground</key><string>#6639ba</string></dict></dict>
+    <dict><key>name</key><string>Variable</string><key>scope</key><string>variable.other.readwrite.shell, variable.other.normal.shell, punctuation.definition.variable</string>
+      <key>settings</key><dict><key>foreground</key><string>#953800</string></dict></dict>
+    <dict><key>name</key><string>Tag</string><key>scope</key><string>entity.name.tag</string>
+      <key>settings</key><dict><key>foreground</key><string>#116329</string></dict></dict>
+  </array>
+</dict></plist>

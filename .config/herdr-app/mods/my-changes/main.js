@@ -17,6 +17,15 @@ const key = () => JSON.stringify(location());
 // Reads write nothing under .git (no index refresh or lock, no fsmonitor cookie):
 // the folder watch would see it, and every refresh would start the next one.
 const READ = ["--no-optional-locks", "-c", "core.fsmonitor=false", "-c", "diff.autoRefreshIndex=false"];
+// The diff uses the terminal's font, size and weight; rows get the terminal's line height on top of a 1.5 base.
+const diffFont = () => {
+  const s = settings(), size = Number(s.font_size) || 14;
+  return {
+    // settings() doesn't report font_weight; 400 is the weight settings.json sets for the terminals.
+    family: s.font_family ?? "JetBrains Mono", size, weight: Number(s.font_weight) || 400,
+    row: Math.ceil(size * 1.5 * (Number(s.terminal_line_height) || 1)),
+  };
+};
 const countLines = (text) => text ? text.split("\n").length - Number(text.endsWith("\n")) : 0;
 
 // Text draws a tab as nothing: pad each to the next 4-column stop.
@@ -148,7 +157,7 @@ export default class Changes extends View {
 
   setLines(lines) {
     this.rows = diffRows(lines);
-    this.diffWidth = Math.max(300, ...this.rows.map(row => (row.text.length + 1) * 7 + 50));
+    this.diffWidth = Math.max(300, ...this.rows.map(row => (row.text.length + 1) * diffFont().size * 0.6 + 50));
   }
 
   pick(path, cx) {
@@ -182,8 +191,9 @@ export default class Changes extends View {
   }
 
   diffRow({ kind, number, text }, t) {
-    if (kind === "@") return div().w_full().px(12).h(20).flex_none().truncate().bg(t.raised).text_color(t.dim).child(text);
-    return h_flex().w_full().h(20).flex_none().gap(10).when(kind === "+", (e) => e.bg(t.ansi2 + "18")).when(kind === "-", (e) => e.bg(t.ansi1 + "18"))
+    const h = diffFont().row;
+    if (kind === "@") return div().w_full().px(12).h(h).flex_none().truncate().bg(t.raised).text_color(t.dim).child(text);
+    return h_flex().w_full().h(h).flex_none().gap(10).when(kind === "+", (e) => e.bg(t.ansi2 + "18")).when(kind === "-", (e) => e.bg(t.ansi1 + "18"))
       .child(div().w(30).flex_none().text_right().text_color(t.dim).child(number === undefined ? "" : String(number)))
       .child(div().flex_1().min_w(0).truncate().child(text));
   }
@@ -212,9 +222,9 @@ export default class Changes extends View {
       })).when(!this.files.length, (e) => e.child(div().p(8).text_color(t.dim).child(this.error || (this.loading ? "Loading changes…" : this.root ? "No uncommitted changes" : "No folder")))))
         .child(Scrollbar.vertical("changes-list").absolute().inset_0()))
       .when(this.limited, el => el.child(div().px(12).py(4).text_size(11).text_color(t.dim).child("Showing the first 1,000 changed files")))
-      .child(div().flex_1().min_h(0).relative().font_family(settings().font_family ?? "JetBrains Mono").text_size(11)
+      .child(div().flex_1().min_h(0).relative().font_family(diffFont().family).text_size(diffFont().size).font_weight(diffFont().weight)
         .child(div().id("changes-diff-x").size_full().overflow_x_scrollbar()
-          .child(div().w_full().min_w(this.diffWidth).h_full().child(v_virtual_list("changes-diff", this.rows.length, 20, (i) => String(i),
+          .child(div().w_full().min_w(this.diffWidth).h_full().child(v_virtual_list("changes-diff", this.rows.length, diffFont().row, (i) => String(i),
             (range) => this.rows.slice(range.start, range.end).map((row) => this.diffRow(row, t))).size_full())))
         .child(Scrollbar.vertical("changes-diff").viewport_from_layout().absolute().inset_0())
         .when(!this.open && this.files.length > 0, (e) => e.child(div().absolute().top(6).px(12).text_color(t.dim).child("Select a file to view its changes"))))

@@ -1,4 +1,4 @@
-import { View, div } from "gpui-kit";
+import { View, div, svg } from "gpui-kit";
 import { v_flex, h_flex, Scrollbar, v_virtual_list, VirtualListScrollHandle } from "gpui-base";
 import { spaces, panes, focused, exec, watchFolder, theme, settings, home } from "herdr";
 
@@ -141,7 +141,7 @@ function diffRows(lines) {
 
 export default class Changes extends View {
   init(_props, cx) {
-    this.files = []; this.repo = []; this.rows = []; this.diffScroll = VirtualListScrollHandle.new(); this.diffWidth = 0;
+    this.files = []; this.repo = []; this.rows = []; this.diffScroll = VirtualListScrollHandle.new(); this.diffWidth = 0; this.wrap = localStorage.getItem("wrap") === "1";
     this.refresh(cx);
     cx.timer.every(10000, (cx) => this.refresh(cx));
   }
@@ -294,6 +294,36 @@ export default class Changes extends View {
     cx.notify();
   }
 
+  // With word wrap on, long lines become several rows of the same height (the virtual list needs one
+  // row height): each breaks at the last space that fits, else mid-word, and only its first row is numbered.
+  visualRows() {
+    if (!this.wrap || !this.cell || !this.diffAreaWidth) return this.rows;
+    const cols = Math.max(20, Math.floor((this.diffAreaWidth - 64) / this.cell));
+    if (this.wrapped?.rows === this.rows && this.wrapped.cols === cols) return this.wrapped.list;
+    const list = [];
+    for (const row of this.rows) {
+      if (row.kind === "@" || !row.kind || row.text.length <= cols) { list.push(row); continue; }
+      for (let start = 0; start < row.text.length; ) {
+        let end = Math.min(start + cols, row.text.length);
+        if (end < row.text.length) { const space = row.text.lastIndexOf(" ", end - 1); if (space > start + cols / 2) end = space + 1; }
+        const spans = row.spans && row.spans.flatMap((sp) => {
+          const a = Math.max(sp.col, start), b = Math.min(sp.col + sp.text.length, end);
+          return a < b ? [{ ...sp, text: sp.text.slice(a - sp.col, b - sp.col), col: a - start }] : [];
+        });
+        list.push({ kind: row.kind, number: start ? undefined : row.number, text: row.text.slice(start, end), spans });
+        start = end;
+      }
+    }
+    this.wrapped = { rows: this.rows, cols, list };
+    return list;
+  }
+
+  toggleWrap(cx) {
+    this.wrap = !this.wrap;
+    localStorage.setItem("wrap", this.wrap ? "1" : "0");
+    cx.notify();
+  }
+
   diffRow({ kind, number, text, spans }, t) {
     const h = diffFont().row, c = DIFF_COLORS[settings().dark ? "dark" : "light"];
     if (kind === "@") return div().w_full().px(12).h(h).flex_none().truncate().bg(c.hunk).text_color(c.hunkText).child(text);
@@ -313,6 +343,7 @@ export default class Changes extends View {
   render(cx) {
     if (key() !== this.context) this.refresh(cx);
     const t = theme(), add = this.files.reduce((n, f) => n + f.add, 0), del = this.files.reduce((n, f) => n + f.del, 0);
+    const rows = this.visualRows();
     return v_flex().id("changes").size_full().min_h(0).rounded(10).overflow_hidden().bg(t.background).border_1().border_color(t.border).text_color(t.foreground).text_size(13)
       .child(h_flex().h(42).flex_none().px(14).gap(8).items_center().border_b(1).border_color(t.border)
         .child(div().font_semibold().child("Changes"))
@@ -335,9 +366,14 @@ export default class Changes extends View {
         .child(div().id("diff-cell").absolute().top(0).left(0).invisible().whitespace_nowrap().child("0".repeat(100))
           .on_size_change((size, cx) => { if (size.width / 100 !== this.cell) { this.cell = size.width / 100; cx.notify(); } }))
         .child(div().id("changes-diff-x").size_full().overflow_x_scrollbar()
-          .child(div().w_full().min_w(this.diffWidth).h_full().child(v_virtual_list("changes-diff", this.rows.length, diffFont().row, (i) => String(i),
-            (range) => this.rows.slice(range.start, range.end).map((row) => this.diffRow(row, t))).size_full().track_scroll(this.diffScroll))))
+          .on_size_change((size, cx) => { if (size.width !== this.diffAreaWidth) { this.diffAreaWidth = size.width; cx.notify(); } })
+          .child(div().w_full().min_w(this.wrap ? 0 : this.diffWidth).h_full().child(v_virtual_list("changes-diff", rows.length, diffFont().row, (i) => String(i),
+            (range) => rows.slice(range.start, range.end).map((row) => this.diffRow(row, t))).size_full().track_scroll(this.diffScroll))))
         .child(Scrollbar.vertical("changes-diff").viewport_from_layout().absolute().inset_0())
+        .when(this.rows.length > 0, (e) => e.child(div().id("diff-wrap").absolute().top(0).right(8).h(diffFont().row).px(4).flex().items_center()
+          .tooltip(this.wrap ? "Soft-wrap on" : "Soft-wrap off").cursor_pointer().on_click((_e, cx) => this.toggleWrap(cx))
+          .child(div().id("diff-wrap-icon").p(2).rounded(4).text_color(this.wrap ? t.accent : t.dim).hover((s) => s.bg(t.hover).text_color(t.foreground))
+            .child(svg("mods/my-changes/wrap.svg").size(13)))))
         .when(!this.open && this.files.length > 0, (e) => e.child(div().absolute().top(6).px(12).text_color(t.dim).child("Select a file to view its changes"))))
       .when(Boolean(this.note), (e) => e.child(div().px(10).pb(8).text_size(11).text_color(t.ansi1).child(this.note)));
   }

@@ -1,5 +1,5 @@
 import { View, div } from "gpui-kit";
-import { v_flex, h_flex, InputState, Input, Scrollbar, v_virtual_list } from "gpui-base";
+import { v_flex, h_flex, InputState, Input, Scrollbar, v_virtual_list, VirtualListScrollHandle } from "gpui-base";
 import { spaces, panes, focused, exec, watchFolder, theme, settings, home } from "herdr";
 
 // Dotfiles: a bare repo in ~/.dot with $HOME as its work tree (the `dot` alias). Folders under home that
@@ -141,7 +141,7 @@ function diffRows(lines) {
 
 export default class Changes extends View {
   init(_props, cx) {
-    this.files = []; this.repo = []; this.rows = []; this.diffWidth = 0; this.message = ""; this.handle = cx.focus_handle();
+    this.files = []; this.repo = []; this.rows = []; this.diffScroll = VirtualListScrollHandle.new(); this.diffWidth = 0; this.message = ""; this.handle = cx.focus_handle();
     this.input = InputState.new({ placeholder: "Commit message" });
     this.input.on("change", (_e, cx) => {
       const hadMessage = Boolean(this.message.trim());
@@ -249,6 +249,9 @@ export default class Changes extends View {
       lines = trimmed.lines; kept = spans ? trimmed.spans : null;
       if (fresh) file.add = lines.filter((l) => l[0] === "+").length;
     }
+    // Another file starts at its top; the refresh of the same file keeps the scroll position.
+    if (path !== this.shownPath) this.diffScroll.scroll_to_item(0);
+    this.shownPath = path;
     const long = (line) => line.length > 4000;
     this.setLines(lines.slice(0, 1500).map((line) => long(line) ? line.slice(0, 4000) + "… (line truncated)" : line),
       kept && kept.slice(0, 1500).map((sp, i) => long(lines[i]) ? null : sp));
@@ -287,12 +290,14 @@ export default class Changes extends View {
   }
 
   pick(path, cx) {
-    this.open = this.open === path ? null : path; this.setLines([]); this.note = null;
+    // The previous diff stays until the new one is ready: clearing it first flashes an empty panel.
+    this.open = this.open === path ? null : path; this.note = null;
+    if (!this.open) this.setLines([]);
     this.closed = !this.open;
     const context = this.context;
     if (this.open) cx.spawn(async (cx) => {
       try { await this.load(path, context); }
-      catch (e) { if (key() === context && this.open === path) this.note = `Cannot preview this diff (too large or unreadable): ${e}`; }
+      catch (e) { if (key() === context && this.open === path) { this.setLines([]); this.note = `Cannot preview this diff (too large or unreadable): ${e}`; } }
       cx.notify();
     });
     cx.notify();
@@ -362,7 +367,7 @@ export default class Changes extends View {
           .on_size_change((size, cx) => { if (size.width / 100 !== this.cell) { this.cell = size.width / 100; cx.notify(); } }))
         .child(div().id("changes-diff-x").size_full().overflow_x_scrollbar()
           .child(div().w_full().min_w(this.diffWidth).h_full().child(v_virtual_list("changes-diff", this.rows.length, diffFont().row, (i) => String(i),
-            (range) => this.rows.slice(range.start, range.end).map((row) => this.diffRow(row, t))).size_full())))
+            (range) => this.rows.slice(range.start, range.end).map((row) => this.diffRow(row, t))).size_full().track_scroll(this.diffScroll))))
         .child(Scrollbar.vertical("changes-diff").viewport_from_layout().absolute().inset_0())
         .when(!this.open && this.files.length > 0, (e) => e.child(div().absolute().top(6).px(12).text_color(t.dim).child("Select a file to view its changes"))))
       .when(Boolean(this.note), (e) => e.child(div().px(10).pb(8).text_size(11).text_color(t.ansi1).child(this.note)))

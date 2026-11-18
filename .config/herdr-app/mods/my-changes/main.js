@@ -44,9 +44,15 @@ const SYNTAX_THEME = { light: "GitHub", dark: "Visual Studio Dark+" };
 const MARKDOWN_THEME = { light: "github-markdown-light", dark: "github-markdown-dark" };
 const isMarkdown = (path) => /\.(md|markdown|mdx)$/i.test(path);
 const CONTEXT = 3;
-const DELTA = 'theme=$1 mode=$2; shift 2; "$@" | delta --no-gitconfig --color-only --syntax-theme="$theme" "--$mode" ' +
+const DELTA = 'printf "%s\\n" "$3" | delta --no-gitconfig --color-only --syntax-theme="$1" "--$2" ' +
   "--true-color=always --plus-style=syntax --minus-style=syntax --zero-style=syntax --max-line-length=0 --tabs=0";
 const ANSI = /\x1b\[[0-9;]*m/g;
+// The diff goes to delta as an argument (no stdin from exec); bigger diffs stay uncolored.
+const DELTA_MAX = 200000;
+
+// delta's spans by theme and diff text, so the 10-second refresh and going back to a file skip delta.
+const colorCache = new Map();
+const CACHE_SIZE = 40;
 
 // delta's ANSI output as lines of {text, color, bold, italic, underline} spans; backgrounds are dropped.
 function parseAnsi(out) {
@@ -227,33 +233,47 @@ export default class Changes extends View {
     if (!file) return;
     const fresh = file.fresh || (!this.hasHead && file.status === "A");
     const diff = fresh
-      ? ["git", "diff", "--no-index", "--no-ext-diff", "--no-color", `-U${1e6}`, "--", "/dev/null", path]
-      : ["git", ...READ, ...this.repo, "diff", ...(this.hasHead ? ["HEAD"] : []), "--no-ext-diff", "--no-textconv", "--no-color", `-U${1e6}`, "--", path];
-    const dark = settings().dark, theme = (isMarkdown(path) ? MARKDOWN_THEME : SYNTAX_THEME)[dark ? "dark" : "light"];
-    const coloring = exec("sh", ["-c", DELTA, "sh", theme, dark ? "dark" : "light", ...diff], { cwd: root, on }).catch(() => null);
-    const out = await coloring;
-    if (out?.stdout.includes("@@")) return this.present(file, fresh, out, true, path, context);
-    // delta missing or failing (a remote machine): the plain diff, uncolored.
-    const plain = await exec(diff[0], diff.slice(1), { cwd: root, on });
+      ? ["diff", "--no-index", "--no-ext-diff", "--no-color", `-U${1e6}`, "--", "/dev/null", path]
+      : [...READ, ...this.repo, "diff", ...(this.hasHead ? ["HEAD"] : []), "--no-ext-diff", "--no-textconv", "--no-color", `-U${1e6}`, "--", path];
+    const out = await exec("git", diff, { cwd: root, on });
     // git diff --no-index exits 1 when the files differ.
-    if (plain.code > (fresh ? 1 : 0)) throw new Error(plain.stderr);
-    this.present(file, fresh, plain, false, path, context);
-  }
-
-  present(file, fresh, out, colored, path, context) {
+    if (out.code > (fresh ? 1 : 0)) throw new Error(out.stderr);
+    const all = out.stdout.replace(/\n$/, "").split("\n"), first = all.findIndex((l) => l.startsWith("@@"));
+    const raw = first < 0 ? null : all.slice(first);
+    const spans = raw && await this.colors(all, first, path);
     if (key() !== context || this.open !== path) return;
-    const all = out.stdout.replace(/\n$/, "").split("\n"), first = all.findIndex((l) => l.replace(ANSI, "").startsWith("@@"));
-    let lines, spans = null;
-    if (first < 0) lines = [file.binary ? "Binary file changed" : fresh ? "Binary file · no text diff" : "No text diff available"];
+    let lines, kept = null;
+    if (!raw) lines = [file.binary ? "Binary file changed" : fresh ? "Binary file · no text diff" : "No text diff available"];
     else {
-      const raw = all.slice(first);
-      const trimmed = trimContext(raw.map((l) => l.replace(ANSI, "")), colored ? parseAnsi(raw.join("\n")) : [], CONTEXT);
-      lines = trimmed.lines; spans = colored ? trimmed.spans : null;
+      const trimmed = trimContext(raw, spans ?? [], CONTEXT);
+      lines = trimmed.lines; kept = spans ? trimmed.spans : null;
       if (fresh) file.add = lines.filter((l) => l[0] === "+").length;
     }
     const long = (line) => line.length > 4000;
     this.setLines(lines.slice(0, 1500).map((line) => long(line) ? line.slice(0, 4000) + "… (line truncated)" : line),
-      spans && spans.slice(0, 1500).map((sp, i) => long(lines[i]) ? null : sp));
+      kept && kept.slice(0, 1500).map((sp, i) => long(lines[i]) ? null : sp));
+  }
+
+  // Spans parallel to the diff from its @@ line on (`all` from `first`), from delta or the cache; null when
+  // delta is missing or fails (a remote machine). delta gets the file headers too: it picks the language from them.
+  async colors(all, first, path) {
+    const text = all.join("\n");
+    if (text.length > DELTA_MAX) return null;
+    const dark = settings().dark, theme = (isMarkdown(path) ? MARKDOWN_THEME : SYNTAX_THEME)[dark ? "dark" : "light"];
+    const cacheKey = `${theme}\0${text}`;
+    if (colorCache.has(cacheKey)) {
+      const hit = colorCache.get(cacheKey);
+      colorCache.delete(cacheKey); colorCache.set(cacheKey, hit);
+      return hit;
+    }
+    const out = await exec("sh", ["-c", DELTA, "sh", theme, dark ? "dark" : "light", text], { cwd: this.root, on: this.on }).catch(() => null);
+    if (!out || out.code !== 0) return null;
+    const parsed = parseAnsi(out.stdout);
+    if (parsed.length !== all.length) return null;
+    const spans = parsed.slice(first);
+    colorCache.set(cacheKey, spans);
+    if (colorCache.size > CACHE_SIZE) colorCache.delete(colorCache.keys().next().value);
+    return spans;
   }
 
   setLines(lines, spans = null) {

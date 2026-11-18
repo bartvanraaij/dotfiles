@@ -69,7 +69,8 @@ Two programs share the name:
 The user's own parts, all tracked in dot:
 - `layouts/my-main.json`: clone of `main`, the shown layout. Changes from `main`: the tab bar is a row of the shipped `tabs` mod plus a 124px `usage-button` block; the right panel stack has a third child `usage`; the `changes` child uses `my-changes`.
 - `mods/claude-usage/`: the Claude usage panel, and with `props.button` the tab bar button (✻, 5-hour percentage and time left, in Claude orange, red from 90%). `usage.js` holds the cache readers, the thresholds and the colors (green, yellow, red from the theme's ansi colors). The button adds `"usage"` to the shared `workspace.panels` list, so the tab bar remembers the open panel per space.
-- `mods/my-changes/`: clone of `changes` that falls back to the dotfiles repo (`~/.dot`, work tree `$HOME`) for folders under home that are in no other repo. Tracked files only; Commit runs `add -u` there, never `add -A`.
+- `mods/my-changes/`: clone of `changes` that falls back to the dotfiles repo (`~/.dot`, work tree `$HOME`) for folders under home that are in no other repo. Tracked files only; Commit runs `add -u` there, never `add -A`. Its diff uses the terminal font, size and weight; `settings()` doesn't report `font_weight`, so the mod falls back to the weight in `settings.json`.
+- `settings.json`: the terminal font matches Ghostty (BlexMono Nerd Font 13.5, weight 400, `terminal_line_height` 1.2). Ghostty draws Light with `font-thicken`; Herdr has no thicken, so it uses Regular. Herdr's Settings screen writes this file too.
 
 Not tracked: the generated `gpui-kit.d.ts` and `jsconfig.json` in each mod folder, and everything the app writes (`shared.json`, `view.json`, `layouts/.state/`, `data/`, ...).
 

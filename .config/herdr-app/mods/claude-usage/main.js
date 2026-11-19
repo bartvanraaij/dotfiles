@@ -1,6 +1,6 @@
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
-import { agents, run, theme, settings, checking, props, layout, shared, setShared } from "herdr";
+import { agents, panes, run, theme, settings, checking, props, layout, shared, setShared, home, readTextFile } from "herdr";
 import { LIMITS, CONTEXT, level, levelColor, readLimit, readContext, logoColor, untilText, resetText, tokensText } from "./usage.js";
 
 function find(node, id) {
@@ -12,13 +12,19 @@ function find(node, id) {
   return null;
 }
 
+// The session's folder name (its pane's live folder): space names are project titles, too long for the label column.
+const folderOf = (a) => (panes().find((p) => p.pane === a.pane)?.cwd ?? "").replace(/\/+$/, "").split("/").pop() || a.space_name;
+// The sidebar's (my-spaces) view of each work session, with its project: written there, read here.
+const LIVE = () => `${home()}/.config/herdr-app/sessions-live.json`;
+// Project label colors as my-spaces draws them (shared "project.colors" holds the names). Keep the two alike.
+const MARK = { ansi6: "#22a99a", ansi3: "#e3814f", ansi4: "#5b8def", ansi5: "#8b7cf6", ansi2: "#3fae6a", ansi1: "#d9649a" };
 const isClaude = (a) => a.app === "claude-code" || a.program?.key === "claude";
 // Drops the status glyph Claude Code puts in front of its terminal title.
 const clean = (s) => (s ?? "").replace(/^[^\p{L}\p{N}]+/u, "").trim();
 
 export default class ClaudeUsage extends View {
   init(_props, cx) {
-    this.limits = {}; this.context = {}; this.shownKey = "";
+    this.limits = {}; this.context = {}; this.sessions = {}; this.shownKey = "";
     this.button = Boolean(props()?.button);
     if (checking()) return;
     if (this.button) this.registerPanel();
@@ -33,11 +39,15 @@ export default class ClaudeUsage extends View {
     cx.spawn(async (cx) => {
       try {
         const limits = {}, context = {};
+        let sessions = {};
         for (const name of Object.keys(LIMITS)) limits[name] = await readLimit(name);
-        if (!this.button) for (const a of agents().filter(isClaude)) context[a.address] = await readContext(a.address);
-        const key = JSON.stringify([limits, context, Math.floor(Date.now() / 60000)]);
+        if (!this.button) {
+          for (const a of agents().filter(isClaude)) context[a.address] = await readContext(a.address);
+          try { sessions = JSON.parse(await readTextFile(LIVE()) ?? "{}") ?? {}; } catch {}
+        }
+        const key = JSON.stringify([limits, context, sessions, Math.floor(Date.now() / 60000)]);
         if (key === this.shownKey) return;
-        this.shownKey = key; this.limits = limits; this.context = context;
+        this.shownKey = key; this.limits = limits; this.context = context; this.sessions = sessions;
         cx.notify();
       } finally { this.loading = false; }
     });
@@ -84,17 +94,49 @@ export default class ClaudeUsage extends View {
     })));
   }
 
-  // Session titles are too long for the label column: the title gets its own line, the space takes the label.
-  contextRow(a, t) {
+  // Claude sessions under their work session, under its project: projects in the order they first appear,
+  // sessions in no project last, under "Other". The header matches the sidebar's.
+  contextGroups(claudes, t) {
+    const projects = new Map();
+    for (const a of claudes) {
+      const project = this.sessions[a.space]?.project ?? null;
+      if (!projects.has(project)) projects.set(project, new Map());
+      const spaces = projects.get(project);
+      if (!spaces.has(a.space)) spaces.set(a.space, []);
+      spaces.get(a.space).push(a);
+    }
+    const order = [...projects.keys()].filter((p) => p !== null);
+    if (projects.has(null)) order.push(null);
+    return order.flatMap((project) => [
+      this.projectHeader(project, t),
+      ...[...projects.get(project).values()].flatMap((list) => [
+        div().px(10).pt(4).min_w(0).truncate().font_semibold().child(list[0].space_name),
+        ...list.map((a) => this.contextRow(a, t, list[0].space_name)),
+      ]),
+    ]);
+  }
+
+  projectHeader(project, t) {
+    const color = project ? (shared("project.colors") ?? {})[project] : null;
+    const fill = color ? (color.startsWith("#") ? color : (MARK[color] ?? t[color])) : t.dim;
+    // The label's edge lines up with a selected row's highlight, its text with the titles and folders below.
+    return h_flex().id(`project-${project ?? "other"}`).pt(10).items_center()
+      .child(div().flex_none().max_w_full().truncate().px(10).py(1).rounded(4).bg(fill)
+        .font_family("SF Pro").text_size(11.5).font_bold().text_color("#ffffff").child(project ?? "Other"));
+  }
+
+
+  // A Claude session's title in muted text under its work session's title, left out when it repeats it.
+  contextRow(a, t, sessionTitle) {
     const c = this.context[a.address], used = c?.used == null ? null : Math.round(c.used);
     const tip = [c?.tokens && c?.size ? `${tokensText(c.tokens)} / ${tokensText(c.size)} tokens` : null, c?.model].filter(Boolean).join(" · ");
     return v_flex().id(`ctx-${a.address}`).px(10).pt(8).pb(4).gap(2).rounded(8).cursor_pointer()
       .when(a.focused, (el) => el.bg(t.selected)).hover((s) => s.bg(t.hover))
       .when(Boolean(tip), (el) => el.tooltip(tip))
       .on_click(() => run("pane.focus", { pane: a.pane }))
-      .child(div().min_w(0).truncate().child(clean(a.title) || a.tab_name))
+      .when((clean(a.title) || a.tab_name) !== sessionTitle, (el) => el.child(div().min_w(0).truncate().text_color(t.muted).child(clean(a.title) || a.tab_name)))
       .child(this.row(`ctx-${a.address}-row`, t, {
-        label: a.space_name, labelColor: t.muted, pct: used, color: used == null ? t.dim : levelColor(level(used, CONTEXT), t),
+        label: folderOf(a), labelColor: t.muted, pct: used, color: used == null ? t.dim : levelColor(level(used, CONTEXT), t),
         right: c?.tokens ? tokensText(c.tokens) : "",
       }));
   }
@@ -131,7 +173,7 @@ export default class ClaudeUsage extends View {
         .child(div().font_semibold().child("Claude usage")))
       .child(v_flex().id("claude-usage-body").flex_1().min_h(0).overflow_y_scrollbar()
         .child(this.section(t, "Limits", [this.limitRow("five", t), this.limitRow("week", t)], { first: true }))
-        .child(this.section(t, "Context", claudes.length ? claudes.map((a) => this.contextRow(a, t))
+        .child(this.section(t, "Context", claudes.length ? this.contextGroups(claudes, t)
           : [div().px(8).text_size(11).text_color(t.dim).child("No Claude sessions running")])));
   }
 }

@@ -3,8 +3,8 @@
 // state. A session nobody named takes the title of the first Claude session in it; Claude renames it
 // on request. A session's project comes from the folders open in it (projects.json), or is set for
 // that session (sessions.json); a header with a dot in the project's color heads each project.
-// Rule: ~/.claude/rules/herdr-sessions.md. A session shows only whether it needs you: a red dot while
-// waiting, a grey ring when done. Click to switch, right-click for its menu, drag to reorder.
+// Rule: ~/.claude/rules/herdr-sessions.md. A session shows its terminals as a box per tab, a column per
+// terminal, and in that box whether it needs you. Click to switch, right-click for its menu, drag to reorder.
 
 import { View, div, svg } from "gpui-kit";
 import { v_flex, h_flex, ScrollHandle } from "gpui-base";
@@ -44,6 +44,8 @@ function sessionTitle(a) {
   if (raw === a.address || lower === "claude" || lower === "claude code" || lower === a.program?.name?.toLowerCase()) return null;
   return raw;
 }
+
+const isClaude = (p) => p.app === "claude-code" || p.program?.key === "claude";
 
 // What a stored color name looks like on an avatar (the same in every mod
 // that draws space avatars): one strong color per hue, light and dark alike.
@@ -321,7 +323,7 @@ export default class Spaces extends View {
     for (const project of order) {
       const mine = groups.get(project);
       const fill = this.fill(project, t);
-      if (!collapsed) list.push(this.projectHeader(project, fill, mine.length, mine.some((r) => r.w.active), t));
+      if (!collapsed) list.push(this.projectHeader(project, fill, mine.some((r) => r.w.active), t));
       else if (list.length) list.push(div().id(`project-gap-${project ?? "other"}`).h(8).flex_none());
       for (const r of mine) {
         if (r.w.active) active = list.length;
@@ -338,11 +340,11 @@ export default class Spaces extends View {
     return color.startsWith("#") ? color : (MARK[color] ?? t[color]);
   }
 
-  // A dot in the project's color, its name in bold SF Pro (Herdr's Geist draws no bold) and its session count.
-  // The project holding the active session has a larger dot in a tinted ring and its name in its color; the
-  // name keeps its font and size, so switching projects moves no text.
+  // A dot in the project's color and its name in bold SF Pro (Herdr's Geist draws no bold); no count, as
+  // the sessions are listed under it. The project holding the active session has a larger dot in a tinted
+  // ring and its name in its color; the name keeps its font and size, so switching projects moves no text.
   // The claude-usage mod draws the same header; keep the two alike.
-  projectHeader(project, fill, count, active, t) {
+  projectHeader(project, fill, active, t) {
     // The dot's slot is as wide as the active dot, so the names line up; the ring draws past it.
     const dot = h_flex().w(10).h(10).flex_none().items_center().justify_center()
       .child(active
@@ -352,15 +354,31 @@ export default class Spaces extends View {
     return h_flex().id(`project-${project ?? "other"}`).h(32).flex_none().pt(8).px(8).gap(8).items_center()
       .child(dot)
       .child(div().flex_1().min_w(0).truncate().font_family("SF Pro").font_bold().text_size(12)
-        .text_color(active ? fill : t.muted).child(project ?? "Other"))
-      .child(div().flex_none().text_size(12).text_color(t.dim).child(String(count)));
+        .text_color(active ? fill : t.muted).child(project ?? "Other"));
   }
 
-  // A small red dot while the session waits for you, a grey ring when it's done; nothing otherwise.
-  mark(status, t) {
-    if (status === "blocked") return div().size(6).flex_none().rounded(3).bg(t.blocked);
-    if (status === "done") return div().size(6.5).flex_none().rounded(4).border(1.25).border_color(t.muted);
-    return null;
+  // A session's terminals per tab, in pane order; tabs without a terminal left out. Mod panes don't count.
+  terminalsByTab(s) {
+    const all = panes();
+    return (s.tabs ?? []).map((tab) => all.filter((p) => p.tab === tab.id && p.terminal)).filter((list) => list.length);
+  }
+
+  // A box per tab, a column per terminal in it, 6px plus 4 per terminal up to 22px; a Claude session's column
+  // is filled. With `states`, a tab with a waiting Claude is red, its column too, and a done tab is t.muted.
+  paneBoxes(tabs, color, states, t) {
+    return h_flex().flex_none().gap(4).items_center().children(tabs.map((list) => {
+      const waiting = states && list.some((p) => p.status === "blocked");
+      const done = states && !waiting && list.some((p) => p.status === "done");
+      const line = waiting ? t.blocked : done ? t.muted : color;
+      const columns = [];
+      list.forEach((p, i) => {
+        if (i) columns.push(div().w(1).h_full().flex_none().bg(line));
+        const fill = states && p.status === "blocked" ? mix(t.blocked, t.chrome, 0.5) : isClaude(p) ? mix(line, t.chrome, 0.5) : null;
+        columns.push(div().flex_1().h_full().when(Boolean(fill), (el) => el.bg(fill)));
+      });
+      return h_flex().w(Math.min(6 + 4 * list.length, 22)).h(10).flex_none().rounded(2.5).overflow_hidden()
+        .border(1.25).border_color(line).children(columns);
+    }));
   }
 
 
@@ -378,7 +396,7 @@ export default class Spaces extends View {
   row({ w, i }, t) {
     const on = w.active;
     const fromIndex = this.pressed === null ? -1 : spaces().findIndex(s => s.id === this.pressed);
-    const mark = this.mark(w.status, t);
+    const tabs = this.terminalsByTab(w);
     return v_flex()
       .relative()
       .id(`space-${w.id}`)
@@ -421,19 +439,21 @@ export default class Spaces extends View {
         cx.notify();
       })
       .on_mouse_down("right", () => this.menu(w))
-      // The mark sits right after the title; a long title shrinks and truncates, the mark stays.
+      // The boxes sit at the right edge, lined up across rows; a long title truncates before them.
       .child(
         h_flex()
           .gap(8)
           .items_center()
           // A waiting session's title is red too: it can't go on without you.
-          .child(div().flex_shrink(1).min_w(0).truncate().text_color(w.status === "blocked" ? t.blocked : t.foreground).child(w.name))
-          .when(Boolean(mark), (el) => el.child(mark)),
+          .child(div().flex_1().min_w(0).truncate().text_color(w.status === "blocked" ? t.blocked : t.foreground).child(w.name))
+          .when(tabs.length > 0, (el) => el.child(this.paneBoxes(tabs, t.dim, true, t))),
       );
   }
 
-  // The rail's cell: a dot in the session's project color.
+  // The rail's cell: one box in the session's project color, a column per terminal across its tabs, without
+  // waiting or done; a dot for a session without terminals.
   compact({ w }, project, fill, t) {
+    const terminals = this.terminalsByTab(w).flat();
     return railCell(h_flex()
       .id(`space-${w.id}`)
       .w(RAIL_CELL)
@@ -445,7 +465,7 @@ export default class Spaces extends View {
       .when(w.active, (el) => el.bg(t.selected))
       .when(!w.active, (el) => el.hover((s) => s.bg(t.hover)))
       .on_click(() => run("space.select", { id: w.id }))
-      .child(div().size(8).rounded(4).bg(fill)));
+      .child(terminals.length ? this.paneBoxes([terminals], fill, false, t) : div().size(8).rounded(4).bg(fill)));
   }
 
   render() {

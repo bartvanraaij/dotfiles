@@ -363,18 +363,33 @@ export default class Spaces extends View {
     return (s.tabs ?? []).map((tab) => all.filter((p) => p.tab === tab.id && p.terminal)).filter((list) => list.length);
   }
 
+  // Shows a terminal's pane: its session, its tab, then the pane itself. The click ends the row's press too,
+  // so no drag to reorder stays armed.
+  showPane(p, cx) {
+    cx.stop_propagation();
+    this.pressed = null;
+    this.over = null;
+    cx.notify();
+    const space = spaces().find((s) => (s.tabs ?? []).some((tab) => tab.id === p.tab));
+    if (space) run("space.select", { id: space.id });
+    run("tab.select", { id: p.tab });
+    run("pane.focus", { pane: p.pane });
+  }
+
   // A box per tab, a column per terminal in it, 6px plus 4 per terminal up to 22px; a Claude session's column
-  // is filled. With `states`, a tab with a waiting Claude is red, its column too, and a done tab is t.muted.
-  paneBoxes(tabs, color, states, t) {
+  // is filled. In a full row (`full`), a tab with a waiting Claude is red, its column too, a done tab is in
+  // t.done, and clicking a column shows that terminal's session, tab and pane.
+  paneBoxes(tabs, color, full, t) {
     return h_flex().flex_none().gap(4).items_center().children(tabs.map((list) => {
-      const waiting = states && list.some((p) => p.status === "blocked");
-      const done = states && !waiting && list.some((p) => p.status === "done");
-      const line = waiting ? t.blocked : done ? t.muted : color;
+      const waiting = full && list.some((p) => p.status === "blocked");
+      const done = full && !waiting && list.some((p) => p.status === "done");
+      const line = waiting ? t.blocked : done ? t.done : color;
       const columns = [];
       list.forEach((p, i) => {
         if (i) columns.push(div().w(1).h_full().flex_none().bg(line));
-        const fill = states && p.status === "blocked" ? mix(t.blocked, t.chrome, 0.5) : isClaude(p) ? mix(line, t.chrome, 0.5) : null;
-        columns.push(div().flex_1().h_full().when(Boolean(fill), (el) => el.bg(fill)));
+        const fill = full && p.status === "blocked" ? mix(t.blocked, t.chrome, 0.5) : isClaude(p) ? mix(line, t.chrome, 0.5) : null;
+        columns.push(div().id(`pane-${p.pane}`).flex_1().h_full().when(Boolean(fill), (el) => el.bg(fill))
+          .when(full, (el) => el.on_click((_e, cx) => this.showPane(p, cx))));
       });
       return h_flex().w(Math.min(6 + 4 * list.length, 22)).h(10).flex_none().rounded(2.5).overflow_hidden()
         .border(1.25).border_color(line).children(columns);

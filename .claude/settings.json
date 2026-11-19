@@ -165,5 +165,18 @@
   "switchModelsOnFlag": true,
   "fileCheckpointingEnabled": false,
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/herdr-session-hook.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
 }

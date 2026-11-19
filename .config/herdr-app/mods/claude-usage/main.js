@@ -1,6 +1,6 @@
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
-import { agents, panes, run, theme, settings, checking, props, layout, shared, setShared, home, readTextFile } from "herdr";
+import { agents, panes, spaces, run, theme, settings, checking, props, layout, shared, setShared, home, readTextFile } from "herdr";
 import { LIMITS, CONTEXT, level, levelColor, readLimit, readContext, logoColor, untilText, resetText, tokensText } from "./usage.js";
 
 function find(node, id) {
@@ -12,15 +12,57 @@ function find(node, id) {
   return null;
 }
 
-// The session's folder name (its pane's live folder): space names are project titles, too long for the label column.
+// A Claude session's folder name (its pane's live folder).
 const folderOf = (a) => (panes().find((p) => p.pane === a.pane)?.cwd ?? "").replace(/\/+$/, "").split("/").pop() || a.space_name;
 // The sidebar's (my-spaces) view of each work session, with its project: written there, read here.
 const LIVE = () => `${home()}/.config/herdr-app/sessions-live.json`;
-// Project label colors as my-spaces draws them (shared "project.colors" holds the names). Keep the two alike.
-const MARK = { ansi6: "#22a99a", ansi3: "#e3814f", ansi4: "#5b8def", ansi5: "#8b7cf6", ansi2: "#3fae6a", ansi1: "#d9649a" };
 const isClaude = (a) => a.app === "claude-code" || a.program?.key === "claude";
-// Drops the status glyph Claude Code puts in front of its terminal title.
-const clean = (s) => (s ?? "").replace(/^[^\p{L}\p{N}]+/u, "").trim();
+
+// A Claude session's title, when it names the work: Claude Code puts its session title in the terminal
+// title, after a status glyph. Its plain program name, a folder path or a host isn't a title.
+function claudeTitle(a) {
+  const raw = (a.title ?? "").replace(/^[^\p{L}\p{N}~/]+/u, "").trim();
+  if (!raw || /^[~/]/.test(raw) || raw.includes("@")) return null;
+  const lower = raw.toLowerCase();
+  if (raw === a.address || lower === "claude" || lower === "claude code" || lower === a.program?.name?.toLowerCase()) return null;
+  return raw;
+}
+
+// The project header and its colors as my-spaces draws them; keep the two alike.
+// What a stored color name (shared "project.colors") looks like: one strong color per hue, light and dark alike.
+const MARK = { ansi6: "#22a99a", ansi3: "#e3814f", ansi4: "#5b8def", ansi5: "#8b7cf6", ansi2: "#3fae6a", ansi1: "#d9649a" };
+
+// `color` mixed into `base` by `amount` (0..1); both #rrggbb. Anything else returns `color`.
+function mix(color, base, amount) {
+  const rgb = (h) => (/^#[0-9a-f]{6}/i.test(h ?? "") ? [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)) : null);
+  const a = rgb(color), b = rgb(base);
+  if (!a || !b) return color;
+  return "#" + a.map((v, i) => Math.round(v * amount + b[i] * (1 - amount)).toString(16).padStart(2, "0")).join("");
+}
+
+// A project's color as drawn; "Other", and a project my-spaces hasn't given a color yet, are dim.
+function fill(project, t) {
+  const color = project ? (shared("project.colors") ?? {})[project] : null;
+  if (!color) return t.dim;
+  return color.startsWith("#") ? color : (MARK[color] ?? t[color]);
+}
+
+// A dot in the project's color, its name in bold SF Pro (Herdr's Geist draws no bold) and its count.
+// The active project has a larger dot in a tinted ring and its name in its color; the name keeps its
+// font and size, so switching projects moves no text. `base` is the surface the header sits on.
+function projectHeader(project, fill, count, active, t, base) {
+  // The dot's slot is as wide as the active dot, so the names line up; the ring draws past it.
+  const dot = h_flex().w(10).h(10).flex_none().items_center().justify_center()
+    .child(active
+      ? h_flex().size(16).flex_none().rounded(8).bg(mix(fill, base, 0.3)).items_center().justify_center()
+          .child(div().size(10).rounded(5).bg(fill))
+      : div().size(8).rounded(4).bg(fill));
+  return h_flex().id(`project-${project ?? "other"}`).h(32).flex_none().pt(8).px(8).gap(8).items_center()
+    .child(dot)
+    .child(div().flex_1().min_w(0).truncate().font_family("SF Pro").font_bold().text_size(12)
+      .text_color(active ? fill : t.muted).child(project ?? "Other"))
+    .child(div().flex_none().text_size(12).text_color(t.dim).child(String(count)));
+}
 
 export default class ClaudeUsage extends View {
   init(_props, cx) {
@@ -67,18 +109,19 @@ export default class ClaudeUsage extends View {
       .when(pace !== undefined, (el) => el.child(div().absolute().top(-2).h(10).w(2).rounded(1).bg(t.muted).left(`${pace}%`)));
   }
 
-  // Columns shared by the limit and context rows, so their bars, percentages and times line up.
-  row(id, t, { label, labelColor, pct, color, pace, right }) {
+  // Columns shared by the limit and context rows, so their percentages and times line up.
+  // Context rows have no label: their folder is on the line above.
+  row(id, t, { label, pct, color, pace, right }) {
     return h_flex().id(id).h(28).gap(12).items_center().min_w(0)
-      .child(div().w(64).flex_none().truncate().text_color(labelColor ?? t.foreground).child(label ?? ""))
+      .when(label != null, (el) => el.child(div().w(64).flex_none().truncate().child(label)))
       .child(div().flex_1().min_w(0).child(this.bar(`${id}-bar`, pct ?? 0, color, t, pace)))
       .child(div().w(40).flex_none().text_right().font_semibold().text_color(color).child(pct == null ? "–" : `${pct}%`))
       .child(div().w(52).flex_none().text_right().text_size(11).text_color(t.muted).child(right ?? ""));
   }
 
   // Flat sections on the panel itself, split by a line like the header's, so rows sit one level deep.
-  section(t, title, rows, { first = false } = {}) {
-    return v_flex().gap(6).px(10).pt(16).pb(14).when(!first, (el) => el.border_t(1).border_color(t.border))
+  section(t, title, rows, { first = false, gap = 6 } = {}) {
+    return v_flex().gap(gap).px(10).pt(16).pb(14).when(!first, (el) => el.border_t(1).border_color(t.border))
       .child(div().px(10).pb(4).text_size(11).text_color(t.muted).child(title))
       .children(rows);
   }
@@ -95,7 +138,8 @@ export default class ClaudeUsage extends View {
   }
 
   // Claude sessions under their work session, under its project: projects in the order they first appear,
-  // sessions in no project last, under "Other". The header matches the sidebar's.
+  // sessions in no project last, under "Other". The project holding the active work session is the
+  // active one, as in the sidebar; the count is its Claude sessions.
   contextGroups(claudes, t) {
     const projects = new Map();
     for (const a of claudes) {
@@ -107,36 +151,53 @@ export default class ClaudeUsage extends View {
     }
     const order = [...projects.keys()].filter((p) => p !== null);
     if (projects.has(null)) order.push(null);
-    return order.flatMap((project) => [
-      this.projectHeader(project, t),
-      ...[...projects.get(project).values()].flatMap((list) => [
-        div().px(10).pt(4).min_w(0).truncate().font_semibold().child(list[0].space_name),
-        ...list.map((a) => this.contextRow(a, t, list[0].space_name)),
-      ]),
-    ]);
+    const activeSpace = spaces().find((s) => s.active)?.id;
+    return order.flatMap((project) => {
+      const groups = [...projects.get(project).entries()];
+      const color = fill(project, t);
+      const active = groups.some(([space]) => space === activeSpace);
+      const count = groups.reduce((n, [, list]) => n + list.length, 0);
+      return [
+        projectHeader(project, color, count, active, t, t.background),
+        ...groups.flatMap(([space, list], i) => this.workSession(space, list, i > 0, t)),
+      ];
+    });
   }
 
-  projectHeader(project, t) {
-    const color = project ? (shared("project.colors") ?? {})[project] : null;
-    const fill = color ? (color.startsWith("#") ? color : (MARK[color] ?? t[color])) : t.dim;
-    // The label's edge lines up with a selected row's highlight, its text with the titles and folders below.
-    return h_flex().id(`project-${project ?? "other"}`).pt(10).items_center()
-      .child(div().flex_none().max_w_full().truncate().px(10).py(1).rounded(4).bg(fill)
-        .font_family("SF Pro").text_size(11.5).font_bold().text_color("#ffffff").child(project ?? "Other"));
+  // A work session with one Claude session is one row: its title and the folder above the bar. With more,
+  // its title gets a row of its own and each Claude session names itself: its own title, even when it
+  // repeats the work session's, and its folder.
+  workSession(space, list, spaced, t) {
+    const title = list[0].space_name;
+    if (list.length === 1) return [this.contextRow(list[0], t, { title, spaced })];
+    return [
+      h_flex().id(`work-${space}`).h(26).flex_none().pl(26).pr(8).items_center().when(spaced, (el) => el.mt(6))
+        .child(div().min_w(0).truncate().child(title)),
+      ...list.map((a) => this.contextRow(a, t, { title: claudeTitle(a), muted: true })),
+    ];
   }
 
-
-  // A Claude session's title in muted text under its work session's title, left out when it repeats it.
-  contextRow(a, t, sessionTitle) {
+  // A Claude session: `title · folder` above its context bar. The title is the work session's (foreground)
+  // or the Claude session's own (muted); the folder stays whole and a long title truncates.
+  contextRow(a, t, { title, muted = false, spaced = false }) {
     const c = this.context[a.address], used = c?.used == null ? null : Math.round(c.used);
-    const tip = [c?.tokens && c?.size ? `${tokensText(c.tokens)} / ${tokensText(c.size)} tokens` : null, c?.model].filter(Boolean).join(" · ");
-    return v_flex().id(`ctx-${a.address}`).px(10).pt(8).pb(4).gap(2).rounded(8).cursor_pointer()
+    const own = claudeTitle(a), folder = folderOf(a);
+    // A work session nobody named carries its folder's name: the folder isn't repeated after it.
+    if (title === folder) title = null;
+    const tip = [!muted && own && own !== title ? own : null, c?.tokens && c?.size ? `${tokensText(c.tokens)} / ${tokensText(c.size)} tokens` : null, c?.model]
+      .filter(Boolean).join(" · ");
+    return v_flex().id(`ctx-${a.address}`).flex_none().pl(26).pr(8).py(2).rounded(8).cursor_pointer()
+      .when(spaced, (el) => el.mt(6))
       .when(a.focused, (el) => el.bg(t.selected)).hover((s) => s.bg(t.hover))
       .when(Boolean(tip), (el) => el.tooltip(tip))
       .on_click(() => run("pane.focus", { pane: a.pane }))
-      .when((clean(a.title) || a.tab_name) !== sessionTitle, (el) => el.child(div().min_w(0).truncate().text_color(t.muted).child(clean(a.title) || a.tab_name)))
+      .child(h_flex().h(muted ? 20 : 24).gap(6).min_w(0).when(muted, (el) => el.items_end()).when(!muted, (el) => el.items_center())
+        .when(Boolean(title), (el) => el
+          .child(div().flex_shrink(1).min_w(0).truncate().text_color(muted ? t.muted : t.foreground).child(title))
+          .child(div().flex_none().text_color(t.muted).child("·")))
+        .child(div().flex_none().max_w(160).truncate().text_color(title || muted ? t.muted : t.foreground).child(folder)))
       .child(this.row(`ctx-${a.address}-row`, t, {
-        label: folderOf(a), labelColor: t.muted, pct: used, color: used == null ? t.dim : levelColor(level(used, CONTEXT), t),
+        pct: used, color: used == null ? t.dim : levelColor(level(used, CONTEXT), t),
         right: c?.tokens ? tokensText(c.tokens) : "",
       }));
   }
@@ -174,6 +235,6 @@ export default class ClaudeUsage extends View {
       .child(v_flex().id("claude-usage-body").flex_1().min_h(0).overflow_y_scrollbar()
         .child(this.section(t, "Limits", [this.limitRow("five", t), this.limitRow("week", t)], { first: true }))
         .child(this.section(t, "Context", claudes.length ? this.contextGroups(claudes, t)
-          : [div().px(8).text_size(11).text_color(t.dim).child("No Claude sessions running")])));
+          : [div().px(8).text_size(11).text_color(t.dim).child("No Claude sessions running")], { gap: 0 })));
   }
 }

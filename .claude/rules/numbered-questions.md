@@ -9,8 +9,10 @@ These all count as questions and get a number:
 
 Plain numbers are reserved for questions. Every other list in the same message (summaries, design points, steps, findings, suggestions) uses bullets or a letter prefix: findings `F1`, `F2`, suggestions `S1`, `S2`, design or summary points `D1`, `D2`. Never a 1, 2, 3 list that isn't questions.
 
+A numbered question is either a yes/no question about one thing, or a lettered choice (`A`, `B`, `C`). Never phrase it as "X, or Y?": a yes or no to that doesn't say which part it answers. When the options are "do X" and "do Y instead", make it a lettered choice.
+
 Each number holds one decision. Steps that naturally go together and would almost always get the same answer (commit and push, for example) can share a number. If I could reasonably say yes to one part and no to the other, split them.
 
 Before sending a message, check: does it end waiting on me? Then every open point is in the numbered block, and nothing else uses plain numbers.
 
-**Why:** I answer by label ("1 yes, 2 B, skip F2"). Questions almost always need my answer, so they get the shortest label. Bullets make me retype or quote the question, and two lists both numbered 1/2/3 make "1. ..." ambiguous.
+**Why:** I answer by label ("1 yes, 2 B, skip F2"). Questions almost always need my answer, so they get the shortest label. Bullets make me retype or quote the question, and two lists both numbered 1/2/3 make "1. ..." ambiguous. An "X, or Y?" question once got "no keep" as its answer, which fits either part (2026-11-19).

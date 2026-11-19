@@ -1,0 +1,9 @@
+{
+  "name": "claude-lsp-typescript",
+  "private": true,
+  "description": "TypeScript language server for Claude Code's typescript-lsp plugin, separate from Neovim's Mason install. TypeScript 7 (the Go port) has no tsserver.js, so this pins TypeScript 6.",
+  "dependencies": {
+    "typescript": "~6.0.3",
+    "typescript-language-server": "^6.1.0"
+  }
+}

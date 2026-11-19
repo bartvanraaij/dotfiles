@@ -47,10 +47,11 @@ function fill(project, t) {
   return color.startsWith("#") ? color : (MARK[color] ?? t[color]);
 }
 
-// A dot in the project's color, its name in bold SF Pro (Herdr's Geist draws no bold) and its count.
+// A dot in the project's color and its name in bold SF Pro (Herdr's Geist draws no bold); no count, as
+// its sessions are listed under it.
 // The active project has a larger dot in a tinted ring and its name in its color; the name keeps its
 // font and size, so switching projects moves no text. `base` is the surface the header sits on.
-function projectHeader(project, fill, count, active, t, base) {
+function projectHeader(project, fill, active, t, base) {
   // The dot's slot is as wide as the active dot, so the names line up; the ring draws past it.
   const dot = h_flex().w(10).h(10).flex_none().items_center().justify_center()
     .child(active
@@ -60,8 +61,7 @@ function projectHeader(project, fill, count, active, t, base) {
   return h_flex().id(`project-${project ?? "other"}`).h(32).flex_none().pt(8).px(8).gap(8).items_center()
     .child(dot)
     .child(div().flex_1().min_w(0).truncate().font_family("SF Pro").font_bold().text_size(12)
-      .text_color(active ? fill : t.muted).child(project ?? "Other"))
-    .child(div().flex_none().text_size(12).text_color(t.dim).child(String(count)));
+      .text_color(active ? fill : t.muted).child(project ?? "Other"));
 }
 
 export default class ClaudeUsage extends View {
@@ -139,7 +139,7 @@ export default class ClaudeUsage extends View {
 
   // Claude sessions under their work session, under its project: projects in the order they first appear,
   // sessions in no project last, under "Other". The project holding the active work session is the
-  // active one, as in the sidebar; the count is its Claude sessions.
+  // active one, as in the sidebar.
   contextGroups(claudes, t) {
     const projects = new Map();
     for (const a of claudes) {
@@ -156,9 +156,8 @@ export default class ClaudeUsage extends View {
       const groups = [...projects.get(project).entries()];
       const color = fill(project, t);
       const active = groups.some(([space]) => space === activeSpace);
-      const count = groups.reduce((n, [, list]) => n + list.length, 0);
       return [
-        projectHeader(project, color, count, active, t, t.background),
+        projectHeader(project, color, active, t, t.background),
         ...groups.flatMap(([space, list], i) => this.workSession(space, list, i > 0, t)),
       ];
     });

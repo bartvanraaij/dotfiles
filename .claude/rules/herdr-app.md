@@ -26,7 +26,7 @@ herdr-app do pane.split '{"direction":"right","pane":"<pane id>","argv":["zsh"]}
 herdr-app do pane.split '{"direction":"right","pane":"<pane id>","mod":"files"}'
 
 herdr-app do pane.close '{"pane":"<pane id>"}'
-herdr-app do space.select '{"id":"<sp id>"}'        # not run yet; also tab.select {id}, pane.focus {pane | terminal}, pane.zoom {pane}
+herdr-app do space.select '{"id":"<sp id>"}'        # also tab.select {id}, pane.focus {pane | terminal}; pane.zoom {pane} not run yet
 herdr-app status                                    # shown layout, focused space/tab/pane, errors
 herdr-app shot <file.png>                           # screenshot of the window
 ```

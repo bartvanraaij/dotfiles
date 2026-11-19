@@ -166,6 +166,8 @@ brew "tmux"
 brew "tree"
 # Parser generator tool
 brew "tree-sitter-cli"
+# Language Server Protocol implementation for TypeScript wrapping tsserver
+brew "typescript-language-server"
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
 # Executes a program periodically, showing output fullscreen

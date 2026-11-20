@@ -45,7 +45,8 @@
               "size": {
                 "weight": 1
               },
-              "min": 90
+              "min": 90,
+              "hidden": true
             }
           ]
         },

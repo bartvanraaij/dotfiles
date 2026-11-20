@@ -8,7 +8,7 @@
 
 import { View, div, svg } from "gpui-kit";
 import { v_flex, h_flex, ScrollHandle } from "gpui-base";
-import { spaces, machines, agents, panes, run, openOverlay, hc, theme, shared, setShared, layout, checking, home, readTextFile, writeTextFile } from "herdr";
+import { spaces, machines, agents, panes, settings, run, openOverlay, hc, theme, shared, setShared, layout, checking, home, readTextFile, writeTextFile } from "herdr";
 
 function find(node, id) {
   if (node?.id === id) return node;
@@ -46,6 +46,9 @@ function sessionTitle(a) {
 }
 
 const isClaude = (p) => p.app === "claude-code" || p.program?.key === "claude";
+
+// Claude orange, as the claude-usage mod draws the ✻ logo (a mod can't import from another mod's folder).
+const claudeOrange = () => (settings().dark ? "#d97757" : "#c15f3c");
 
 // What a stored color name looks like on an avatar (the same in every mod
 // that draws space avatars): one strong color per hue, light and dark alike.
@@ -377,8 +380,10 @@ export default class Spaces extends View {
   }
 
   // A box per tab, a column per terminal in it, up to about 22px wide; a Claude session's column
-  // is filled. In a full row (`full`), a waiting Claude's column is red and a done Claude's column is in t.done,
-  // the box itself stays in `color`, and clicking a column shows that terminal's session, tab and pane.
+  // is filled. In a full row (`full`), a waiting Claude's column is red, a done Claude's column is in t.done and
+  // a working Claude's column pulses between its grey and a faded Claude orange (a native loop, so it causes
+  // no redraws); the box itself stays in
+  // `color`, and clicking a column shows that terminal's session, tab and pane.
   paneBoxes(tabs, color, full, t) {
     return h_flex().flex_none().gap(4).items_center().children(tabs.map((list) => {
       // Whole-pixel columns, so a split box draws its halves equally wide; the box's width follows from them.
@@ -391,6 +396,8 @@ export default class Spaces extends View {
           : full && p.status === "done" ? mix(t.done, t.chrome, 0.5)
           : isClaude(p) ? mix(color, t.chrome, 0.5) : null;
         columns.push(div().id(`pane-${p.pane}`).when(i < n - 1, (el) => el.w(width).flex_none()).when(i === n - 1, (el) => el.flex_1()).h_full().when(Boolean(fill), (el) => el.bg(fill))
+          .when(full && p.status === "working", (el) => el.relative().child(div().absolute().top(0).bottom(0).left(0).right(0)
+            .bg(mix(claudeOrange(), t.chrome, 0.7)).loop("opacity", { from: 0, to: 1, period: 1200 })))
           .when(full, (el) => el.on_click((_e, cx) => this.showPane(p, cx))));
       });
       return h_flex().w(2.5 + n * width + (n - 1)).h(10).flex_none().rounded(2.5).overflow_hidden()

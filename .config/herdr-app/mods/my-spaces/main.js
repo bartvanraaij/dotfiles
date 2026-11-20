@@ -376,23 +376,25 @@ export default class Spaces extends View {
     run("pane.focus", { pane: p.pane });
   }
 
-  // A box per tab, a column per terminal in it, 6px plus 4 per terminal up to 22px; a Claude session's column
-  // is filled. In a full row (`full`), a tab with a waiting Claude is red, its column too, a done tab is in
-  // t.done, and clicking a column shows that terminal's session, tab and pane.
+  // A box per tab, a column per terminal in it, up to about 22px wide; a Claude session's column
+  // is filled. In a full row (`full`), a waiting Claude's column is red and a done Claude's column is in t.done,
+  // the box itself stays in `color`, and clicking a column shows that terminal's session, tab and pane.
   paneBoxes(tabs, color, full, t) {
     return h_flex().flex_none().gap(4).items_center().children(tabs.map((list) => {
-      const waiting = full && list.some((p) => p.status === "blocked");
-      const done = full && !waiting && list.some((p) => p.status === "done");
-      const line = waiting ? t.blocked : done ? t.done : color;
+      // Whole-pixel columns, so a split box draws its halves equally wide; the box's width follows from them.
+      // The last column takes what is left inside the border, so the fill meets it after the renderer rounds.
+      const n = list.length, width = n === 1 ? 7.5 : Math.max(1, Math.min(5, Math.floor((19.5 - (n - 1)) / n)));
       const columns = [];
       list.forEach((p, i) => {
-        if (i) columns.push(div().w(1).h_full().flex_none().bg(line));
-        const fill = full && p.status === "blocked" ? mix(t.blocked, t.chrome, 0.5) : isClaude(p) ? mix(line, t.chrome, 0.5) : null;
-        columns.push(div().id(`pane-${p.pane}`).flex_1().h_full().when(Boolean(fill), (el) => el.bg(fill))
+        if (i) columns.push(div().w(1).h_full().flex_none().bg(color));
+        const fill = full && p.status === "blocked" ? mix(t.blocked, t.chrome, 0.5)
+          : full && p.status === "done" ? mix(t.done, t.chrome, 0.5)
+          : isClaude(p) ? mix(color, t.chrome, 0.5) : null;
+        columns.push(div().id(`pane-${p.pane}`).when(i < n - 1, (el) => el.w(width).flex_none()).when(i === n - 1, (el) => el.flex_1()).h_full().when(Boolean(fill), (el) => el.bg(fill))
           .when(full, (el) => el.on_click((_e, cx) => this.showPane(p, cx))));
       });
-      return h_flex().w(Math.min(6 + 4 * list.length, 22)).h(10).flex_none().rounded(2.5).overflow_hidden()
-        .border(1.25).border_color(line).children(columns);
+      return h_flex().w(2.5 + n * width + (n - 1)).h(10).flex_none().rounded(2.5).overflow_hidden()
+        .border(1.25).border_color(color).children(columns);
     }));
   }
 

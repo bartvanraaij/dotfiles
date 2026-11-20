@@ -1,6 +1,24 @@
 {
-  "Merlin": ["~/Dev/agx_core*", "~/Dev/agx_merlin*", "~/.herdr/worktrees/agx_core", "~/.herdr/worktrees/agx_merlin"],
-  "Homeops": ["~/Dev/homeops", "~/Dev/ha-core", "~/Dev/ha-docs"],
-  "Playgrid": ["~/Dev/playgrid"],
-  ".config": ["~/.config", "~/.claude"]
+  "Merlin": [
+    "~/.herdr/worktrees/agx_core",
+    "~/.herdr/worktrees/agx_merlin",
+    "~/Dev/agx_core*",
+    "~/Dev/agx_merlin*",
+    "~/Dev/merlin-prototype"
+  ],
+  "Homeops": [
+    "~/Dev/homeops",
+    "~/Dev/ha-core",
+    "~/Dev/ha-docs"
+  ],
+  "Playgrid": [
+    "~/Dev/playgrid"
+  ],
+  ".config": [
+    "~/.config",
+    "~/.claude"
+  ],
+  "AgxAzure Gen1": [
+    "~/Dev/agx_azure"
+  ]
 }

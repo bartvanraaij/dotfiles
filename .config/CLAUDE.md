@@ -18,9 +18,22 @@ dot status --short -- ~/.config/nvim   # alias: git --git-dir=$HOME/.dot/ --work
 ```
 
 - `status` hides untracked files; new config files must be added explicitly (`dot ls-files --error-unmatch <path>`).
+- `dot status -sb` shows how far `main` is ahead of GitHub's (`origin/main`, updated by `dot fetch` and `dot push`).
 - Scope `add`/`commit` to the paths you changed; never `commit -a` (it sweeps in all of `$HOME`'s tracked files).
 - `~/.config/ghostty/theme.ghostty` is intentionally untracked (written by `theme`).
 - Generated files have their own commands: `~/.Brewfile` → `brew-store-installed`. Check `zsh/aliases.zsh` before hand-editing generated files.
+
+### When to commit
+
+In this repo Claude commits without being asked (this replaces "only commit when I ask" from the global git rule), one commit per finished piece of work:
+- A piece of work is finished when the user accepts it ("looks great", "nice") or moves on to something else. Commit then, not after each edit.
+- Tweaks made while iterating on it (a color, a size, a bug in what was just built) go into that same commit. Nothing is committed while the user is still trying it out.
+- A later change to what the last commit holds goes into that commit with `dot commit --amend`, as long as it isn't pushed (the user pushes by hand). Check first: `dot fetch -q && dot branch -r --contains HEAD` prints nothing for an unpushed commit. Any other change to something already committed is a new commit, named after what it changes.
+- Separate pieces of work get separate commits, and the one-app-per-commit rule below still holds.
+- Changes Claude didn't make stay out of the commit; mention them once.
+- After committing, name the commit in one line. Don't ask "commit?".
+
+**Why:** unprompted, a model commits every small edit and the history gets huge; asking for every commit got tedious (2026-11-20).
 
 ### Commit messages
 

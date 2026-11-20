@@ -58,6 +58,8 @@ Examples: `nvim: add dark mode toggle to settings`, `zsh: allow case-insensitive
 
 **Claude's shell is bash, the user's is zsh.** Claude Code's Bash tool runs Homebrew bash 5 (`CLAUDE_CODE_SHELL` in `~/.claude/settings.json`), so commands follow bash rules in every project. It inherits PATH and exported variables from the zsh terminal; `~/.bashrc` only adds what Claude needs (`dot`, `theme`, mise shims). Aliases for the user go in `zsh/aliases.zsh`; anything Claude must call also goes in `~/.bashrc`, as a function (non-interactive bash skips aliases).
 
+**Claude Code's LSP plugins have their own servers, separate from Neovim's Mason.** Claude keeps working when the nvim setup breaks. `~/.claude/lsp/typescript/` pins `typescript-language-server` and TypeScript 6 (TypeScript 7, the Go port, has no `tsserver.js`); its `install.sh` installs them and links the server into `~/.local/bin`. A Homebrew `typescript-language-server` would come first on PATH and pull in TypeScript 7, so it stays uninstalled.
+
 **Claude usage in tmux and Herdr.** `~/.claude/statusline.sh` writes three caches, each via rename so readers never see half a file:
 - `~/.cache/claude-usage`: the 5-hour window, `<used_pct> <resets_at>`. `tmux/claude-usage.sh` renders it in `status-right`; the format must stay as it is for tmux.
 - `~/.cache/claude-usage-7d`: the weekly window, same format. Both limit caches keep the highest value per window: a lower value is stale (an idle session redrawing), a later reset time is a new window.

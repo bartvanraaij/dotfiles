@@ -14,42 +14,8 @@
 - Why: commit bodies never get read. The subject carries everything, the type makes the log filterable, and the ticket links the context.
 
 ## PR descriptions
-- Title = the commit subject format.
-- The body opens with a summary of one or two plain sentences, no heading: what the PR is about and why it is needed, the context the change lines don't carry.
-- Then `This PR:` and one line per change, starting with a bold third-person verb ("**Adds**", "**Fixes**", "**Moves**"). The PR is the subject, so the verb is something the PR changes, not runtime behaviour ("Handles"). The why goes in the same sentence and names the concrete situation the reader knows. If a reviewer will obviously ask "does this affect prod?", answer it in the line. Incidental changes (docs, conventions) are just another line. No sub-bullets or paragraphs in this list.
-- Below it, in this order; a part with nothing to say is left out:
-    - `Details:` implementation notes per change, as plain statements ("Unwrapping is in ...").
-    - `Out-of-scope:` follow-ups and known gaps, each linking its ticket where one exists.
-    - `### Reviewing`, holding `What I need from you:` (numbered asks to the reviewer, including where to start reading) and `How to test:` (prerequisites in one line, then the steps as one commented code block, expected output as comments).
+- The format comes from the repo's AGENTS.md (in agx_core: §11, with a Changes and a Decisions format; ask which one before writing). A repo without one: title in the commit subject format, one or two opening sentences, then short bold-labelled parts only when there is something to say.
 - The `_Co-Authored by ..._` line (see "Posting as me") ends the description.
-
-Example:
-```
-Field uploads rejected a FeatureCollection holding a single Feature, the shape most GeoJSON tools (and the Outsystems export) produce.
-
-This PR:
-
-- **Adds** support for a FeatureCollection holding a single Feature. Multiple features get a 400.
-- **Adds** PR description conventions to AGENTS.md, so AI agents follow our style.
-
-Details:
-
-- Unwrapping is in the shared GeoJsonFeatureConverter, so every endpoint that takes a Feature accepts it. OriginalGeoJson stores the unwrapped feature.
-
-Out-of-scope:
-
-- Multi-feature uploads ([JIRA-124](https://agxeed.atlassian.net/browse/JIRA-124)).
-
-### Reviewing
-
-What I need from you:
-
-1. Start with GeoJsonFeatureConverter: is unwrapping there the right layer?
-
-How to test:
-
-    dotnet test src/tests/CoreAPI.Integration.Tests --filter FieldUploadTests
-```
 
 ## Writing voice (PRs, comments, write-ups)
 - No "christmas tree". Use formatting only when it helps the reader: a bold short section header, a table when people compare or scan rows, a list for separate items. No decorative italics, checkboxes, blockquotes or emoji sprinkles (a single emoji for tone is fine).

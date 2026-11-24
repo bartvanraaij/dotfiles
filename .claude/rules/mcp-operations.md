@@ -31,6 +31,12 @@ Verified 2026-10-30 (pipelines):
 - `listBitbucketRepoPipelineSteps` (executeRead): `pipelineId` (build number as a string, e.g. "832"; a number fails validation, checked 2026-11-12). Fields: `values.name`, `values.uuid`, `values.state.result.name`.
 - `getBitbucketRepoPipelineStepLog` (executeRead): `pipelineId`, `stepUuid` ("{...}" form).
 
-Names seen, inputs not verified yet (executeRead): `getBitbucketRepoPullRequest`, `listBitbucketRepoPullRequests`, `getBitbucketRepoPullRequestDiff`, `listBitbucketRepoPullRequestTasks`.
+Verified 2026-11-20 (executeRead):
+- `getBitbucketRepoPullRequest`: `prId`. Fields: `reviewers`, `participants.user.uuid`.
+- `listBitbucketRepoPullRequests`: `state` ("OPEN" | "MERGED" | "DECLINED"), `pagelen`.
+- `listBitbucketWorkspacePullRequests`: `workspaceId` only, plus optional `state`, `authorUuid`, `reviewerUuid`, `pagelen` (max 100). Fields `values.reviewers.display_name`, `values.reviewers.uuid` find a colleague's uuid for `reviewers`.
+- Known uuids: Bart Kockx `{a954088c-3d0b-4625-8ca4-ea9340dce583}`, Florian Giller `{03838f5e-941d-4178-b626-7632092c5e3a}`.
+
+Names seen, inputs not verified yet (executeRead): `getBitbucketRepoPullRequestDiff`, `listBitbucketRepoPullRequestTasks`, `getBitbucketRepoDefaultReviewers`.
 
 Useful `responseFields`: `["id", "draft", "links.html.href", "summary.html"]`. `summary.html` shows how a description renders.

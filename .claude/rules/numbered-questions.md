@@ -14,8 +14,10 @@ Plain numbers are reserved for questions. Every other list in the same message u
 
 A numbered question is either a yes/no question about one thing, or a lettered choice (`A`, `B`, `C`). Never phrase it as "X, or Y?": a yes or no to that doesn't say which part it answers. When the options are "do X" and "do Y instead", make it a lettered choice.
 
+When questions decide proposals, the question number is the proposal number: question 3 decides P3, never P2. A proposal without a question skips its number, and a question about no proposal comes after the highest one. A follow-up decision about the same proposal gets its number plus a lowercase letter (`1a`, `1b`), which keeps it apart from the uppercase alternatives inside a choice.
+
 Each number holds one decision. Steps that naturally go together and would almost always get the same answer (commit and push, for example) can share a number. If I could reasonably say yes to one part and no to the other, split them.
 
 Before sending a message, check: does it end waiting on me? Then every open point is in the numbered block, and nothing else uses plain numbers.
 
-**Why:** I answer by label ("1 yes, 2 B, skip P3"). Questions almost always need my answer, so they get the shortest label. Bullets make me retype or quote the question, and two lists both numbered 1/2/3 make "1. ..." ambiguous. An "X, or Y?" question once got "no keep" as its answer, which fits either part (2026-11-19).
+**Why:** I answer by label ("1 yes, 2 B, skip P3"). Questions almost always need my answer, so they get the shortest label. Bullets make me retype or quote the question, and two lists both numbered 1/2/3 make "1. ..." ambiguous. An "X, or Y?" question once got "no keep" as its answer, which fits either part (2026-11-19). Questions 3 and 4 once decided P2 and P3, so every answer needed a cross-reference (2026-11-24).

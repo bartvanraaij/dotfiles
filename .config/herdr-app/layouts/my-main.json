@@ -209,6 +209,7 @@
     "color": "border"
   },
   "titlebar": "none",
+  "toast": "my-toast",
   "traffic_lights": [
     12,
     16

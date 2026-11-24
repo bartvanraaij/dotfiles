@@ -16,6 +16,8 @@ Use these two words with the user. Herdr's own name for a session, "space", appe
 
 **Title.** When the user asks to update the session title (also "herdr session title", "rename the session"), make one from the work in this conversation, unless the user gives one. Two to five words: what happens to which thing, at the level of the whole session, with the thing named as the user calls it ("Improving Herdr usage panel", "Adding vehicle images", "Fixing nvim LSP startup"). Not one part of it (the panel, not a section of the panel), and not a bare noun label. Rename only when asked.
 
-**Project.** When the user asks, set it with `project`. On your own, only when the session has no project: a SessionStart hook then tells you so. Decide from context which project the session's folders belong to (an existing one, or a new one when it's clearly separate); when it's unclear, ask the user ("Which project does `~/Dev/foo` belong to: Merlin, Homeops, …?"). Then run `add-folder` for the folder, so the next session there needs no question, and `project` for this session. Mention it in one line.
+**Project.** Set it only when the user asks. A session whose folders are in no project stays under "Other" in the sidebar; don't ask about it or set one on your own.
+- "Move this session to <project>": `project "<project>"`, plus `add-folder "<project>" <dir>` for each of its folders that matches no pattern in `projects.json` yet, so the next session there lands in that project too. A folder already in another project stays there.
+- "This folder belongs to <project>": `add-folder "<project>" <dir>` only.
 
 **Why:** the user works in Claude, not in Herdr's menus, and finds work in the sidebar by project and session title.

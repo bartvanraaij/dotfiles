@@ -17,7 +17,7 @@ herdr-app ls | jq -r --arg t "$HC_TERMINAL_ID" '.spaces[] | . as $s | .tabs[] | 
 # New work session with Claude and its first message; focus false keeps me where I am
 herdr-app do space.new '{"folder":"/abs/dir","argv":["claude"],"task":"<first message>","focus":false}'
 
-# New tab in a space (default: the shown one), same argv/task/folder/focus (not run yet)
+# New tab in a space (default: the shown one), same argv/task/folder/focus (run 2026-11-20)
 herdr-app do tab.new '{"space":"<sp id>","folder":"/abs/dir","argv":["claude"],"task":"<first message>"}'
 
 # Split next to a pane: a shell, a program, or a mod pane. No folder argument:

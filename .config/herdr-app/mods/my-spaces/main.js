@@ -5,10 +5,12 @@
 // that session (sessions.json); a header with a dot in the project's color heads each project.
 // Rule: ~/.claude/rules/herdr-sessions.md. A session shows its terminals as a box per tab, a column per
 // terminal, and in that box whether it needs you. Click to switch, right-click for its menu, drag to reorder.
+// Herdr's own session order and agent order follow this list, so the keys that switch sessions or agents
+// go top to bottom here; the Dock icon counts the agents waiting for you.
 
 import { View, div, svg } from "gpui-kit";
 import { v_flex, h_flex, ScrollHandle } from "gpui-base";
-import { spaces, machines, agents, panes, settings, run, openOverlay, hc, theme, shared, setShared, layout, checking, home, readTextFile, writeTextFile } from "herdr";
+import { spaces, machines, agents, panes, settings, run, openOverlay, hc, theme, shared, setShared, setAgentOrder, setBadge, layout, checking, home, readTextFile, writeTextFile } from "herdr";
 
 function find(node, id) {
   if (node?.id === id) return node;
@@ -309,10 +311,9 @@ export default class Spaces extends View {
     });
   }
 
-  // Rows under a header per project, in the order projects first appear; sessions in no project go last,
-  // under "Other". The rail (a narrow sidebar) has no room for headers: a gap parts its projects instead.
-  // `active`: the active row's index.
-  byProject(rows, draw, t, collapsed) {
+  // Rows per project as [project, rows], in the order projects first appear; sessions in no project
+  // go last, under "Other" (null).
+  projectGroups(rows) {
     const groups = new Map();
     for (const r of rows) {
       const project = this.projectOf(r.w);
@@ -321,10 +322,59 @@ export default class Spaces extends View {
     }
     const order = [...groups.keys()].filter((p) => p !== null);
     if (groups.has(null)) order.push(null);
+    return order.map((p) => [p, groups.get(p)]);
+  }
+
+  // The sessions as this list draws them: per machine, this computer first, then per project.
+  sidebarOrder(sp) {
+    const remote = [...new Set(sp.map((s) => s.machine).filter(Boolean))].sort();
+    return [null, ...remote].flatMap((m) => this.projectGroups(sp.filter((s) => (s.machine ?? null) === m).map((w, i) => ({ w, i })))
+      .flatMap(([, rows]) => rows.map((r) => r.w)));
+  }
+
+  // Moves a session in Herdr's own order to its place in this list, one move per render, so
+  // space.select:N and space.next go top to bottom here. Waits while a row is dragged, and until every
+  // session's project is known: a session counted under "Other" for a moment would move its project's
+  // place for good. A move that leaves the order as it was isn't tried again.
+  keepOrder(sp, order) {
+    if (checking() || !this.loaded || this.pressed !== null) return;
+    if (!sp.every((s) => s.id in this.sessions || this.terminalsByTab(s).flat().every((p) => p.cwd))) return;
+    const key = sp.map((s) => s.id).join();
+    for (const m of new Set(sp.map((s) => s.machine ?? null))) {
+      const current = sp.filter((s) => (s.machine ?? null) === m);
+      const wanted = order.filter((s) => (s.machine ?? null) === m);
+      const k = current.findIndex((s, i) => s.id !== wanted[i]?.id);
+      if (k === -1) continue;
+      if (this.lastMove === key) return;
+      this.lastMove = key;
+      run("space.move", { id: wanted[k].id, index: sp.indexOf(current[k]) + 1 });
+      return;
+    }
+    this.lastMove = null;
+  }
+
+  // agent.next / agent.prev go through the agents in this list's order. The Dock icon shows how many
+  // agents wait for you; it is set when the count changes, and once when the list starts.
+  agentKeys(order) {
+    const place = new Map(order.map((s, i) => [s.id, i]));
+    const all = agents();
+    setAgentOrder(all.map((a, i) => ({ a, i }))
+      .sort((x, y) => (place.get(x.a.space) ?? order.length) - (place.get(y.a.space) ?? order.length) || x.i - y.i)
+      .map(({ a }) => a.address));
+    const waiting = all.filter((a) => a.status === "blocked").length;
+    const badge = waiting ? String(waiting) : null;
+    if (badge !== this.badge) {
+      this.badge = badge;
+      setBadge(badge);
+    }
+  }
+
+  // Rows under a header per project (see projectGroups). The rail (a narrow sidebar) has no room for
+  // headers: a gap parts its projects instead. `active`: the active row's index.
+  byProject(rows, draw, t, collapsed) {
     const list = [];
     let active = -1;
-    for (const project of order) {
-      const mine = groups.get(project);
+    for (const [project, mine] of this.projectGroups(rows)) {
       const fill = this.fill(project, t);
       if (!collapsed) list.push(this.projectHeader(project, fill, mine.some((r) => r.w.active), t));
       else if (list.length) list.push(div().id(`project-gap-${project ?? "other"}`).h(8).flex_none());
@@ -508,6 +558,9 @@ export default class Spaces extends View {
       changed = true;
     }
     if (changed) setShared("space.colors", kept);
+    const order = this.sidebarOrder(sp);
+    this.keepOrder(sp, order);
+    this.agentKeys(order);
     const list = this.grouped(t, collapsed);
     // Bring the active space into view when it, or its place in the list, changes; a row already in view stays put.
     const active = sp.find(p => p.active)?.id;

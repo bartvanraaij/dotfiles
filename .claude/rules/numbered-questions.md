@@ -1,23 +1,25 @@
-# Label lists so I can answer by label
+# Questions: numbered, standalone, typed
 
-When a message needs any decision or answer from me, every question gets a plain number (1., 2., 3.), even when there is only one. The questions go together in one block at the end of the message.
+When a message needs an answer or decision from me, the questions go in one numbered block at the end of the message.
 
-These all count as questions and get a number:
-- A direct question ("Is the design approved?").
-- An offer that waits on my yes ("If you'd rather X, I can do Y", "Want me to ...?").
-- A choice between alternatives. The alternatives inside it get `A`, `B`, `C`.
+- Number questions 1, 2, 3 without gaps, starting at 1 in every message. Numbers in my answer ("1 yes, 2 B") always refer to the latest message.
+- Each question stands alone: it names its subject in plain words (what, where, what changes) in one or two lines. It never refers to a label or another message ("P13", "the option above", "as discussed"). A question still open from an earlier message is asked again in full, with a new number.
+- A question is yes/no about one thing, or a choice between alternatives `A`, `B`, `C`. Never "X, or Y?": a yes or no to that doesn't say which part it answers.
+- Every question gives a recommendation: a yes/no question ends with `(recommended: yes)` or `(recommended: no)`; in a choice, one alternative gets `(recommended)` and a short reason. Test checks get none.
+- One decision per number. Steps that would almost always get the same answer (commit and push) can share a number; if I could say yes to one part and no to the other, split them.
+- An offer that waits on my yes ("Want me to ...?") is a question too.
+- Plain numbers are only for questions. Plans, findings, steps and summaries are bullets, without labels like P1 or F1.
+- When every item of a list needs my answer (review findings to fix or not, checks to test), that list is the question block: one number per finding or check.
+- Keep the text around the questions short; explain more when I ask.
+- Ask in text, never with the AskUserQuestion picker.
 
-Plain numbers are reserved for questions. Every other list in the same message uses a letter prefix or bullets. Never a 1, 2, 3 list that isn't questions.
-- Proposals `P1`, `P2`: everything you put forward for me to accept or reject, in one sequence: the plan or design for what I asked, and extras beyond it. An extra gets `(optional)` right after its label: `P3 (optional): Add a tooltip with the reset time`.
-- Findings `F1`, `F2`.
-- Summaries, steps and other points I won't answer by label: plain bullets.
+```
+1. sync.ts:42 retries forever when the server returns 401. Stop after 3 tries? (recommended: yes)
+2. Which model should subagents use by default?
+   A. Sonnet (recommended: cheapest one that handles bounded fixes)
+   B. Opus for everything
+```
 
-A numbered question is either a yes/no question about one thing, or a lettered choice (`A`, `B`, `C`). Never phrase it as "X, or Y?": a yes or no to that doesn't say which part it answers. When the options are "do X" and "do Y instead", make it a lettered choice.
+Before sending: does the message end waiting on me? Then every open point is in the block, numbered from 1 without gaps, and each question reads right without anything above it.
 
-When questions decide proposals, the question number is the proposal number: question 3 decides P3, never P2. A proposal without a question skips its number, and a question about no proposal comes after the highest one. A follow-up decision about the same proposal gets its number plus a lowercase letter (`1a`, `1b`), which keeps it apart from the uppercase alternatives inside a choice.
-
-Each number holds one decision. Steps that naturally go together and would almost always get the same answer (commit and push, for example) can share a number. If I could reasonably say yes to one part and no to the other, split them.
-
-Before sending a message, check: does it end waiting on me? Then every open point is in the numbered block, and nothing else uses plain numbers.
-
-**Why:** I answer by label ("1 yes, 2 B, skip P3"). Questions almost always need my answer, so they get the shortest label. Bullets make me retype or quote the question, and two lists both numbered 1/2/3 make "1. ..." ambiguous. An "X, or Y?" question once got "no keep" as its answer, which fits either part (2026-11-19). Questions 3 and 4 once decided P2 and P3, so every answer needed a cross-reference (2026-11-24).
+**Why:** I answer by number ("1 yes, 2 B"), in sequence, and my sessions are long. Questions numbered to match proposal labels left gaps (1, 4, 5, 9 on 2026-11-26; a first question "4" on 2026-11-27), so I answered the wrong ones. A question "P13: should I change ...?" pointed to a label far up the conversation that I no longer remembered (2026-11-27). An "X, or Y?" question once got "no keep" as its answer, which fits either part (2026-11-19). I type every answer, so I always work the same way; a picker means switching (2026-11-27).

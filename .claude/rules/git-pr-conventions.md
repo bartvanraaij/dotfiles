@@ -38,7 +38,7 @@
 - Push back with reasons when a suggestion is wrong for this codebase, unused (YAGNI), or conflicts with an earlier decision.
 - No performative agreement ("Great point!", "You're absolutely right").
 - Bot review comments (Copilot, CodeRabbit) get a short text reply too, not only a code change that marks them outdated: "Good suggestion, applied in <commit>." or a one-line reason when keeping things as they are.
-- When asking me several questions, label them as in `numbered-questions.md`.
+- When asking me questions, follow `numbered-questions.md`.
 
 ## Design docs
 Code comments: see `code-comments.md`.
